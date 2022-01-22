@@ -14,6 +14,19 @@ public class ClimbingArmHook extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public ClimbingArmHook() {}
 
+ public void erectHook(){
+
+ }
+
+ public void retractHook(){
+
+ }
+
+ 
+ 
+ 
+ 
+ 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
