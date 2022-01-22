@@ -12,12 +12,6 @@ public class Drive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
 
-    //6 Wheel
-    //2 groups
-    //Quadencoders
-    //IMU
-    //4 Motors
-    //L and R encoders
   /**
    * Creates a new ExampleCommand.
    *

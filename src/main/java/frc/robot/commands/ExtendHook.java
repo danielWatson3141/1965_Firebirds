@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ExtendHook extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
-    //Stepper motor
-    //limit switch
+
   /**
    * Creates a new ExampleCommand.
    *

@@ -7,6 +7,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbingArmHook extends SubsystemBase {
+
+    //Stepper motor
+    //limit switch
+
   /** Creates a new ExampleSubsystem. */
   public ClimbingArmHook() {}
 

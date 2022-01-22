@@ -4,11 +4,23 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Cannon extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public Cannon() {}
+
+  // Stoppers
+  // Pneumatic cylinders
+
+  // Proximity sensors
+
+  // Motor
+  private TalonSRX beltDriveTalon;
+
+  /** Creates a new Cannon Subsystem. */
+  public Cannon() {
+  }
 
   @Override
   public void periodic() {

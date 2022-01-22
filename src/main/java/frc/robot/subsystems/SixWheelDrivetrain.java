@@ -13,6 +13,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -22,21 +24,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SixWheelDrivetrain extends SubsystemBase {
 
-  // These are the two motors characteristic of a treadbot
-  private TalonSRX l1Talon;
-  private TalonSRX r1Talon;
-  private TalonSRX l2Talon;
-  private TalonSRX r2Talon;
+  // L and R encoders
+  private Encoder lEncoder;
+  private Encoder rEncoder;
 
   public DifferentialDrive driver;
 
   private XboxController myController;
 
+  private ADIS16470_IMU imu;
+
   /** Creates a new ExampleSubsystem. */
   public SixWheelDrivetrain() {
+    // 2 groups of motors
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(1);
     WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(2);
-
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
 
     MotorController m_frontRight = new WPI_TalonSRX(3);
@@ -46,34 +48,30 @@ public class SixWheelDrivetrain extends SubsystemBase {
     driver = new DifferentialDrive(m_left, m_right);
 
     myController = new XboxController(0);
-  }
 
-  public void setWheelSpeed(double leftSpeed, double rightSpeed) {
-    l1Talon.set(ControlMode.PercentOutput, leftSpeed);
-    l2Talon.set(ControlMode.PercentOutput, leftSpeed);
-    r1Talon.set(ControlMode.PercentOutput, rightSpeed);
-    r2Talon.set(ControlMode.PercentOutput, rightSpeed);
+    imu = new ADIS16470_IMU();
   }
 
   // radians / sec
   protected double rotationRate() {
 
-    double unitsPers = l2Talon.getSelectedSensorVelocity(0) * 10;
+    // double unitsPers = l2Talon.getSelectedSensorVelocity(0) * 10;
     // SmartDashboard.putNumber("RotationRate", unitsPers/unitsPerRadian);
     // TODO: Make in radians
-    return unitsPers; // unitsPerRadian;
+    return 0; // unitsPerRadian;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("leftStickX", myController.getRawAxis(0));
-    SmartDashboard.putNumber("leftStickY", myController.getRawAxis(1));
 
     long currentTime = System.currentTimeMillis();
 
-    double leftStickX = myController.getRawAxis(0);
-    double leftStickY = myController.getRawAxis(1);
+    double leftStickX = myController.getLeftX();
+    double leftStickY = myController.getLeftY();
+
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("leftStickX", leftStickX);
+    SmartDashboard.putNumber("leftStickY", leftStickY);
 
     double rightTrigger = myController.getRightTriggerAxis();
     SmartDashboard.putNumber("rightTrigger", rightTrigger);
@@ -91,10 +89,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
     double steerOutput = leftStickX;
-    if (leftStickX > steerLimit)
-      steerOutput = steerLimit;
+    // if (leftStickX > steerLimit)
+    // steerOutput = steerLimit;
 
-    driver.curvatureDrive(rightTrigger, steerOutput, quickturn);
+    driver.curvatureDrive(throttle, steerOutput, quickturn);
   }
 
   @Override

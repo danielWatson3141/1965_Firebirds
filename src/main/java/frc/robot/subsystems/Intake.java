@@ -4,9 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+
+    //Motor
+    private TalonSRX intakeMotor;
+
+    //Servo Hinge
+    private Servo hinge;
+
   /** Creates a new ExampleSubsystem. */
   public Intake() {}
 

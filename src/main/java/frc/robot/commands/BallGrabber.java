@@ -12,10 +12,6 @@ public class BallGrabber extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
 
-    //Sprocket
-    //Motor
-    //Pnumatic Hinge
-    //Camera (Want Perhaps)
   /**
    * Creates a new ExampleCommand.
    *
