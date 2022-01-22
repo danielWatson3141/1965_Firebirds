@@ -67,6 +67,11 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   }
 
+  double targetSpeed = 0;
+  double currentSpeed = 0;
+
+  final double MAX_ACCEL = .2;
+
   public void drive() {
 
     long currentTime = System.currentTimeMillis();
@@ -97,7 +102,17 @@ public class SixWheelDrivetrain extends SubsystemBase {
     if (leftStickX > steerLimit)
       steerOutput = steerLimit;
 
-    driver.curvatureDrive(throttle, steerOutput, quickturn);
+    targetSpeed = throttle;
+
+    if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
+      currentSpeed = targetSpeed;
+    } else if(currentSpeed < targetSpeed){
+      currentSpeed += MAX_ACCEL;
+    } else {
+      currentSpeed -= MAX_ACCEL;
+    }
+
+    driver.curvatureDrive(currentSpeed, steerOutput, quickturn);
   }
 
   @Override
