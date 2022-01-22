@@ -67,8 +67,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   }
 
-  public void drive(){
-    
+  public void drive() {
+
     long currentTime = System.currentTimeMillis();
 
     double leftStickX = myController.getLeftX();
@@ -95,7 +95,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     double steerOutput = leftStickX;
     if (leftStickX > steerLimit)
-    steerOutput = steerLimit;
+      steerOutput = steerLimit;
 
     driver.curvatureDrive(throttle, steerOutput, quickturn);
   }

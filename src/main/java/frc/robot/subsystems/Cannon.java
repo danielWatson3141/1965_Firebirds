@@ -22,6 +22,14 @@ public class Cannon extends SubsystemBase {
   public Cannon() {
   }
 
+  public void turnOnBelt(){
+
+  }
+
+  public void turnOffBelt(){
+    
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
