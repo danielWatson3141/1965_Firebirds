@@ -44,6 +44,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     MotorController m_frontRight = new WPI_TalonSRX(3);
     MotorController m_rearRight = new WPI_TalonSRX(4);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
+    m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
 
@@ -64,6 +65,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
 
+  }
+
+  public void drive(){
+    
     long currentTime = System.currentTimeMillis();
 
     double leftStickX = myController.getLeftX();
@@ -89,8 +94,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
     double steerOutput = leftStickX;
-    // if (leftStickX > steerLimit)
-    // steerOutput = steerLimit;
+    if (leftStickX > steerLimit)
+    steerOutput = steerLimit;
 
     driver.curvatureDrive(throttle, steerOutput, quickturn);
   }
