@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class BallEjector extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
+    
+  //Reverse to get rid of imposter ball
+
 
   /**
    * Creates a new ExampleCommand.

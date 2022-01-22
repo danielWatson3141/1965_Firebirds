@@ -12,6 +12,9 @@ public class BallSender extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
 
+    //Stoppers
+    //Proximity sensors
+    //Motor
   /**
    * Creates a new ExampleCommand.
    *
