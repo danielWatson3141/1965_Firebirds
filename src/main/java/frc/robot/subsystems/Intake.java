@@ -20,6 +20,22 @@ public class Intake extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Intake() {}
 
+  public void enableSpinner(){
+
+  }
+
+  public void disableSpinner(){
+
+  }
+
+  public void dropSpinner(){
+
+  }
+  
+  public void raiseSpinner(){
+      
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

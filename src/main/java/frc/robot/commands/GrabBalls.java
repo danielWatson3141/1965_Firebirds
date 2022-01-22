@@ -12,6 +12,14 @@ public class BallGrabber extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
 
+ //eject mode: peg 1 drops
+    //storage mode: peg 1-3 raises
+   
+    //lift mode: peg 1-3 drops 
+    //collect mode: belt spins while intake is collecting, peg 3 is raised
+    //deposit mode: belt spins while intake is closed, peg 1 is raised
+
+
   /**
    * Creates a new ExampleCommand.
    *
