@@ -23,16 +23,17 @@ public class Cannon extends SubsystemBase {
   }
   
 
-  public void beltForwards(){
-
+  public void beltController(){
+    //Requires: TalonSRX
+    
   }
 
-  public void beltBackwards(){
+  //public void beltBackwards(){
 
-  }
+  //}
 
-  public void beltOff(){
-
+  //public void beltOff(){
+    //
   }
 
   public void setPegActive(int peg, boolean up){
