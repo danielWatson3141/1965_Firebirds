@@ -21,9 +21,15 @@ public class Cannon extends SubsystemBase {
   /** Creates a new Cannon Subsystem. */
   public Cannon() {
   }
+  
 
+<<<<<<< HEAD
   public void beltForwards(){
 
+=======
+  public void turnOnBelt(){
+        //Turns belt on to drop balls
+>>>>>>> 390b453d0b4e369b33d3bc906661a692ff4c1a6d
   }
 
   public void beltBackwards(){
