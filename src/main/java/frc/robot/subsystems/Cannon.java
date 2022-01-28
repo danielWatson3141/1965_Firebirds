@@ -22,16 +22,20 @@ public class Cannon extends SubsystemBase {
   public Cannon() {
   }
 
-  public void turnOnBelt(){
+  public void beltForwards(){
 
   }
 
-  public void turnOffBelt(){
+  public void beltBackwards(){
+
+  }
+
+  public void beltOff(){
 
   }
 
   public void setPegActive(int peg, boolean up){
-    
+    // if 
   }
 
   @Override
