@@ -28,7 +28,11 @@ public class Cannon extends SubsystemBase {
   }
 
   public void turnOffBelt(){
-        //Turns the belt off
+
+  }
+
+  public void setPegActive(int peg, boolean up){
+    
   }
 
   @Override
