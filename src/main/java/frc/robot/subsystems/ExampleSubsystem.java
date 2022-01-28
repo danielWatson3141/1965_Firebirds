@@ -27,7 +27,7 @@ public class ExampleSubsystem extends SubsystemBase {
   //The arm takes 1 second to retract
 
   public void extendArm(){
-    //Requires: Servo motor 1 and 2, and proximity sensor 1
+    //Requires: Servo motor #1 and #2, and proximity sensor 1
 
     //if proximity sensor detects button && arm is retracted
     
