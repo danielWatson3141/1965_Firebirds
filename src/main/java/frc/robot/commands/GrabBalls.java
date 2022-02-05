@@ -10,17 +10,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class GrabBalls extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final Cannon cannon;
   private final Intake intake;
 
- //eject mode: peg 1 drops
-    //storage mode: peg 1-3 raises
-   
-    //lift mode: peg 1-3 drops 
-    //collect mode: belt spins while intake is collecting, peg 3 is raised
-    //deposit mode: belt spins while intake is closed, peg 1 is raised
+  // eject mode: peg 1 drops
+  // storage mode: peg 1-3 raises
 
+  // lift mode: peg 1-3 drops
+  // collect mode: belt spins while intake is collecting, peg 3 is raised
+  // deposit mode: belt spins while intake is closed, peg 1 is raised
 
   /**
    * Creates a new ExampleCommand.
@@ -36,20 +35,21 @@ public class GrabBalls extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
 
-  aButton.whenPressed(
-    new RunCommand(() -> cannon.toggleBelt(true), cannon));
-  aButton.whenReleased(
-    new RunCommand(() -> cannon.toggleBelt(false), cannon));
-  
-    // Called every time the scheduler runs while the command is scheduled.
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override
