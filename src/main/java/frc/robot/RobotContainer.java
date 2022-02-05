@@ -29,12 +29,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain();
   private ClimbingArmHook arm = new ClimbingArmHook();
-<<<<<<< HEAD
   private Intake intake = new Intake();
 
-=======
   private Cannon cannon = new Cannon();
->>>>>>> 316047243b4eb5031e3d5dbd3e60be1e5761b435
   private XboxController myController = new XboxController(0);
 
   private JoystickButton aButton = new JoystickButton(myController, XboxController.Button.kA.value);
@@ -77,7 +74,6 @@ public class RobotContainer {
 
     rbButton.whenPressed(
         new RunCommand(() -> arm.erectHook(), arm));
-<<<<<<< HEAD
     lbButton.whenPressed(
         new RunCommand(() -> arm.retractHook(), arm));
     bButton.whenPressed(
@@ -86,13 +82,13 @@ public class RobotContainer {
         new RunCommand(() -> intake.setSpinnerEnabled(false), intake));
     yButton.whenPressed(
         new RunCommand(() -> intake.dropSpinner(), intake));
-=======
 
     aButton.whenPressed(
         new RunCommand(() -> cannon.toggleBelt(true), cannon));
     aButton.whenReleased(
         new RunCommand(() -> cannon.toggleBelt(false), cannon));
->>>>>>> 316047243b4eb5031e3d5dbd3e60be1e5761b435
+    xButton.whenPressed(
+        new RunCommand(() -> cannon.testPegs(), cannon));
   }
 
   /**

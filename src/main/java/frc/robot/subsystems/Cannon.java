@@ -67,6 +67,20 @@ public class Cannon extends SubsystemBase {
 
   }
 
+  static int pegNum = 1;
+
+  public void testPegs(){
+    if(pegNum <= 3){
+      setPegToggle(pegNum, true);
+    } else {
+      setPegToggle(1, false);
+      setPegToggle(2, false);
+      setPegToggle(3, false);
+      pegNum = 0;
+    }
+    pegNum++;
+  }
+
   // ultra sensor detects balls within 5 inches
   public boolean isBallPresent(int slot) {
     if (slot == 1) {
