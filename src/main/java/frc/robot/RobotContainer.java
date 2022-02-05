@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -27,6 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain();
   private ClimbingArmHook arm = new ClimbingArmHook();
+  private Intake intake = new Intake();
 
   private XboxController myController = new XboxController(0);
 
@@ -70,7 +72,14 @@ public class RobotContainer {
 
     rbButton.whenPressed(
         new RunCommand(() -> arm.erectHook(), arm));
-
+    lbButton.whenPressed(
+        new RunCommand(() -> arm.retractHook(), arm));
+    bButton.whenPressed(
+        new RunCommand(() -> intake.setSpinnerEnabled(true), intake));
+    bButton.whenReleased(
+        new RunCommand(() -> intake.setSpinnerEnabled(false), intake));
+    yButton.whenPressed(
+        new RunCommand(() -> intake.dropSpinner(), intake));
   }
 
   /**
