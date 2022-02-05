@@ -22,27 +22,34 @@ public class Cannon extends SubsystemBase {
   public Cannon() {
   }
   
-
-  public void beltController(){
+  //Set belt on/off and direction
+  //forward controls forward/back motion
+  //on controls on/off
+  public void toggleBelt(boolean forward, boolean on){
     //Requires: TalonSRX
+
+    //determine motor speed
+
+    //0 if off
+
+    //1 if on
+
+    //positive if forward
+
+    //negative if backward
     
   }
 
-  //public void beltBackwards(){
-
-  //}
-
-  //public void beltOff(){
-    //
-  //}
-
+  //Boolean determines position of the pegs 
+  //peg determines which peg (1,2,3)
   public void setPegToggle(int peg, boolean up){
-    //Boolean uses the data from the proximity sensors
-    //Boolean determines position of the pegs 
     //Pegs are changed pneumatically
-    //T
-  
-  
+  }
+
+  //is a ball detected by proximity sensor
+  //slot is which slot we're asking about (1,2)
+  public boolean isBallPresent(int slot){
+    //Check if proximity sensor (slot) is activated
   }
 
   @Override
