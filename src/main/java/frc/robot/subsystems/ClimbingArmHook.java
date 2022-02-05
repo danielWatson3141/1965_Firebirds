@@ -15,21 +15,37 @@ public class ClimbingArmHook extends SubsystemBase {
   public ClimbingArmHook() {}
 
 
-// This function moves the climbing hook upwards, but only when the limit switch on the top is not
+// This function moves the climbing hook upwards to hook onto a bar, 
+// but only when the limit switch on the top is not
 // active. This is when the hook is not extended fully.
 // It moves until the limit switch on the top is active and then stops
-// moving. This is when the hook is extended fully.
- public void erectHook(){
-// The function moves a motor to move a chain positively, which only raises the hook if the top limit switch isn't active. 
-// When the top limit switch becomes active, the motor and chain stop moving.
+// moving. This is when the hook is extended fully. It stays like this until
+// retractHook is called.
+ public void erectHook(){  
+   // requires: motor 1
+  // If button pressed & top limit switch off
+  // motor 1 moves positively
+  // if button pressed & top limit switch on and motor 1 on
+  // turn off motor 1
+  // if top limit switch on & button pressed
+  // motor one does not move
+
  }
-// This function moves the climbing hook downwards, but only when the limit switch on the bottom is not
+// This function moves the climbing hook downwards to pull a robot up on a bar, but 
+//  only when the limit switch on the bottom is not
 // active. This is when the hook is not retracted fully.
 // It moves until the limit switch on the bottom is active and then stops
-// moving. This is when the hook is retracted fully.
+// moving. This is when the hook is retracted fully. It stays like this until
+// extendHook is called.
  public void retractHook(){
-  // The function moves a motor to move a chain negatively, which only lowers/*  */ the hook if the bottom limit switch isn't active. 
- // When the top limit switch becomes active, the motor and chain stop moving.
+   // requires: motor 1
+  // If button pressed & bottom limit switch off
+  // motor 1 moves negatively
+  // if bottom limit switch on and motor 1 on
+  // turn off motor 1
+  // if bottom limit switch on & button pressed
+  // motor one does not move
+
  }
 
  
