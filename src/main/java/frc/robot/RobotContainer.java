@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SixWheelDrivetrain;
@@ -27,7 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain();
   private ClimbingArmHook arm = new ClimbingArmHook();
-
+  private Cannon cannon = new Cannon();
   private XboxController myController = new XboxController(0);
 
   private JoystickButton aButton = new JoystickButton(myController, XboxController.Button.kA.value);
@@ -71,6 +72,10 @@ public class RobotContainer {
     rbButton.whenPressed(
         new RunCommand(() -> arm.erectHook(), arm));
 
+    aButton.whenPressed(
+        new RunCommand(() -> cannon.toggleBelt(true), cannon));
+    aButton.whenReleased(
+        new RunCommand(() -> cannon.toggleBelt(false), cannon));
   }
 
   /**
