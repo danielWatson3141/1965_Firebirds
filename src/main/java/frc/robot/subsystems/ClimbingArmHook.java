@@ -16,15 +16,15 @@ public class ClimbingArmHook extends SubsystemBase {
   public TalonSRX lifterMotor;
   // limit switches
 
-  // TODO: figure out the ports that we're using
+  // TODO: figure out the sensor ports that we're using
   public DigitalInput toplimitSwitch = new DigitalInput(0);
   public DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
   public static enum STATE {
-    EXTENDED,
-    RETRACTED,
-    EXTENDING,
-    RETRACTING
+    EXTENDED, // Fully extended, top limit switch on, motor speed = 0
+    RETRACTED, // Fully retracted, bottom limit switch on, motor speed = 0
+    EXTENDING, // Motor moving in a positive direction, top limit switch not on, motor speed = 0.25
+    RETRACTING // Motor moving in a negative direction, bottom limit switch not on, motor speed = -0.25
   }
 
   public STATE state = STATE.RETRACTED;
@@ -40,17 +40,9 @@ public class ClimbingArmHook extends SubsystemBase {
   // moving. This is when the hook is extended fully. It stays like this until
   // retractHook is called.
   public void erectHook() {
-    // if top limit active set motor to 0
 
-    state=STATE.EXTENDING;
-
-    // requires: motor 1
-    // If button pressed & top limit switch off
-    // motor 1 moves postively
-    // else
-    // do nothing
-    // check limit switches every second
-
+    state = STATE.EXTENDING;
+    // sets state to extending to set events in motion
   }
 
   // This function moves the climbing hook downwards to pull a robot up on a bar,
@@ -61,36 +53,39 @@ public class ClimbingArmHook extends SubsystemBase {
   // moving. This is when the hook is retracted fully. It stays like this until
   // extendHook is called.
   public void retractHook() {
-    // if bottom limit switch is active motor set to 0
+
     state = STATE.RETRACTING;
-    // requires: motor 1
-    // If button pressed & bottom limit switch off
-    // motor 1 moves negatively
-    // else
-    // do nothing
-    // check limit switches every second
+    // sets state to retracting to set events in motion
   }
 
   private static final double LIFTER_SPEED = .25;
+  // defines LIFTER_SPEED
+
+
+  // checks limit switches every second if case is extending
+  // if top limit switch is on and case = extending
+  // change case to extended
+  // if top limit switch is off and case = extending
+  // continue to move at LIFTER_SPEED (0.25)
 
   @Override
   public void periodic() {
-
     switch (state) {
       case EXTENDING:
-        if (toplimitSwitch.get()) {
-          lifterMotor.set(ControlMode.PercentOutput, 0);
-          state=STATE.EXTENDED;
+        if (toplimitSwitch.get()) { // if top limit switch is on
+          lifterMotor.set(ControlMode.PercentOutput, 0); // turn off motor
+          state = STATE.EXTENDED; // change state to extended
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED);
+          lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED); // turn motor on to LIFTER_SPEED
         }
         break;
+
       case RETRACTING:
-        if (bottomlimitSwitch.get()) {
-          lifterMotor.set(ControlMode.PercentOutput, 0);
-          state=STATE.RETRACTED;
+        if (bottomlimitSwitch.get()) { // if bottom limit switch is on
+          lifterMotor.set(ControlMode.PercentOutput, 0); // turn off motor
+          state = STATE.RETRACTED; // change state to retracted
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED);
+          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED); // turn on motor to LIFTER_SPEED
         }
         break;
       default:
