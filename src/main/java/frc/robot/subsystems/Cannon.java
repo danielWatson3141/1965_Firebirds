@@ -37,16 +37,10 @@ public class Cannon extends SubsystemBase {
   //}
 
   public void setPegToggle(int peg, boolean up){
-   //Proximity sensor, sensors the balls in the basket.
-   //The dectected balls are then collected into 2 spots
-   
-//The code below is complete hell and we need to rethink and go over with the cannon team how they want the pegs to work and how to implement it into out code.
-//This code sorta works but has many problems and questions that need to be answered. (proximity2=top) (proximity1=bottom)
-      //if proximity2 == 1 "peg 2 and peg 3 raise"
-         //else proximity2 == 0 "no pegs raise"
-    
-      //if proximity1 == 1 "peg 1 raises"
-          //else proximity1 == 0 "no pegs raise"
+    //Boolean uses the data from the proximity sensors
+    //Boolean determines position of the pegs 
+    //Pegs are changed pneumatically
+    //T
   
   
   }
