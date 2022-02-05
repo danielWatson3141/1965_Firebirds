@@ -42,13 +42,6 @@ public class Intake extends SubsystemBase {
 
   }
   
-  //raises the spinner
-  //assumes spinner is down
-  //does nothing otherwise
-  public void raiseSpinner(){
-      
-  }
-  
   @Override
   public void periodic() {
     // This function will be called once per scheduler run
