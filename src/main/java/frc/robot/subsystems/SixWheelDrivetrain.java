@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-//import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SixWheelDrivetrain extends SubsystemBase {
@@ -37,12 +36,12 @@ public class SixWheelDrivetrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public SixWheelDrivetrain() {
     // 2 groups of motors
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(1);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(2);
+    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
+    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
 
-    MotorController m_frontRight = new WPI_TalonSRX(3);
-    MotorController m_rearRight = new WPI_TalonSRX(4);
+    MotorController m_frontRight = new WPI_TalonSRX(4);
+    MotorController m_rearRight = new WPI_TalonSRX(6);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(true);
 
@@ -50,7 +49,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     myController = new XboxController(0);
 
-    imu = new ADIS16470_IMU();
+    //imu = new ADIS16470_IMU();
   }
 
   // radians / sec
