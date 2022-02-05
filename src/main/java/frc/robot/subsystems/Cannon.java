@@ -23,16 +23,26 @@ public class Cannon extends SubsystemBase {
   }
   
 
-  public void turnOnBelt(){
-        //Turns belt on to drop balls
-  }
-
-  public void turnOffBelt(){
-
-  }
-
-  public void setPegActive(int peg, boolean up){
+  public void beltController(){
+    //Requires: TalonSRX
     
+  }
+
+  //public void beltBackwards(){
+
+  //}
+
+  //public void beltOff(){
+    //
+  //}
+
+  public void setPegToggle(int peg, boolean up){
+    //Boolean uses the data from the proximity sensors
+    //Boolean determines position of the pegs 
+    //Pegs are changed pneumatically
+    //T
+  
+  
   }
 
   @Override

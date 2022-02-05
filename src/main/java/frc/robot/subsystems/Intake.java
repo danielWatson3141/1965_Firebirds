@@ -21,24 +21,25 @@ public class Intake extends SubsystemBase {
   public Intake() {}
 
   public void enableSpinner(){
-        //Raises rpm of spinner for intake
+    // 
+
   }
 
   public void disableSpinner(){
-        //Turns motor off 
+
   }
 
   public void dropSpinner(){
-        //Drops spinner to ground
+
   }
   
   public void raiseSpinner(){
-        //Raises spinner from ground
+      
   }
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This function will be called once per scheduler run
   }
 
   @Override
