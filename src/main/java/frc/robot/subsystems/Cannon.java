@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
@@ -24,8 +25,9 @@ public class Cannon extends SubsystemBase {
   DoubleSolenoid pistonArm3;
   Compressor compressor;
 
-  // Proximity sensors
-
+  // Creates a ping-response Ultrasonic object on DIO 1 and 2.
+  Ultrasonic ultrasonic1 = new Ultrasonic(1, 2);
+  Ultrasonic ultrasonic2 = new Ultrasonic(1, 2);
   // Motor
   private TalonSRX cannonMotor;
 
@@ -37,6 +39,7 @@ public class Cannon extends SubsystemBase {
     pistonArm2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     pistonArm3 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 6);
     compressor = new Compressor(null);
+    Ultrasonic.setAutomaticMode(true);
   }
 
   // Set belt on/off and direction
@@ -64,12 +67,23 @@ public class Cannon extends SubsystemBase {
 
   }
 
-  // is a ball detected by proximity sensor
-  // slot is which slot we're asking about (1,2)
+  // ultra sensor detects balls within 5 inches
   public boolean isBallPresent(int slot) {
-    return false;
-    // Check if proximity sensor (slot) is activated
+    if (slot == 1) {
+      // "ultrasonic1" returns true or false from the boolean equation
+      return (ultrasonic1.getRangeInches() < 5);
+    } else if (slot == 2) {
+      // "ultrasonic2" returns true or false from the boolean equation
+      return (ultrasonic2.getRangeInches() < 5);
+    } else {
+
+      return false;
+      // error condition when a slot doesnt exist
+    }
   }
+  // Check if proximity sensor (slot) is activated
+  // Starts the ultrasonic sensor running in automatic mode
+  // Creates a ping-response Ultrasonic object on DIO 1 and 2.
 
   @Override
   public void periodic() {
