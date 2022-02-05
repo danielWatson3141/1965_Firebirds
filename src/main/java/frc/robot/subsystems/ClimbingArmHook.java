@@ -22,13 +22,13 @@ public class ClimbingArmHook extends SubsystemBase {
 // moving. This is when the hook is extended fully. It stays like this until
 // retractHook is called.
  public void erectHook(){  
-   // requires: motor 1
+   // requires: servo motor 1
   // If button pressed & top limit switch off
-  // motor 1 moves positively
-  // if button pressed & top limit switch on and motor 1 on
-  // turn off motor 1
-  // if top limit switch on & button pressed
-  // motor one does not move
+  // servo motor 1 moves positively
+  // else
+  // do nothing
+  // check limit switches every second
+  
 
  }
 // This function moves the climbing hook downwards to pull a robot up on a bar, but 
@@ -38,14 +38,12 @@ public class ClimbingArmHook extends SubsystemBase {
 // moving. This is when the hook is retracted fully. It stays like this until
 // extendHook is called.
  public void retractHook(){
-   // requires: motor 1
+   // requires: servo motor 1
   // If button pressed & bottom limit switch off
-  // motor 1 moves negatively
-  // if bottom limit switch on and motor 1 on
-  // turn off motor 1
-  // if bottom limit switch on & button pressed
-  // motor one does not move
-
+  // servo motor 1 moves negatively
+  // else
+  // do nothing
+  // check limit switches every second
  }
 
  
