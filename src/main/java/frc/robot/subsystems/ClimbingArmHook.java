@@ -4,13 +4,21 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbingArmHook extends SubsystemBase {
 
     //Stepper motor
-    //limit switch
- 
+    public TalonSRX lifterMotor;
+    //limit switches
+
+    // TODO: figure out the ports that we're using
+    public DigitalInput toplimitSwitch = new DigitalInput(0);
+    public DigitalInput bottomlimitSwitch = new DigitalInput(1);
     //Creates an example subsystem
   public ClimbingArmHook() {}
 
@@ -22,13 +30,20 @@ public class ClimbingArmHook extends SubsystemBase {
 // moving. This is when the hook is extended fully. It stays like this until
 // retractHook is called.
  public void erectHook(){  
-   // requires: servo motor 1
-  // If button pressed & top limit switch off
-  // servo motor 1 moves positively
-  // else
-  // do nothing
-  // check limit switches every second
-  
+   //if top limit active set motor to 0
+    if(toplimitSwitch.get()){ 
+     lifterMotor.set(ControlMode.PercentOutput, 0);
+    }
+    // if its not active motor set to 0.2
+    else {
+      lifterMotor.set(ControlMode.PercentOutput, 0.2);
+    }
+    //requires:  motor 1
+    // If button pressed & top limit switch off
+    // motor 1 moves postively
+    // else
+    // do nothing
+    // check limit switches every second
 
  }
 // This function moves the climbing hook downwards to pull a robot up on a bar, but 
@@ -38,9 +53,17 @@ public class ClimbingArmHook extends SubsystemBase {
 // moving. This is when the hook is retracted fully. It stays like this until
 // extendHook is called.
  public void retractHook(){
-   // requires: servo motor 1
+   // if bottom limit switch is active motor set to 0
+  if(toplimitSwitch.get()){ 
+    lifterMotor.set(ControlMode.PercentOutput, 0);
+   }
+   // if its not active motor set to -0.2
+   else {
+     lifterMotor.set(ControlMode.PercentOutput, -0.2);
+   }
+   // requires: motor 1
   // If button pressed & bottom limit switch off
-  // servo motor 1 moves negatively
+  // motor 1 moves negatively
   // else
   // do nothing
   // check limit switches every second
@@ -53,6 +76,7 @@ public class ClimbingArmHook extends SubsystemBase {
  
   @Override
   public void periodic() {
+    
     // This method will be called once per scheduler run
   }
 
