@@ -71,6 +71,8 @@ public class ClimbingArmHook extends SubsystemBase {
     // check limit switches every second
   }
 
+  private static final double LIFTER_SPEED = .25;
+
   @Override
   public void periodic() {
 
@@ -80,7 +82,7 @@ public class ClimbingArmHook extends SubsystemBase {
           lifterMotor.set(ControlMode.PercentOutput, 0);
           state=STATE.EXTENDED;
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, .25);
+          lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED);
         }
         break;
       case RETRACTING:
@@ -88,7 +90,7 @@ public class ClimbingArmHook extends SubsystemBase {
           lifterMotor.set(ControlMode.PercentOutput, 0);
           state=STATE.RETRACTED;
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, -.25);
+          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED);
         }
         break;
       default:
