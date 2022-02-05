@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -18,11 +19,20 @@ public class Intake extends SubsystemBase {
     private Servo hinge;
 
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    // motor that extends arm
+    intakeMotor = new TalonSRX(7);
+  }
+
+  private static final double SPINNER_SPEED = .2;
 
   //activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled){
-
+    if(enabled){
+      intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
+    }else{
+      intakeMotor.set(ControlMode.PercentOutput, 0);
+    }
   }
 
   //drops the spinner
@@ -31,7 +41,6 @@ public class Intake extends SubsystemBase {
   public void dropSpinner(){
 
   }
-  
   
   //raises the spinner
   //assumes spinner is down
