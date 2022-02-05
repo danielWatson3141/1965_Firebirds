@@ -12,71 +12,69 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbingArmHook extends SubsystemBase {
 
-    //Stepper motor
-    public TalonSRX lifterMotor;
-    //limit switches
+  // Stepper motor
+  public TalonSRX lifterMotor;
+  // limit switches
 
-    // TODO: figure out the ports that we're using
-    public DigitalInput toplimitSwitch = new DigitalInput(0);
-    public DigitalInput bottomlimitSwitch = new DigitalInput(1);
-    //Creates an example subsystem
-  public ClimbingArmHook() {}
+  // TODO: figure out the ports that we're using
+  public DigitalInput toplimitSwitch = new DigitalInput(0);
+  public DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
+  // Creates an example subsystem
+  public ClimbingArmHook() {
+  }
 
-// This function moves the climbing hook upwards to hook onto a bar, 
-// but only when the limit switch on the top is not
-// active. This is when the hook is not extended fully.
-// It moves until the limit switch on the top is active and then stops
-// moving. This is when the hook is extended fully. It stays like this until
-// retractHook is called.
- public void erectHook(){  
-   //if top limit active set motor to 0
-    if(toplimitSwitch.get()){ 
-     lifterMotor.set(ControlMode.PercentOutput, 0);
+  // This function moves the climbing hook upwards to hook onto a bar,
+  // but only when the limit switch on the top is not
+  // active. This is when the hook is not extended fully.
+  // It moves until the limit switch on the top is active and then stops
+  // moving. This is when the hook is extended fully. It stays like this until
+  // retractHook is called.
+  public void erectHook() {
+    // if top limit active set motor to 0
+    if (toplimitSwitch.get()) {
+      lifterMotor.set(ControlMode.PercentOutput, 0);
     }
     // if its not active motor set to 0.2
     else {
       lifterMotor.set(ControlMode.PercentOutput, 0.2);
     }
-    //requires:  motor 1
+    // requires: motor 1
     // If button pressed & top limit switch off
     // motor 1 moves postively
     // else
     // do nothing
     // check limit switches every second
 
- }
-// This function moves the climbing hook downwards to pull a robot up on a bar, but 
-//  only when the limit switch on the bottom is not
-// active. This is when the hook is not retracted fully.
-// It moves until the limit switch on the bottom is active and then stops
-// moving. This is when the hook is retracted fully. It stays like this until
-// extendHook is called.
- public void retractHook(){
-   // if bottom limit switch is active motor set to 0
-  if(toplimitSwitch.get()){ 
-    lifterMotor.set(ControlMode.PercentOutput, 0);
-   }
-   // if its not active motor set to -0.2
-   else {
-     lifterMotor.set(ControlMode.PercentOutput, -0.2);
-   }
-   // requires: motor 1
-  // If button pressed & bottom limit switch off
-  // motor 1 moves negatively
-  // else
-  // do nothing
-  // check limit switches every second
- }
+  }
 
- 
- 
- 
- 
- 
+  // This function moves the climbing hook downwards to pull a robot up on a bar,
+  // but
+  // only when the limit switch on the bottom is not
+  // active. This is when the hook is not retracted fully.
+  // It moves until the limit switch on the bottom is active and then stops
+  // moving. This is when the hook is retracted fully. It stays like this until
+  // extendHook is called.
+  public void retractHook() {
+    // if bottom limit switch is active motor set to 0
+    if (toplimitSwitch.get()) {
+      lifterMotor.set(ControlMode.PercentOutput, 0);
+    }
+    // if its not active motor set to -0.2
+    else {
+      lifterMotor.set(ControlMode.PercentOutput, -0.2);
+    }
+    // requires: motor 1
+    // If button pressed & bottom limit switch off
+    // motor 1 moves negatively
+    // else
+    // do nothing
+    // check limit switches every second
+  }
+
   @Override
   public void periodic() {
-    
+
     // This method will be called once per scheduler run
   }
 
