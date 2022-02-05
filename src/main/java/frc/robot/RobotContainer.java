@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DropBalls;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
@@ -87,6 +88,8 @@ public class RobotContainer {
         new RunCommand(() -> cannon.toggleBelt(true), cannon));
     aButton.whenReleased(
         new RunCommand(() -> cannon.toggleBelt(false), cannon));
+    xButton.whenPressed(
+        new DropBalls(cannon));
   }
 
   /**

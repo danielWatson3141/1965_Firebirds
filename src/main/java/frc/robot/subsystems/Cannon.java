@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,8 +27,8 @@ public class Cannon extends SubsystemBase {
   Compressor compressor;
 
   // Creates a ping-response Ultrasonic object on DIO 1 and 2.
-  Ultrasonic ultrasonic1 = new Ultrasonic(1, 2);
-  Ultrasonic ultrasonic2 = new Ultrasonic(1, 2);
+  Ultrasonic ultrasonic1 = new Ultrasonic(0, 1);
+  Ultrasonic ultrasonic2 = new Ultrasonic(2, 3);
   // Motor
   private TalonSRX cannonMotor;
 
@@ -38,7 +39,7 @@ public class Cannon extends SubsystemBase {
     pistonArm1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
     pistonArm2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     pistonArm3 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 6);
-    compressor = new Compressor(null);
+    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     Ultrasonic.setAutomaticMode(true);
   }
 
@@ -67,6 +68,20 @@ public class Cannon extends SubsystemBase {
 
   }
 
+  static int pegNum = 1;
+
+  public void testPegs(){
+    if(pegNum <= 3){
+      setPegToggle(pegNum, true);
+    } else {
+      setPegToggle(1, false);
+      setPegToggle(2, false);
+      setPegToggle(3, false);
+      pegNum = 0;
+    }
+    pegNum++;
+  }
+
   // ultra sensor detects balls within 5 inches
   public boolean isBallPresent(int slot) {
     if (slot == 1) {
@@ -87,6 +102,7 @@ public class Cannon extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
     // This method will be called once per scheduler run
   }
 
