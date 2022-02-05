@@ -20,6 +20,15 @@ public class ClimbingArmHook extends SubsystemBase {
   public DigitalInput toplimitSwitch = new DigitalInput(0);
   public DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
+  public static enum STATE {
+    EXTENDED,
+    RETRACTED,
+    EXTENDING,
+    RETRACTING
+  }
+
+  public STATE state = STATE.RETRACTED;
+
   // Creates an example subsystem
   public ClimbingArmHook() {
   }
@@ -32,13 +41,9 @@ public class ClimbingArmHook extends SubsystemBase {
   // retractHook is called.
   public void erectHook() {
     // if top limit active set motor to 0
-    if (toplimitSwitch.get()) {
-      lifterMotor.set(ControlMode.PercentOutput, 0);
-    }
-    // if its not active motor set to 0.2
-    else {
-      lifterMotor.set(ControlMode.PercentOutput, 0.2);
-    }
+
+    state=STATE.EXTENDING;
+
     // requires: motor 1
     // If button pressed & top limit switch off
     // motor 1 moves postively
@@ -57,13 +62,7 @@ public class ClimbingArmHook extends SubsystemBase {
   // extendHook is called.
   public void retractHook() {
     // if bottom limit switch is active motor set to 0
-    if (toplimitSwitch.get()) {
-      lifterMotor.set(ControlMode.PercentOutput, 0);
-    }
-    // if its not active motor set to -0.2
-    else {
-      lifterMotor.set(ControlMode.PercentOutput, -0.2);
-    }
+    state = STATE.RETRACTING;
     // requires: motor 1
     // If button pressed & bottom limit switch off
     // motor 1 moves negatively
@@ -75,7 +74,27 @@ public class ClimbingArmHook extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // This method will be called once per scheduler run
+    switch (state) {
+      case EXTENDING:
+        if (toplimitSwitch.get()) {
+          lifterMotor.set(ControlMode.PercentOutput, 0);
+          state=STATE.EXTENDED;
+        } else {
+          lifterMotor.set(ControlMode.PercentOutput, .25);
+        }
+        break;
+      case RETRACTING:
+        if (bottomlimitSwitch.get()) {
+          lifterMotor.set(ControlMode.PercentOutput, 0);
+          state=STATE.RETRACTED;
+        } else {
+          lifterMotor.set(ControlMode.PercentOutput, -.25);
+        }
+        break;
+      default:
+        break;
+    }
+
   }
 
   @Override
