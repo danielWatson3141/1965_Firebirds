@@ -7,16 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    //Motor
-    private TalonSRX intakeMotor;
-
-    //Servo Hinge
-    private Servo hinge;
+  // Motor
+  private TalonSRX intakeMotor;
 
   /** Creates a new Intake. */
   public Intake() {
@@ -26,22 +22,22 @@ public class Intake extends SubsystemBase {
 
   private static final double SPINNER_SPEED = .2;
 
-  //activates/deactivates the spinner based on enabled
-  public void setSpinnerEnabled(boolean enabled){
-    if(enabled){
+  // activates/deactivates the spinner based on enabled
+  public void setSpinnerEnabled(boolean enabled) {
+    if (enabled) {
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
-    }else{
+    } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
     }
   }
 
-  //drops the spinner
-  //assumes spinner is up
-  //does nothing otherwise
-  public void dropSpinner(){
+  // drops the spinner
+  // assumes spinner is up
+  // does nothing otherwise
+  public void dropSpinner() {
 
   }
-  
+
   @Override
   public void periodic() {
     // This function will be called once per scheduler run
