@@ -17,22 +17,25 @@ public class Intake extends SubsystemBase {
     //Servo Hinge
     private Servo hinge;
 
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new Intake. */
   public Intake() {}
 
-  public void enableSpinner(){
-    // 
+  //activates/deactivates the spinner based on enabled
+  public void setSpinnerEnabled(boolean enabled){
 
   }
 
-  public void disableSpinner(){
-
-  }
-
+  //drops the spinner
+  //assumes spinner is up
+  //does nothing otherwise
   public void dropSpinner(){
 
   }
   
+  
+  //raises the spinner
+  //assumes spinner is down
+  //does nothing otherwise
   public void raiseSpinner(){
       
   }
