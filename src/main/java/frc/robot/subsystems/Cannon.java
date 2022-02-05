@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,40 +17,37 @@ public class Cannon extends SubsystemBase {
   // Proximity sensors
 
   // Motor
-  private TalonSRX beltDriveTalon;
+  private TalonSRX cannonMotor;
 
   /** Creates a new Cannon Subsystem. */
   public Cannon() {
+    cannonMotor = new TalonSRX(8);
   }
+
+  // Set belt on/off and direction
+  // forward controls forward/back motion
+  // on controls on/off
   
-  //Set belt on/off and direction
-  //forward controls forward/back motion
-  //on controls on/off
-  public void toggleBelt(boolean forward, boolean on){
-    //Requires: TalonSRX
+  private static final double BELT_SPEED = 0.3;
 
-    //determine motor speed
-
-    //0 if off
-
-    //1 if on
-
-    //positive if forward
-
-    //negative if backward
-    
+  public void toggleBelt(boolean enabled) {
+    if (enabled) {
+      cannonMotor.set(ControlMode.PercentOutput, BELT_SPEED);
+    } else {
+      cannonMotor.set(ControlMode.PercentOutput, -0.15);
+    }
   }
 
-  //Boolean determines position of the pegs 
-  //peg determines which peg (1,2,3)
-  public void setPegToggle(int peg, boolean up){
-    //Pegs are changed pneumatically
+  // Boolean determines position of the pegs
+  // peg determines which peg (1,2,3)
+  public void setPegToggle(int peg, boolean up) {
+    // Pegs are changed pneumatically
   }
 
-  //is a ball detected by proximity sensor
-  //slot is which slot we're asking about (1,2)
-  public boolean isBallPresent(int slot){
-    //Check if proximity sensor (slot) is activated
+  // is a ball detected by proximity sensor
+  // slot is which slot we're asking about (1,2)
+  public boolean isBallPresent(int slot) {
+    // Check if proximity sensor (slot) is activated
   }
 
   @Override
