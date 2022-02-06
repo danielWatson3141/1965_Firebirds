@@ -53,7 +53,7 @@ public class Cannon extends SubsystemBase {
     if (enabled) {
       cannonMotor.set(ControlMode.PercentOutput, BELT_SPEED);
     } else {
-      cannonMotor.set(ControlMode.PercentOutput, -0.15);
+      cannonMotor.set(ControlMode.PercentOutput, 0);
     }
   }
 

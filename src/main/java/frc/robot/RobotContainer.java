@@ -6,7 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DropBalls;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ExtendHook;
+import frc.robot.commands.GrabBalls;
+import frc.robot.commands.RetractHook;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -73,9 +77,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     rbButton.whenPressed(
-        new RunCommand(() -> arm.erectHook(), arm));
+        new ExtendHook(arm));
     lbButton.whenPressed(
-        new RunCommand(() -> arm.retractHook(), arm));
+        new RetractHook(arm));
     bButton.whenPressed(
         new RunCommand(() -> intake.setSpinnerEnabled(true), intake));
     bButton.whenReleased(
@@ -83,12 +87,10 @@ public class RobotContainer {
     yButton.whenPressed(
         new RunCommand(() -> intake.dropSpinner(), intake));
 
-    aButton.whenPressed(
-        new RunCommand(() -> cannon.toggleBelt(true), cannon));
-    aButton.whenReleased(
-        new RunCommand(() -> cannon.toggleBelt(false), cannon));
-    xButton.whenPressed(
-        new RunCommand(() -> cannon.testPegs(), cannon));
+    aButton.whileActiveOnce(
+        new GrabBalls(cannon, intake));    
+    xButton.whileActiveOnce(
+        new DropBalls(cannon));
   }
 
   /**
