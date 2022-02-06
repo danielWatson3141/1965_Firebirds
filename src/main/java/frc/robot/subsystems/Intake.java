@@ -35,7 +35,9 @@ public class Intake extends SubsystemBase {
   // assumes spinner is up
   // does nothing otherwise
   public void dropSpinner() {
-
+    //TODO: Implement this function.
+    //Should activate a solenoid
+    //Like in Cannon::setPegToggle
   }
 
   @Override

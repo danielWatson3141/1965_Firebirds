@@ -76,19 +76,27 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    //rb and lb
     rbButton.whenPressed(
         new ExtendHook(arm));
     lbButton.whenPressed(
         new RetractHook(arm));
-    bButton.whenPressed(
+
+    //B button
+    bButton.whenPressed(    //TODO: Decide if these should be in their own file.
         new RunCommand(() -> intake.setSpinnerEnabled(true), intake));
     bButton.whenReleased(
         new RunCommand(() -> intake.setSpinnerEnabled(false), intake));
+
+    //Y Button
     yButton.whenPressed(
         new RunCommand(() -> intake.dropSpinner(), intake));
 
+    //A Button
     aButton.whileActiveOnce(
-        new GrabBalls(cannon, intake));    
+        new GrabBalls(cannon, intake));   
+    
+    //X Button
     xButton.whileActiveOnce(
         new DropBalls(cannon));
   }

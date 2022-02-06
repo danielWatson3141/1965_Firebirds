@@ -85,7 +85,7 @@ public class ClimbingArmHook extends SubsystemBase {
           lifterMotor.set(ControlMode.PercentOutput, 0); // turn off motor
           state = STATE.RETRACTED; // change state to retracted
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED); // turn on motor to LIFTER_SPEED
+          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED); // turn on motor to -LIFTER_SPEED
         }
         break;
       default:

@@ -20,15 +20,18 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 public class Cannon extends SubsystemBase {
 
   // Stoppers
-  // Pneumatic cylinders
-  DoubleSolenoid pistonArm1;
-  DoubleSolenoid pistonArm2;
-  DoubleSolenoid pistonArm3;
+  // Pneumatic cylinders which control pegs
+  // 3 of them
+  DoubleSolenoid[] pistons;
+
   Compressor compressor;
 
-  // Creates a ping-response Ultrasonic object on DIO 1 and 2.
+  // Creates a ping-response Ultrasonic object on DIO 0 and 1.
   Ultrasonic ultrasonic1 = new Ultrasonic(0, 1);
+
+  // Creates a ping-response Ultrasonic object on DIO 2 and 3.
   Ultrasonic ultrasonic2 = new Ultrasonic(2, 3);
+
   // Motor
   private TalonSRX cannonMotor;
 
@@ -36,10 +39,15 @@ public class Cannon extends SubsystemBase {
   public Cannon() {
     cannonMotor = new TalonSRX(8);
 
-    pistonArm1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
-    pistonArm2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
-    pistonArm3 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 6);
+    pistons=new DoubleSolenoid[]{
+      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2),
+      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4),
+      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 6)
+    };
+
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
+    //Make the ultrasonic sensor always on
     Ultrasonic.setAutomaticMode(true);
   }
 
@@ -58,14 +66,12 @@ public class Cannon extends SubsystemBase {
   }
 
   // Boolean determines position of the pegs
-  // peg determines which peg (1,2,3)
+  // peg determines which peg (0,1,2)
   public void setPegToggle(int pegNumber, boolean up) {
-    DoubleSolenoid peg = (new DoubleSolenoid[]{pistonArm1, pistonArm2, pistonArm3})[pegNumber-1];
 
     DoubleSolenoid.Value direction = up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kOff;
 
-    peg.set(direction);    
-
+    pistons[pegNumber].set(direction);    
   }
 
   static int pegNum = 1;
@@ -82,18 +88,22 @@ public class Cannon extends SubsystemBase {
     pegNum++;
   }
 
+  private static final double ULTRASONIC_DETECTION_RANGE_MM = 10;
+
   // ultra sensor detects balls within 5 inches
   public boolean isBallPresent(int slot) {
-    if (slot == 1) {
-      // "ultrasonic1" returns true or false from the boolean equation
+
+    // TODO: Check out this alternate implementation
+    // return slot == 1 ?
+    //   ultrasonic1.getRangeMM() < 10 :
+    //   ultrasonic2.getRangeMM() < 10 ;
+
+    if (slot == 1) {      
       return (ultrasonic1.getRangeInches() < 5);
     } else if (slot == 2) {
-      // "ultrasonic2" returns true or false from the boolean equation
       return (ultrasonic2.getRangeInches() < 5);
     } else {
-
       return false;
-      // error condition when a slot doesnt exist
     }
   }
   // Check if proximity sensor (slot) is activated
