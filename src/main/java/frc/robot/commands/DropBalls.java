@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Cannon;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -14,7 +13,7 @@ public class DropBalls extends CommandBase {
   private final Cannon cannon;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new DropBalls Command.
    *
    * @param Cannon The subsystem used by this command.
    */

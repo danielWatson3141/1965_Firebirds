@@ -22,7 +22,7 @@ public class GrabBalls extends CommandBase {
   // deposit mode: belt spins while intake is closed, peg 1 is raised
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new GrabBalls command.
    *
    * @param subsystem The subsystem used by this command.
    */

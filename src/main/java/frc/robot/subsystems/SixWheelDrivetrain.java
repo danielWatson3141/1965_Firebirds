@@ -33,7 +33,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   private ADIS16470_IMU imu;
 
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain() {
     // 2 groups of motors
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);

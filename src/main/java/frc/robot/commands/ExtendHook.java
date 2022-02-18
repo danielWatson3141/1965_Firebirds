@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ClimbingArmHook;
-import frc.robot.subsystems.ExampleSubsystem;
+//import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -14,7 +14,7 @@ public class ExtendHook extends CommandBase {
   private final ClimbingArmHook armHook;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new ExtendHook command.
    *
    * @param subsystem The subsystem used by this command.
    */

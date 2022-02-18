@@ -7,13 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DropBalls;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
 import frc.robot.commands.RetractHook;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,8 +57,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     drivetrain.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
         new RunCommand(
             () -> drivetrain.drive(),
             drivetrain));
@@ -107,9 +103,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new RunCommand(
-        () -> drivetrain.drive(),
-        drivetrain);
+      return null;
   }
 }
