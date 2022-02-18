@@ -103,15 +103,16 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     targetSpeed = throttle;
 
-    if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
-      currentSpeed = targetSpeed;
-    } else if(currentSpeed < targetSpeed){
-      currentSpeed += MAX_ACCEL;
-    } else {
-      currentSpeed -= MAX_ACCEL;
-    }
+    //TODO Come back to this
+    // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
+    //   currentSpeed = targetSpeed;
+    // } else if(currentSpeed < targetSpeed){
+    //   currentSpeed += MAX_ACCEL;
+    // } else {
+    //   currentSpeed -= MAX_ACCEL;
+    // }
 
-    driver.curvatureDrive(currentSpeed, steerOutput, quickturn);
+    driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
   }
 
   @Override
