@@ -36,19 +36,32 @@ public class GrabBalls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    if (cannon.isBallPresent(1) && cannon.isBallPresent(2))
+      end(false);
+    cannon.toggleBelt(true);
+    intake.setSpinnerEnabled(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // cannon.isBallPresent(1);
 
+    if (cannon.isBallPresent(1)) {
+      cannon.setPegToggle(1, true);
+      cannon.setPegToggle(2, true);
+      if (cannon.isBallPresent(2)) {
+        cannon.setPegToggle(3, true);
+        cannon.toggleBelt(false);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    cannon.toggleBelt(false);
+    intake.setSpinnerEnabled(false);
   }
 
   // Returns true when the command should end.
