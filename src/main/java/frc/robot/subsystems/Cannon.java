@@ -22,7 +22,7 @@ public class Cannon extends SubsystemBase {
   // Stoppers
   // Pneumatic cylinders which control pegs
   // 3 of them
-  DoubleSolenoid[] pistons;
+  DoubleSolenoid piston;
 
   Compressor compressor;
 
@@ -39,12 +39,7 @@ public class Cannon extends SubsystemBase {
   public Cannon() {
     cannonMotor = new TalonSRX(8);
 
-    pistons=new DoubleSolenoid[]{
-      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2),
-      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4),
-      new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 6)
-    };
-
+    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     //Make the ultrasonic sensor always on
@@ -67,25 +62,24 @@ public class Cannon extends SubsystemBase {
 
   // Boolean determines position of the pegs
   // peg determines which peg (0,1,2)
-  public void setPegToggle(int pegNumber, boolean up) {
+  public void setPegToggle(boolean up) {
 
     DoubleSolenoid.Value direction = up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kOff;
 
-    pistons[pegNumber].set(direction);    
+    piston.set(direction);    
   }
 
   static int pegNum = 1;
 
   public void testPegs(){
-    if(pegNum <= 3){
-      setPegToggle(pegNum, true);
-    } else {
-      setPegToggle(1, false);
-      setPegToggle(2, false);
-      setPegToggle(3, false);
-      pegNum = 0;
+    setPegToggle(true);
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
-    pegNum++;
+    setPegToggle(false);
   }
 
   private static final double ULTRASONIC_DETECTION_RANGE_MM = 10;
