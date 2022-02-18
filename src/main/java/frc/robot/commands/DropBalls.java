@@ -29,6 +29,7 @@ public class DropBalls extends CommandBase {
     cannon.toggleBelt(true);
     cannon.setPegToggle(1, false);
     cannon.setPegToggle(2, false);
+    cannon.setPegToggle(3, false);
 
   }
   // Called every time the scheduler runs while the command is scheduled.

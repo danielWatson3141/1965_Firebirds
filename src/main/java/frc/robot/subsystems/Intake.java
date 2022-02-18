@@ -7,9 +7,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+
+  DoubleSolenoid piston;
+
+  Compressor compressor;
 
   // Motor
   private TalonSRX intakeMotor;
@@ -18,6 +25,10 @@ public class Intake extends SubsystemBase {
   public Intake() {
     // motor that extends arm
     intakeMotor = new TalonSRX(7);
+
+    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 8);
+  
+    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   }
 
   private static final double SPINNER_SPEED = .2;
@@ -38,6 +49,8 @@ public class Intake extends SubsystemBase {
     //TODO: Implement this function.
     //Should activate a solenoid
     //Like in Cannon::setPegToggle
+
+    piston.set(DoubleSolenoid.Value.kForward);
   }
 
   @Override

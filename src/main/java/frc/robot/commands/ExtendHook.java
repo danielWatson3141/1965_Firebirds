@@ -28,6 +28,7 @@ public class ExtendHook extends CommandBase {
   @Override
   public void initialize() {
     armHook.erectHook();
+    end(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

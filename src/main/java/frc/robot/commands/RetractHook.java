@@ -27,7 +27,8 @@ public class RetractHook extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armHook.erectHook();
+    armHook.retractHook();
+    end(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
