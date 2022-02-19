@@ -113,6 +113,16 @@ public class RobotContainer {
 
   public void test(){
     //test the hooks
+    if(myController.getLeftBumperPressed()){
+        arm.lowerHook();
+    }
+    if(myController.getRightBumperPressed()){
+        arm.raiseHook();
+    }
+    if(myController.getRightBumperReleased() || 
+       myController.getLeftBumperReleased()){
+        arm.stopHook();
+    }
 
 
     //test the peg

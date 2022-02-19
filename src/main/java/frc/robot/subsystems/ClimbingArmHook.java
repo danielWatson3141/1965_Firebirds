@@ -84,19 +84,19 @@ public class ClimbingArmHook extends SubsystemBase {
     switch (state) {
       case EXTENDING:
         if (toplimitSwitch.get()) { // if top limit switch is on
-          lifterMotor.set(ControlMode.PercentOutput, 0); // turn off motor
+          stopHook();; // turn off motor
           state = STATE.EXTENDED; // change state to extended
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED); // turn motor on to LIFTER_SPEED
+          raiseHook(); // turn motor on to LIFTER_SPEED
         }
         break;
 
       case RETRACTING:
         if (bottomlimitSwitch.get()) { // if bottom limit switch is on
-          lifterMotor.set(ControlMode.PercentOutput, 0); // turn off motor
+          stopHook();; // turn off motor
           state = STATE.RETRACTED; // change state to retracted
         } else {
-          lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED); // turn on motor to -LIFTER_SPEED
+          lowerHook();; // turn on motor to -LIFTER_SPEED
         }
         break;
       default:
