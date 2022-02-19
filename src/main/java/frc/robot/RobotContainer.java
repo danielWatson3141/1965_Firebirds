@@ -17,6 +17,9 @@ import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySerializer;
+
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -123,5 +126,11 @@ public class RobotContainer {
     //test the belt
 
     //intake
+    if(myController.getBButtonPressed()) {
+        intake.setSpinnerEnabled(true);
+    }
+    if(myController.getBButtonReleased()) {
+        intake.setSpinnerEnabled(false);
+    }
   }
 }
