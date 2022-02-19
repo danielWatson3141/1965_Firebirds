@@ -107,6 +107,7 @@ public class Cannon extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
+    
     // This method will be called once per scheduler run
   }
 
