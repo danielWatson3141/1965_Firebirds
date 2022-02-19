@@ -124,7 +124,12 @@ public class RobotContainer {
     }
 
     //test the belt
-
+    if(myController.getAButtonReleased()){
+        cannon.toggleBelt(true);
+    }
+    if(myController.getAButtonReleased()){
+        cannon.toggleBelt(false);
+    }
     //intake
     if(myController.getBButtonPressed()) {
         intake.setSpinnerEnabled(true);
