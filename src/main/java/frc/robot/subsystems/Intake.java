@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -17,6 +18,8 @@ public class Intake extends SubsystemBase {
   DoubleSolenoid piston;
 
   Compressor compressor;
+
+  boolean spinner_enabled = false;
 
   // Motor
   private TalonSRX intakeMotor;
@@ -37,8 +40,10 @@ public class Intake extends SubsystemBase {
   public void setSpinnerEnabled(boolean enabled) {
     if (enabled) {
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
+      spinner_enabled = true;
     } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
+      spinner_enabled = false;
     }
   }
 
@@ -55,6 +60,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("setSpinnerEnabled", spinner_enabled);
     // This function will be called once per scheduler run
   }
 
