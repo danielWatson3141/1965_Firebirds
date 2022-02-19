@@ -107,4 +107,21 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
       return null;
   }
+
+  public void test(){
+    //test the hooks
+
+
+    //test the peg
+    if(myController.getXButtonPressed()){
+        cannon.setPegToggle(true);
+    }
+    if(myController.getXButtonReleased()){
+        cannon.setPegToggle(false);
+    }
+
+    //test the belt
+
+    //intake
+  }
 }
