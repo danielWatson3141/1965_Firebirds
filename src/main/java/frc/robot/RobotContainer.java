@@ -137,5 +137,8 @@ public class RobotContainer {
     if(myController.getBButtonReleased()) {
         intake.setSpinnerEnabled(false);
     }
+    if(myController.getYButtonPressed()) {
+        intake.dropSpinner();
+    }
   }
 }
