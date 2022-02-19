@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbingArmHook extends SubsystemBase {
 
@@ -81,6 +82,8 @@ public class ClimbingArmHook extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Motor Speed", LIFTER_SPEED);
+
     switch (state) {
       case EXTENDING:
         if (toplimitSwitch.get()) { // if top limit switch is on
