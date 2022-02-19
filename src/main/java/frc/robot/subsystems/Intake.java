@@ -20,6 +20,7 @@ public class Intake extends SubsystemBase {
   Compressor compressor;
 
   boolean spinner_enabled = false;
+  boolean spinner_dropped = false;
 
   // Motor
   private TalonSRX intakeMotor;
@@ -53,14 +54,13 @@ public class Intake extends SubsystemBase {
   public void dropSpinner() {
     //TODO: Implement this function.
     //Should activate a solenoid
-    //Like in Cannon::setPegToggle
-
     piston.set(DoubleSolenoid.Value.kForward);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("setSpinnerEnabled", spinner_enabled);
+    SmartDashboard.putBoolean("dropSpinner", spinner_dropped);
     // This function will be called once per scheduler run
   }
 
