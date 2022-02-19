@@ -57,6 +57,17 @@ public class ClimbingArmHook extends SubsystemBase {
     state = STATE.RETRACTING;
     // sets state to retracting to set events in motion
   }
+  public void raiseHook(){
+    lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED);
+  }
+  
+  public void lowerHook(){
+    lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED);
+  }
+
+  public void stopHook(){
+    lifterMotor.set(ControlMode.PercentOutput, 0);
+  }
 
   private static final double LIFTER_SPEED = .25;
   // defines LIFTER_SPEED
