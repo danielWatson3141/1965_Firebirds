@@ -120,7 +120,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // } else {
     //   currentSpeed -= MAX_ACCEL;
     // }
-    System.out.println("Enddrive");
+    Logging.log("drivetrain", "ending");
 
     driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
   }
