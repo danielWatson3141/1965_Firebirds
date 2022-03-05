@@ -6,6 +6,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
+
+import java.security.Timestamp;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -73,19 +79,28 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public void drive() {
 
+<<<<<<< HEAD
     long currentTime = System.currentTimeMillis();
 
+=======
+    Logging.log("drivetrain", "starting");
+
+    long currentTime = System.currentTimeMillis();
+    SmartDashboard.putNumber("time", currentTime);
+
+>>>>>>> 437cff7cf4127f55954f2ce3b17a0c2db0b4521f
     double leftStickX = myController.getLeftX();
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("leftStickX", leftStickX);
-    SmartDashboard.putNumber("leftStickY", leftStickY);
+    //SmartDashboard.putNumber("leftStickX", leftStickX);
+    //SmartDashboard.putNumber("leftStickY", leftStickY);
+    SmartDashboard.putNumber("speed", currentSpeed);
 
     double rightTrigger = myController.getRightTriggerAxis();
-    SmartDashboard.putNumber("rightTrigger", rightTrigger);
+    //SmartDashboard.putNumber("rightTrigger", rightTrigger);
     double leftTrigger = myController.getLeftTriggerAxis();
-    SmartDashboard.putNumber("leftTrigger", leftTrigger);
+    //SmartDashboard.putNumber("leftTrigger", leftTrigger);
 
     double throttle = rightTrigger + (-leftTrigger);
 

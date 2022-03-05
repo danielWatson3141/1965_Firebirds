@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -17,24 +18,22 @@ public class Intake extends SubsystemBase {
 
   DoubleSolenoid piston;
 
-  Compressor compressor;
-
   boolean spinner_enabled = false;
+  boolean spinner_dropped = false;
 
   // Motor
-  private TalonSRX intakeMotor;
+  private VictorSPX intakeMotor;
 
   /** Creates a new Intake. */
   public Intake() {
     // motor that extends arm
-    intakeMotor = new TalonSRX(7);
+    intakeMotor = new VictorSPX(9);
+    intakeMotor.setInverted(true);
 
-    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 8);
-  
-    compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   }
 
-  private static final double SPINNER_SPEED = .2;
+  private static final double SPINNER_SPEED = 1;
 
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
@@ -53,14 +52,13 @@ public class Intake extends SubsystemBase {
   public void dropSpinner() {
     //TODO: Implement this function.
     //Should activate a solenoid
-    //Like in Cannon::setPegToggle
-
     piston.set(DoubleSolenoid.Value.kForward);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("setSpinnerEnabled", spinner_enabled);
+    SmartDashboard.putBoolean("dropSpinner", spinner_dropped);
     // This function will be called once per scheduler run
   }
 
