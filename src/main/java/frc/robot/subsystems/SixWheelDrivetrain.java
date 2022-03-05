@@ -6,12 +6,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Logging;
-
-import java.security.Timestamp;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -40,20 +34,20 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private ADIS16470_IMU imu;
 
   /** Creates a new SixWheelDrivetrain. */
-  public SixWheelDrivetrain() {
+  public SixWheelDrivetrain(XboxController cont) {
     // 2 groups of motors
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
+    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(6);
+    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
 
-    MotorController m_frontRight = new WPI_TalonSRX(4);
-    MotorController m_rearRight = new WPI_TalonSRX(6);
+    MotorController m_frontRight = new WPI_TalonSRX(5);
+    MotorController m_rearRight = new WPI_TalonSRX(3);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
 
-    myController = new XboxController(0);
+    myController = cont;
 
     //imu = new ADIS16470_IMU();
   }
@@ -79,45 +73,46 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public void drive() {
 
-<<<<<<< HEAD
+    System.out.println("drive");
     long currentTime = System.currentTimeMillis();
 
-=======
-    Logging.log("drivetrain", "starting");
-
-    long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
 
->>>>>>> 437cff7cf4127f55954f2ce3b17a0c2db0b4521f
     double leftStickX = myController.getLeftX();
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("leftStickX", leftStickX);
-    //SmartDashboard.putNumber("leftStickY", leftStickY);
-    SmartDashboard.putNumber("speed", currentSpeed);
+    SmartDashboard.putNumber("leftStickX", leftStickX);
+    SmartDashboard.putNumber("leftStickY", leftStickY);
 
     double rightTrigger = myController.getRightTriggerAxis();
-    //SmartDashboard.putNumber("rightTrigger", rightTrigger);
+    SmartDashboard.putNumber("rightTrigger", rightTrigger);
     double leftTrigger = myController.getLeftTriggerAxis();
-    //SmartDashboard.putNumber("leftTrigger", leftTrigger);
+    SmartDashboard.putNumber("leftTrigger", leftTrigger);
 
     double throttle = rightTrigger + (-leftTrigger);
 
     SmartDashboard.putNumber("throttle", throttle);
 
     boolean quickturn = throttle < .05 && throttle > -.05;
+    
+    double steerLimit = -0.66 * Math.abs( throttle ) + 1;
 
-    double steerLimit = -0.66 * throttle + 1;
+    //steer output determines steer rate, if quickturn is enabled adjust steering limit
+    
+    if (quickturn);
+      steerLimit= 0.7;
 
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
     double steerOutput = leftStickX;
     if (leftStickX > steerLimit)
-      steerOutput = steerLimit;
+      steerOutput = leftStickX * steerLimit;
 
     targetSpeed = throttle;
 
+    
+    
     //TODO Come back to this
     // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
     //   currentSpeed = targetSpeed;
@@ -126,6 +121,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // } else {
     //   currentSpeed -= MAX_ACCEL;
     // }
+    System.out.println("Enddrive");
 
     driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
   }
