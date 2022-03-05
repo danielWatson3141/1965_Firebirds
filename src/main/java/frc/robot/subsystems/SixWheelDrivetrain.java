@@ -73,9 +73,9 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public void drive() {
 
-    System.out.println("drive");
-    long currentTime = System.currentTimeMillis();
+    Logging.log("drivetrain", "starting");
 
+    long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
 
     double leftStickX = myController.getLeftX();
@@ -121,7 +121,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // } else {
     //   currentSpeed -= MAX_ACCEL;
     // }
-    System.out.println("Enddrive");
+    Logging.log("drivetrain", "ending");
 
     driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
   }

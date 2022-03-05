@@ -15,8 +15,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
 
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+
+import javax.swing.text.WrappedPlainView;
 
 public class Cannon extends SubsystemBase {
 
@@ -47,6 +50,7 @@ public class Cannon extends SubsystemBase {
 
     //Make the ultrasonic sensor always on
     Ultrasonic.setAutomaticMode(true);
+    Logging.log("canon", "initialized");
   }
 
   // Set belt on/off and direction
@@ -56,10 +60,13 @@ public class Cannon extends SubsystemBase {
   private static final double BELT_SPEED = 0.3;
 
   public void toggleBelt(boolean enabled) {
+    
     if (enabled) {
       cannonMotor.set(ControlMode.PercentOutput, BELT_SPEED);
+      Logging.log("cannon", "belt enabled");
     } else {
       cannonMotor.set(ControlMode.PercentOutput, 0);
+      Logging.log("cannon", "belt disabled");
     }
   }
 
@@ -69,7 +76,13 @@ public class Cannon extends SubsystemBase {
 
     DoubleSolenoid.Value direction = up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kOff;
 
-    piston.set(direction);    
+    piston.set(direction);
+    if(up)
+      Logging.log("cannon", "pegs up");
+    else{
+      Logging.log("cannon", "pegs down");
+    }
+
   }
 
   static int pegNum = 1;

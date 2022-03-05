@@ -76,7 +76,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    Logging.log("robot container", "buttons configured");
     //rb and lb
     rbButton.whenPressed(
         new ExtendHook(arm));
@@ -112,7 +112,7 @@ public class RobotContainer {
   }
 
   public void test(){
-    System.out.println("test");
+    Logging.log("robot container", "testing mode");
     //test the hooks
     if(myController.getLeftBumperPressed()){
         arm.lowerHook();
