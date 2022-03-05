@@ -3,18 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbingArmHook extends SubsystemBase {
 
   // Stepper motor
-  public TalonSRX lifterMotor;
+  public WPI_TalonSRX lifterMotor1;
+  public WPI_TalonSRX lifterMotor2;
+  public MotorControllerGroup lifterMotor;
   // limit switches
 
   // TODO: figure out the sensor ports that we're using
@@ -32,6 +33,9 @@ public class ClimbingArmHook extends SubsystemBase {
 
   // Creates an example subsystem
   public ClimbingArmHook() {
+    lifterMotor1 = new WPI_TalonSRX(7);
+    lifterMotor2 = new WPI_TalonSRX(8);
+    lifterMotor = new MotorControllerGroup(lifterMotor1, lifterMotor2);
   }
 
   // This function moves the climbing hook upwards to hook onto a bar,
@@ -59,15 +63,15 @@ public class ClimbingArmHook extends SubsystemBase {
     // sets state to retracting to set events in motion
   }
   public void raiseHook(){
-    lifterMotor.set(ControlMode.PercentOutput, LIFTER_SPEED);
+    lifterMotor.set(LIFTER_SPEED);
   }
   
   public void lowerHook(){
-    lifterMotor.set(ControlMode.PercentOutput, -LIFTER_SPEED);
+    lifterMotor.set(-LIFTER_SPEED);
   }
 
   public void stopHook(){
-    lifterMotor.set(ControlMode.PercentOutput, 0);
+    lifterMotor.set(0);
   }
 
   private static final double LIFTER_SPEED = .25;
