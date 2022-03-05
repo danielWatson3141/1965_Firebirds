@@ -33,13 +33,13 @@ import edu.wpi.first.cameraserver.CameraServer;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain();
+  private XboxController myController = new XboxController(0);
+
+  private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(myController);
   private ClimbingArmHook arm = new ClimbingArmHook();
   private Intake intake = new Intake();
 
   private Cannon cannon = new Cannon();
-  private XboxController myController = new XboxController(0);
-
   private JoystickButton aButton = new JoystickButton(myController, XboxController.Button.kA.value);
   private JoystickButton bButton = new JoystickButton(myController, XboxController.Button.kB.value);
   private JoystickButton xButton = new JoystickButton(myController, XboxController.Button.kX.value);
@@ -112,6 +112,7 @@ public class RobotContainer {
   }
 
   public void test(){
+    System.out.println("test");
     //test the hooks
     if(myController.getLeftBumperPressed()){
         arm.lowerHook();
@@ -134,7 +135,7 @@ public class RobotContainer {
     }
 
     //test the belt
-    if(myController.getAButtonReleased()){
+    if(myController.getAButtonPressed()){
         cannon.toggleBelt(true);
     }
     if(myController.getAButtonReleased()){
