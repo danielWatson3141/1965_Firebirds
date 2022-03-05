@@ -21,7 +21,7 @@ public class ClimbingArmHook extends SubsystemBase {
   // limit switches
 
   // TODO: figure out the sensor ports that we're using
-  public DigitalInput topleftlimitSwitch = new DigitalInput(0);
+  public DigitalInput topleftlimitSwitch = new DigitalInput(4);
   public DigitalInput bottomleftlimitSwitch = new DigitalInput(5);
   public DigitalInput toprightlimitSwitch = new DigitalInput(6);
   public DigitalInput bottomrightlimitSwitch = new DigitalInput(7);
@@ -46,6 +46,7 @@ public class ClimbingArmHook extends SubsystemBase {
 
     leftHook = new Hook(lifterMotor1, topleftlimitSwitch, bottomleftlimitSwitch);
     rightHook = new Hook(lifterMotor2, toprightlimitSwitch, bottomrightlimitSwitch);
+
   }
 
   // This function moves the climbing hook upwards to hook onto a bar,
@@ -126,8 +127,8 @@ public class ClimbingArmHook extends SubsystemBase {
       while(!top.get());
 
       motor.set(0);
+    
     }
-
     public void retract(){
       motor.set(-MOTOR_SPEED);
 
