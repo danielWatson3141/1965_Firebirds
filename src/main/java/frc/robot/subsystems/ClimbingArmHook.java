@@ -6,8 +6,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbingArmHook extends SubsystemBase {
@@ -19,8 +21,13 @@ public class ClimbingArmHook extends SubsystemBase {
   // limit switches
 
   // TODO: figure out the sensor ports that we're using
-  public DigitalInput toplimitSwitch = new DigitalInput(4);
-  public DigitalInput bottomlimitSwitch = new DigitalInput(5);
+  public DigitalInput topleftlimitSwitch = new DigitalInput(4);
+  public DigitalInput bottomleftlimitSwitch = new DigitalInput(5);
+  public DigitalInput toprightlimitSwitch = new DigitalInput(6);
+  public DigitalInput bottomrightlimitSwitch = new DigitalInput(7);
+
+  private Hook leftHook;
+  private Hook rightHook;
 
   public static enum STATE {
     EXTENDED, // Fully extended, top limit switch on, motor speed = 0
@@ -36,6 +43,9 @@ public class ClimbingArmHook extends SubsystemBase {
     lifterMotor1 = new WPI_TalonSRX(7);
     lifterMotor2 = new WPI_TalonSRX(8);
     lifterMotor = new MotorControllerGroup(lifterMotor1, lifterMotor2);
+
+    leftHook = new Hook(lifterMotor1, topleftlimitSwitch, bottomleftlimitSwitch);
+    rightHook = new Hook(lifterMotor2, toprightlimitSwitch, bottomrightlimitSwitch);
   }
 
   // This function moves the climbing hook upwards to hook onto a bar,
@@ -45,9 +55,9 @@ public class ClimbingArmHook extends SubsystemBase {
   // moving. This is when the hook is extended fully. It stays like this until
   // retractHook is called.
   public void erectHook() {
-
-    state = STATE.EXTENDING;
-    // sets state to extending to set events in motion
+    Logging.log("hooks","Extending");
+    leftHook.extend();
+    rightHook.extend();
   }
 
   // This function moves the climbing hook downwards to pull a robot up on a bar,
@@ -58,10 +68,11 @@ public class ClimbingArmHook extends SubsystemBase {
   // moving. This is when the hook is retracted fully. It stays like this until
   // extendHook is called.
   public void retractHook() {
-
-    state = STATE.RETRACTING;
-    // sets state to retracting to set events in motion
+    Logging.log("hooks","Extending");
+    leftHook.retract();
+    rightHook.retract();
   }
+
   public void raiseHook(){
     lifterMotor.set(LIFTER_SPEED);
   }
@@ -88,39 +99,42 @@ public class ClimbingArmHook extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Lifter Motor Speed", LIFTER_SPEED);
-   
-
-    switch (state) {
-      case EXTENDING:
-        if (toplimitSwitch.get()) { // if top limit switch is on
-          stopHook();; // turn off motor
-          state = STATE.EXTENDED; // change state to extended
-          SmartDashboard.putString(stateKey,"Extended");
-        } else {
-          raiseHook(); // turn motor on to LIFTER_SPEED
-          SmartDashboard.putString(stateKey,"Extending");
-        }
-        break;
-
-      case RETRACTING:
-        if (bottomlimitSwitch.get()) { // if bottom limit switch is on
-          stopHook();; // turn off motor
-          state = STATE.RETRACTED; // change state to retracted
-          SmartDashboard.putString(stateKey,"Retracted");
-        } else {
-          lowerHook();; // turn on motor to -LIFTER_SPEED
-          SmartDashboard.putString(stateKey,"Retracting");
-        }
-        break;
-      default:
-        break;
-    }
-
+    //SmartDashboard.putNumber("Motor Speed", LIFTER_SPEED);
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  private class Hook{
+
+    private final double MOTOR_SPEED = .25;
+
+    MotorController motor;
+    DigitalInput top, bottom;
+
+    public Hook(MotorController motorController, DigitalInput topSwitch, DigitalInput bottomSwitch){
+      motor = motorController;
+      top = topSwitch;
+      bottom = bottomSwitch;
+    }
+
+    public void extend(){
+      motor.set(MOTOR_SPEED);
+
+      while(!top.get());
+
+      motor.set(0);
+    }
+
+    public void retract(){
+      motor.set(-MOTOR_SPEED);
+
+      while(!bottom.get());
+
+      motor.set(0);
+    }
+  }
+
 }
