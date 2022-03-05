@@ -40,20 +40,20 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private ADIS16470_IMU imu;
 
   /** Creates a new SixWheelDrivetrain. */
-  public SixWheelDrivetrain(XboxController cont) {
+  public SixWheelDrivetrain() {
     // 2 groups of motors
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(6);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
+    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
+    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
 
-    MotorController m_frontRight = new WPI_TalonSRX(5);
-    MotorController m_rearRight = new WPI_TalonSRX(3);
+    MotorController m_frontRight = new WPI_TalonSRX(4);
+    MotorController m_rearRight = new WPI_TalonSRX(6);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
 
-    myController = cont;
+    myController = new XboxController(0);
 
     //imu = new ADIS16470_IMU();
   }
@@ -88,13 +88,14 @@ public class SixWheelDrivetrain extends SubsystemBase {
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("leftStickX", leftStickX);
-    SmartDashboard.putNumber("leftStickY", leftStickY);
+    //SmartDashboard.putNumber("leftStickX", leftStickX);
+    //SmartDashboard.putNumber("leftStickY", leftStickY);
+    SmartDashboard.putNumber("speed", currentSpeed);
 
     double rightTrigger = myController.getRightTriggerAxis();
-    SmartDashboard.putNumber("rightTrigger", rightTrigger);
+    //SmartDashboard.putNumber("rightTrigger", rightTrigger);
     double leftTrigger = myController.getLeftTriggerAxis();
-    SmartDashboard.putNumber("leftTrigger", leftTrigger);
+    //SmartDashboard.putNumber("leftTrigger", leftTrigger);
 
     double throttle = rightTrigger + (-leftTrigger);
 

@@ -84,17 +84,22 @@ public class ClimbingArmHook extends SubsystemBase {
   // if top limit switch is off and case = extending
   // continue to move at LIFTER_SPEED (0.25)
 
+  final String stateKey = "state";
+
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Motor Speed", LIFTER_SPEED);
+    SmartDashboard.putNumber("Lifter Motor Speed", LIFTER_SPEED);
+   
 
     switch (state) {
       case EXTENDING:
         if (toplimitSwitch.get()) { // if top limit switch is on
           stopHook();; // turn off motor
           state = STATE.EXTENDED; // change state to extended
+          SmartDashboard.putString(stateKey,"Extended");
         } else {
           raiseHook(); // turn motor on to LIFTER_SPEED
+          SmartDashboard.putString(stateKey,"Extending");
         }
         break;
 
@@ -102,8 +107,10 @@ public class ClimbingArmHook extends SubsystemBase {
         if (bottomlimitSwitch.get()) { // if bottom limit switch is on
           stopHook();; // turn off motor
           state = STATE.RETRACTED; // change state to retracted
+          SmartDashboard.putString(stateKey,"Retracted");
         } else {
           lowerHook();; // turn on motor to -LIFTER_SPEED
+          SmartDashboard.putString(stateKey,"Retracting");
         }
         break;
       default:
