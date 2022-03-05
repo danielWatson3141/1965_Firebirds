@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
 
 public class Intake extends SubsystemBase {
 
@@ -31,6 +32,7 @@ public class Intake extends SubsystemBase {
     intakeMotor.setInverted(true);
 
     piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    Logging.log("intake", "initialized");
   }
 
   private static final double SPINNER_SPEED = 25;
@@ -40,9 +42,11 @@ public class Intake extends SubsystemBase {
     if (enabled) {
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
       spinner_enabled = true;
+      Logging.log("intake", "spinner enabled");
     } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
       spinner_enabled = false;
+      Logging.log("intake", "disabled");
     }
   }
 
@@ -53,6 +57,7 @@ public class Intake extends SubsystemBase {
     //TODO: Implement this function.
     //Should activate a solenoid
     piston.set(DoubleSolenoid.Value.kForward);
+    Logging.log("intake", "dropped spinner");
   }
 
   @Override

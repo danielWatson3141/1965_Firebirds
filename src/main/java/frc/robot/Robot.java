@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-    System.out.print("teleopPeriodic");
+    Logging.log("robot", "teleop periodic");
   }
 
   @Override

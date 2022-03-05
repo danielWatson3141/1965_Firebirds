@@ -95,6 +95,8 @@ public class ClimbingArmHook extends SubsystemBase {
   // if top limit switch is off and case = extending
   // continue to move at LIFTER_SPEED (0.25)
 
+  final String stateKey = "state";
+
   @Override
   public void periodic() {
     //SmartDashboard.putNumber("Motor Speed", LIFTER_SPEED);
