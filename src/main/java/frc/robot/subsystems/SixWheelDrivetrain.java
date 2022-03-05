@@ -76,6 +76,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   double currentSpeed = 0;
 
   final double MAX_ACCEL = .2;
+  final double STEER_LIMIT_FACTOR = .38;
 
   public void drive() {
 
@@ -103,13 +104,13 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     boolean quickturn = throttle < .05 && throttle > -.05;
 
-    double steerLimit = -0.66 * throttle + 1;
+    double steerLimit = -STEER_LIMIT_FACTOR * throttle + 1;
 
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
     double steerOutput = leftStickX;
     if (leftStickX > steerLimit)
-      steerOutput = steerLimit;
+      steerOutput = steerLimit * steerOutput;
 
     targetSpeed = throttle;
 
