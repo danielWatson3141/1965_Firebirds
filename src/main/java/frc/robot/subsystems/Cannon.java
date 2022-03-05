@@ -30,11 +30,11 @@ public class Cannon extends SubsystemBase {
 
   Compressor compressor;
 
-  // Creates a ping-response Ultrasonic object on DIO 0 and 1.
-  Ultrasonic ultrasonic1 = new Ultrasonic(0, 1);
+  // // Creates a ping-response Ultrasonic object on DIO 0 and 1.
+  // Ultrasonic ultrasonic1 = new Ultrasonic(0, 1);
 
-  // Creates a ping-response Ultrasonic object on DIO 2 and 3.
-  Ultrasonic ultrasonic2 = new Ultrasonic(2, 3);
+  // // Creates a ping-response Ultrasonic object on DIO 2 and 3.
+  // Ultrasonic ultrasonic2 = new Ultrasonic(2, 3);
 
   // Motor
   private VictorSPX cannonMotor;
@@ -49,7 +49,7 @@ public class Cannon extends SubsystemBase {
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     //Make the ultrasonic sensor always on
-    Ultrasonic.setAutomaticMode(true);
+    //Ultrasonic.setAutomaticMode(true);
     Logging.log("canon", "initialized");
   }
 
@@ -108,13 +108,7 @@ public class Cannon extends SubsystemBase {
     //   ultrasonic1.getRangeMM() < 10 :
     //   ultrasonic2.getRangeMM() < 10 ;
 
-    if (slot == 1) {      
-      return (ultrasonic1.getRangeInches() < 5);
-    } else if (slot == 2) {
-      return (ultrasonic2.getRangeInches() < 5);
-    } else {
-      return false;
-    }
+    return true;
   }
   // Check if proximity sensor (slot) is activated
   // Starts the ultrasonic sensor running in automatic mode
@@ -122,7 +116,7 @@ public class Cannon extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
+    // SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
     
     // This method will be called once per scheduler run
   }

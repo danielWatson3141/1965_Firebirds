@@ -21,7 +21,7 @@ public class ClimbingArmHook extends SubsystemBase {
   // limit switches
 
   // TODO: figure out the sensor ports that we're using
-  public DigitalInput topleftlimitSwitch = new DigitalInput(4);
+  public DigitalInput topleftlimitSwitch = new DigitalInput(0);
   public DigitalInput bottomleftlimitSwitch = new DigitalInput(5);
   public DigitalInput toprightlimitSwitch = new DigitalInput(6);
   public DigitalInput bottomrightlimitSwitch = new DigitalInput(7);

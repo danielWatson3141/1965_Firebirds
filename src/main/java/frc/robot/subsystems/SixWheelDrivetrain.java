@@ -40,7 +40,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private ADIS16470_IMU imu;
 
   /** Creates a new SixWheelDrivetrain. */
-  public SixWheelDrivetrain() {
+  public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
     WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
@@ -53,7 +53,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     driver = new DifferentialDrive(m_left, m_right);
 
-    myController = new XboxController(0);
+    myController = controller;
 
     //imu = new ADIS16470_IMU();
   }
