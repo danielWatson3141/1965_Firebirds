@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -33,13 +34,15 @@ public class Cannon extends SubsystemBase {
   Ultrasonic ultrasonic2 = new Ultrasonic(2, 3);
 
   // Motor
-  private TalonSRX cannonMotor;
+  private VictorSPX cannonMotor;
 
   /** Creates a new Cannon Subsystem. */
   public Cannon() {
-    cannonMotor = new TalonSRX(8);
+    cannonMotor = new VictorSPX(10);
 
-    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
+    cannonMotor.setInverted(true);
+
+    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     //Make the ultrasonic sensor always on
@@ -107,6 +110,7 @@ public class Cannon extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
+    
     // This method will be called once per scheduler run
   }
 

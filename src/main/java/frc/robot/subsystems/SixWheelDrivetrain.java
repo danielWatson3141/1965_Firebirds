@@ -34,20 +34,20 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private ADIS16470_IMU imu;
 
   /** Creates a new SixWheelDrivetrain. */
-  public SixWheelDrivetrain() {
+  public SixWheelDrivetrain(XboxController cont) {
     // 2 groups of motors
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
+    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(6);
+    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(4);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
 
-    MotorController m_frontRight = new WPI_TalonSRX(4);
-    MotorController m_rearRight = new WPI_TalonSRX(6);
+    MotorController m_frontRight = new WPI_TalonSRX(5);
+    MotorController m_rearRight = new WPI_TalonSRX(3);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
 
-    myController = new XboxController(0);
+    myController = cont;
 
     //imu = new ADIS16470_IMU();
   }
@@ -73,7 +73,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public void drive() {
 
+    System.out.println("drive");
     long currentTime = System.currentTimeMillis();
+
+    SmartDashboard.putNumber("time", currentTime);
 
     double leftStickX = myController.getLeftX();
     double leftStickY = myController.getLeftY();
@@ -111,6 +114,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // } else {
     //   currentSpeed -= MAX_ACCEL;
     // }
+    System.out.println("Enddrive");
 
     driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
   }
