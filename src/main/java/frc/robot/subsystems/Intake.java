@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
     } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
       spinner_enabled = false;
-      Logging.log("intake", "disabled");
+      //Logging.log("intake", "disabled");
     }
   }
 
