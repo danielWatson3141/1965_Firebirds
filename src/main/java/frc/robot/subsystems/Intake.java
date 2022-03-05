@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
     piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   }
 
-  private static final double SPINNER_SPEED = 1;
+  private static final double SPINNER_SPEED = 25;
 
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
