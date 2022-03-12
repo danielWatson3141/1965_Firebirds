@@ -56,7 +56,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
-    steeringLimiter = new SlewRateLimiter(0.5);
+    steeringLimiter = new SlewRateLimiter(2);
     throttleLimiter = new SlewRateLimiter(0.5);
 
     myController = controller;
@@ -112,14 +112,20 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     double steerLimit = -STEER_LIMIT_FACTOR * throttle + 1;
 
+    if(quickturn){
+      steerLimit = .43;
+    }
+
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
     double steerInput = leftStickX;
-    if (leftStickX > steerLimit)
+    if (Math.abs(leftStickX) > steerLimit)
       steerInput = steerLimit * steerInput;
 
     double steerOutput = steeringLimiter.calculate((steerInput));
     targetSpeed = throttleLimiter.calculate( throttle );
+
+    SmartDashboard.putNumber("steerOutput", steerOutput);
 
     //TODO Come back to this
     // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
@@ -131,7 +137,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // }
     //Logging.log("drivetrain", "ending");
 
-    driver.curvatureDrive(targetSpeed, steerOutput, quickturn);
+    driver.curvatureDrive(-targetSpeed, steerOutput, quickturn);
   }
 
   @Override

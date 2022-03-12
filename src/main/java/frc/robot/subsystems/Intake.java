@@ -35,11 +35,12 @@ public class Intake extends SubsystemBase {
     Logging.log("intake", "initialized");
   }
 
-  private static final double SPINNER_SPEED = 100;
+  private static final double SPINNER_SPEED = -100;
 
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
     if (enabled) {
+      dropSpinner();
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
       spinner_enabled = true;
       Logging.log("intake", "spinner enabled");
@@ -58,6 +59,20 @@ public class Intake extends SubsystemBase {
     //Should activate a solenoid
     piston.set(DoubleSolenoid.Value.kForward);
     Logging.log("intake", "dropped spinner");
+  }
+
+  public void raiseSpinner() {
+    piston.set(DoubleSolenoid.Value.kReverse);
+    Logging.log("intake", "raised spinner");
+  }
+
+  public void toggleSpinner() {
+    boolean up = piston.get() == DoubleSolenoid.Value.kForward;
+    if(up){
+      raiseSpinner();
+    } else {
+      dropSpinner();
+    }
   }
 
   @Override

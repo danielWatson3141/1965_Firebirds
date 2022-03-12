@@ -57,7 +57,7 @@ public class Cannon extends SubsystemBase {
   // forward controls forward/back motion
   // on controls on/off
 
-  private static final double BELT_SPEED = 0.3;
+  private static final double BELT_SPEED = 1.0;
 
   public void toggleBelt(boolean enabled) {
     
@@ -83,7 +83,7 @@ public class Cannon extends SubsystemBase {
   }
 
   public void togglePeg(){
-    boolean up = piston.get() == DoubleSolenoid.Value.kForward;
+    boolean up = piston.get() == DoubleSolenoid.Value.kReverse;
     setPegToggle(!up);
   }
 

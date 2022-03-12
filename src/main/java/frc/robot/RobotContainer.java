@@ -15,12 +15,16 @@ import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySerializer;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -54,6 +58,10 @@ public class RobotContainer {
     private JoystickButton leftStickButton = new JoystickButton(myController, XboxController.Button.kLeftStick.value);
     private JoystickButton rightStickButton = new JoystickButton(myController, XboxController.Button.kRightStick.value);
 
+    UsbCamera camera1;
+    UsbCamera camera2;
+    NetworkTableEntry cameraSelection;
+
     // The container for the robot. Contains subsystems, OI devices, and commands.
 
     // The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,7 +69,13 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
-        CameraServer.startAutomaticCapture();
+        camera1 = CameraServer.startAutomaticCapture(0);
+        camera1.setResolution(300, 300);
+        camera2 = CameraServer.startAutomaticCapture(1);
+        camera2.setResolution(300, 300);
+
+        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+
         drivetrain.setDefaultCommand(
                 new RunCommand(
                         () -> drivetrain.drive(),
@@ -80,39 +94,47 @@ public class RobotContainer {
         Logging.log("robot container", "buttons configured");
         // rb and lb
         rbButton.whenPressed(
-                new RunCommand(() -> arm.raiseHook(), arm));
+                new InstantCommand(() -> arm.raiseHook(), arm));
 
         lbButton.whenPressed(
-                new RunCommand(() -> arm.lowerHook(), arm));
+                new InstantCommand(() -> arm.lowerHook(), arm));
 
         lbButton.whenReleased(
-                new RunCommand(() -> arm.stopHook(), arm));
+                new InstantCommand(() -> arm.stopHook(), arm));
 
         rbButton.whenReleased(
-                new RunCommand(() -> arm.stopHook(), arm));
+                new InstantCommand(() -> arm.stopHook(), arm));
 
-        // B button
-        bButton.whenPressed( // TODO: Decide if these should be in their own file.
-                new RunCommand(() -> intake.setSpinnerEnabled(true), intake));
-        bButton.whenReleased(
-                new RunCommand(() -> intake.setSpinnerEnabled(false), intake));
-
-        // Y Button
-        yButton.whenPressed(
-                new RunCommand(() -> intake.dropSpinner(), intake));
+        // // Y Button
+        // yButton.whenPressed(
+        //         new InstantCommand(() -> intake.dropSpinner(), intake));
 
         // A Button
         aButton.whileActiveOnce(
                 new GrabBalls(cannon, intake));
 
         // X Button
-        xButton.whileActiveOnce(
-                new DropBalls(cannon));
+        xButton.whenPressed(
+                new InstantCommand(() -> switchCamera()));
 
-        // Back Button
-        backButton.whenPressed(
-                new RunCommand(() -> cannon.togglePeg(), cannon));
+        // B Button
+        bButton.whenPressed(
+                new InstantCommand(() -> cannon.togglePeg(), cannon));
 
+    }
+
+    boolean frontCamera = true;
+
+    public void switchCamera(){
+        if(frontCamera){
+            Logging.log("Camera","Switching to camera 2");
+            cameraSelection.setString(camera2.getName());
+            frontCamera = false;
+        } else {
+            Logging.log("Camera","Switching to camera 1");
+            cameraSelection.setString(camera1.getName());
+            frontCamera = true;
+        }
     }
 
     public void test() {
@@ -152,11 +174,9 @@ public class RobotContainer {
             intake.setSpinnerEnabled(false);
         }
         if (myController.getYButtonPressed()) {
-            intake.dropSpinner();
+            intake.toggleSpinner();
         }
-        if (myController.getBackButtonPressed()) {
-            intake.dropSpinner();
-        }
+        
     }
 
     /**

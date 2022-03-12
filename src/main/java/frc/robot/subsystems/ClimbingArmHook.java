@@ -86,7 +86,7 @@ public class ClimbingArmHook extends SubsystemBase {
     lifterMotor.set(0);
   }
 
-  private static final double LIFTER_SPEED = .25;
+  private static final double LIFTER_SPEED = 1.00;
   // defines LIFTER_SPEED
 
 
