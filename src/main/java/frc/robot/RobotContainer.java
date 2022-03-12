@@ -56,6 +56,8 @@ public class RobotContainer {
 
     // The container for the robot. Contains subsystems, OI devices, and commands.
 
+    // The container for the robot. Contains subsystems, OI devices, and commands.
+
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -77,10 +79,17 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
         // rb and lb
-        rbButton.whileActiveOnce(
-                new ExtendHook(arm));
-        lbButton.whileActiveOnce(
-                new RetractHook(arm));
+        rbButton.whenPressed(
+                new RunCommand(() -> arm.raiseHook(), arm));
+
+        lbButton.whenPressed(
+                new RunCommand(() -> arm.lowerHook(), arm));
+
+        lbButton.whenReleased(
+                new RunCommand(() -> arm.stopHook(), arm));
+
+        rbButton.whenReleased(
+                new RunCommand(() -> arm.stopHook(), arm));
 
         // B button
         bButton.whenPressed( // TODO: Decide if these should be in their own file.
@@ -104,15 +113,6 @@ public class RobotContainer {
         backButton.whenPressed(
                 new RunCommand(() -> cannon.togglePeg(), cannon));
 
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return null;
     }
 
     public void test() {
