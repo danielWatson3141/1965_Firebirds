@@ -85,6 +85,11 @@ public class Cannon extends SubsystemBase {
 
   }
 
+  public void togglePeg(){
+    boolean up = piston.get() == DoubleSolenoid.Value.kForward;
+    setPegToggle(!up);
+  }
+
   static int pegNum = 1;
 
   public void testPegs(){

@@ -54,9 +54,9 @@ public class RobotContainer {
   private JoystickButton leftStickButton = new JoystickButton(myController, XboxController.Button.kLeftStick.value);
   private JoystickButton rightStickButton = new JoystickButton(myController, XboxController.Button.kRightStick.value);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+
+   // The container for the robot. Contains subsystems, OI devices, and commands.
+   
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -100,6 +100,11 @@ public class RobotContainer {
     //X Button
     xButton.whileActiveOnce(
         new DropBalls(cannon));
+    
+    //Back Button
+    backButton.whenPressed(
+        new RunCommand(() -> cannon.pegToggle(), cannon));
+        
   }
 
   /**
@@ -149,6 +154,8 @@ public class RobotContainer {
         intake.setSpinnerEnabled(false);
     }
     if(myController.getYButtonPressed()) {
+        intake.dropSpinner();
+    if(myController.()) {
         intake.dropSpinner();
     }
   }
