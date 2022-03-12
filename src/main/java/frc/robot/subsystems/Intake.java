@@ -35,7 +35,7 @@ public class Intake extends SubsystemBase {
     Logging.log("intake", "initialized");
   }
 
-  private static final double SPINNER_SPEED = 25;
+  private static final double SPINNER_SPEED = 100;
 
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
     } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
       spinner_enabled = false;
-      Logging.log("intake", "disabled");
+      //Logging.log("intake", "disabled");
     }
   }
 

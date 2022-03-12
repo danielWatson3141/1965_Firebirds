@@ -112,7 +112,7 @@ public class RobotContainer {
   }
 
   public void test(){
-    Logging.log("robot container", "testing mode");
+   // Logging.log("robot container", "testing mode");
     //test the hooks
     if(myController.getLeftBumperPressed()){
         arm.lowerHook();
