@@ -36,7 +36,7 @@ public class GrabBalls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    cannon.setPegToggle(true);
+    //cannon.setPegToggle(true);
     cannon.toggleBelt(true);
     intake.setSpinnerEnabled(true);
   }

@@ -27,7 +27,7 @@ public class DropBalls extends CommandBase {
   @Override
   public void initialize() {
     cannon.toggleBelt(true);
-    cannon.setPegToggle(false);
+    //git scannon.setPegToggle(false);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override

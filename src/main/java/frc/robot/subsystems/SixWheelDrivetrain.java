@@ -19,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,6 +40,9 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   private ADIS16470_IMU imu;
 
+  private SlewRateLimiter steeringLimiter;
+  private SlewRateLimiter throttleLimiter;
+
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
@@ -52,6 +56,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
+    steeringLimiter = new SlewRateLimiter(0.5);
+    throttleLimiter = new SlewRateLimiter(0.5);
 
     myController = controller;
 
@@ -108,11 +114,12 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("steerLimit", steerLimit);
 
-    double steerOutput = leftStickX;
+    double steerInput = leftStickX;
     if (leftStickX > steerLimit)
-      steerOutput = steerLimit * steerOutput;
+      steerInput = steerLimit * steerInput;
 
-    targetSpeed = throttle;
+    double steerOutput = steeringLimiter.calculate((steerInput));
+    targetSpeed = throttleLimiter.calculate( throttle );
 
     //TODO Come back to this
     // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
