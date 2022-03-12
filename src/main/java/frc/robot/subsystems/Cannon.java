@@ -74,15 +74,14 @@ public class Cannon extends SubsystemBase {
   // peg determines which peg (0,1,2)
   public void setPegToggle(boolean up) {
 
-    DoubleSolenoid.Value direction = up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kOff;
-
+    DoubleSolenoid.Value direction = !up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse;
     piston.set(direction);
     if(up)
       Logging.log("cannon", "pegs up");
-    else{
+    else
       Logging.log("cannon", "pegs down");
-    }
-    SmartDashboard.putBoolean("enable Peg", up);
+    
+    SmartDashboard.putBoolean("enable peg", up);
   }
 
   public void togglePeg(){
