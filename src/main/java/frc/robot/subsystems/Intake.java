@@ -35,7 +35,7 @@ public class Intake extends SubsystemBase {
     Logging.log("intake", "initialized");
   }
 
-  private static final double SPINNER_SPEED = 1;
+  private static final double SPINNER_SPEED = 100;
 
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
