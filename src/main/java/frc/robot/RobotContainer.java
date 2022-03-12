@@ -79,10 +79,17 @@ public class RobotContainer {
     Logging.log("robot container", "buttons configured");
     //rb and lb
     rbButton.whenPressed(
-        new ExtendHook(arm));
+        new RunCommand(() -> arm.raiseHook(), arm));
+        
     lbButton.whenPressed(
-        new RetractHook(arm));
+        new RunCommand(() -> arm.lowerHook(), arm));
 
+    lbButton.whenReleased(
+        new RunCommand(() -> arm.stopHook(), arm));
+
+    rbButton.whenReleased(
+        new RunCommand(() -> arm.stopHook(), arm));
+        
     //B button
     bButton.whenPressed(    //TODO: Decide if these should be in their own file.
         new RunCommand(() -> intake.setSpinnerEnabled(true), intake));
