@@ -82,7 +82,7 @@ public class Cannon extends SubsystemBase {
     else{
       Logging.log("cannon", "pegs down");
     }
-
+    SmartDashboard.putBoolean("enable Peg", up);
   }
 
   public void togglePeg(){
@@ -102,7 +102,7 @@ public class Cannon extends SubsystemBase {
     }
     setPegToggle(false);
   }
-
+  
   private static final double ULTRASONIC_DETECTION_RANGE_MM = 10;
 
   // ultra sensor detects balls within 5 inches
