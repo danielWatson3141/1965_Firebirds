@@ -44,6 +44,6 @@ public class ExtendHook extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return armHook.state == ClimbingArmHook.STATE.EXTENDED;
+    return false;
   }
 }
