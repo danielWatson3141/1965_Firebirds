@@ -94,10 +94,10 @@ public class RobotContainer {
         Logging.log("robot container", "buttons configured");
         // rb and lb
         rbButton.whenPressed(
-                new InstantCommand(() -> arm.raiseHook(), arm));
+                new InstantCommand(() -> arm.erectHook(), arm));
 
         lbButton.whenPressed(
-                new InstantCommand(() -> arm.lowerHook(), arm));
+                new InstantCommand(() -> arm.retractHook(), arm));
 
         lbButton.whenReleased(
                 new InstantCommand(() -> arm.stopHook(), arm));
@@ -107,7 +107,7 @@ public class RobotContainer {
 
         // // Y Button
         // yButton.whenPressed(
-        //         new InstantCommand(() -> intake.dropSpinner(), intake));
+        // new InstantCommand(() -> intake.dropSpinner(), intake));
 
         // A Button
         aButton.whileActiveOnce(
@@ -125,13 +125,13 @@ public class RobotContainer {
 
     boolean frontCamera = true;
 
-    public void switchCamera(){
-        if(frontCamera){
-            Logging.log("Camera","Switching to camera 2");
+    public void switchCamera() {
+        if (frontCamera) {
+            Logging.log("Camera", "Switching to camera 2");
             cameraSelection.setString(camera2.getName());
             frontCamera = false;
         } else {
-            Logging.log("Camera","Switching to camera 1");
+            Logging.log("Camera", "Switching to camera 1");
             cameraSelection.setString(camera1.getName());
             frontCamera = true;
         }
@@ -141,10 +141,10 @@ public class RobotContainer {
         // Logging.log("robot container", "testing mode");
         // test the hooks
         if (myController.getLeftBumperPressed()) {
-            arm.lowerHook();
+            arm.erectHook();
         }
         if (myController.getRightBumperPressed()) {
-            arm.raiseHook();
+            arm.retractHook();
         }
         if (myController.getRightBumperReleased() ||
                 myController.getLeftBumperReleased()) {
@@ -176,7 +176,7 @@ public class RobotContainer {
         if (myController.getYButtonPressed()) {
             intake.toggleSpinner();
         }
-        
+
     }
 
     /**
