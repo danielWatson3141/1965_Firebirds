@@ -7,9 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DropBalls;
-//import frc.robot.commands.ExtendHook;
+import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
-//import frc.robot.commands.RetractHook;
+import frc.robot.commands.RetractHook;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
@@ -91,8 +91,8 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /** 
-        
+        Logging.log("robot container", "buttons configured");
+        // rb and lb
         rbButton.whenPressed(
                 new InstantCommand(() -> arm.raiseHook(), arm));
 
@@ -104,16 +104,10 @@ public class RobotContainer {
 
         rbButton.whenReleased(
                 new InstantCommand(() -> arm.stopHook(), arm));
-        */
-Logging.log("robot container", "buttons configured");
-        // rb and lb
-        rbButton.whenPressed(
-            new InstantCommand(() -> arm.pnumUpDown(), arm));
-
 
         // // Y Button
-        //yButton.whenPressed(
-            // new InstantCommand(() -> intake.dropSpinner(), intake));
+        // yButton.whenPressed(
+        //         new InstantCommand(() -> intake.dropSpinner(), intake));
 
         // A Button
         aButton.whileActiveOnce(
@@ -146,7 +140,6 @@ Logging.log("robot container", "buttons configured");
     public void test() {
         // Logging.log("robot container", "testing mode");
         // test the hooks
-        /** 
         if (myController.getLeftBumperPressed()) {
             arm.lowerHook();
         }
@@ -157,7 +150,7 @@ Logging.log("robot container", "buttons configured");
                 myController.getLeftBumperReleased()) {
             arm.stopHook();
         }
-        */
+
         // test the peg
         if (myController.getXButtonPressed()) {
             cannon.setPegToggle(true);
