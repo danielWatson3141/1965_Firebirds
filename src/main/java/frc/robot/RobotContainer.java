@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DropBalls;
+import frc.robot.commands.EjectBall;
 import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
 import frc.robot.commands.RetractHook;
+import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
@@ -17,6 +19,7 @@ import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySerializer;
@@ -106,8 +109,8 @@ public class RobotContainer {
                 new InstantCommand(() -> arm.stopHook(), arm));
 
         // // Y Button
-        // yButton.whenPressed(
-        // new InstantCommand(() -> intake.dropSpinner(), intake));
+        yButton.whileActiveOnce(
+                new EjectBall(cannon, intake));
 
         // A Button
         aButton.whileActiveOnce(
@@ -185,6 +188,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        return new GrabBalls(cannon, intake).andThen(
+                new WaitCommand(3).andThen(
+                        new WaitCommand(6).raceWith(new RollAuto(drivetrain))));
     }
 }

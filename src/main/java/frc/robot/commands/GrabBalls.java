@@ -37,8 +37,8 @@ public class GrabBalls extends CommandBase {
   @Override
   public void initialize() {
     //cannon.setPegToggle(true);
-    cannon.toggleBelt(true);
-    intake.setSpinnerEnabled(true);
+    cannon.toggleBelt();
+    intake.toggleRoller();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,13 +50,13 @@ public class GrabBalls extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cannon.toggleBelt(false);
-    intake.setSpinnerEnabled(false);
+   // cannon.toggleBelt(false);
+   // intake.setSpinnerEnabled(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

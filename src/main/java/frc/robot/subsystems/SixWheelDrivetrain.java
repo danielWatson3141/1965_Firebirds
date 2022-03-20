@@ -43,6 +43,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private SlewRateLimiter steeringLimiter;
   private SlewRateLimiter throttleLimiter;
 
+  public static boolean driveOverride = false;
+
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
@@ -56,8 +58,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_right.setInverted(true);
 
     driver = new DifferentialDrive(m_left, m_right);
-    steeringLimiter = new SlewRateLimiter(2);
-    throttleLimiter = new SlewRateLimiter(0.5);
+    steeringLimiter = new SlewRateLimiter(2.5);
+    throttleLimiter = new SlewRateLimiter(1.2);
 
     myController = controller;
 
@@ -85,8 +87,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
   final double STEER_LIMIT_FACTOR = .38;
 
   public void drive() {
-
-   // Logging.log("drivetrain", "starting");
+    if(driveOverride)
+      return;
+    
+   //Logging.log("drivetrain", "driving");
 
     long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
@@ -144,4 +148,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public void goAtSpeed(double speed){
+    System.out.println("GO at speed "+speed);
+    driver.curvatureDrive(speed, 0, false);
+  }
+
 }

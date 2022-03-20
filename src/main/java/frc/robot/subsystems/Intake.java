@@ -36,9 +36,10 @@ public class Intake extends SubsystemBase {
   }
 
   private static final double SPINNER_SPEED = -100;
-
+public boolean spinnerEnabled = false;
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
+    spinnerEnabled = enabled;
     if (enabled) {
       dropSpinner();
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
@@ -75,6 +76,10 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  public void toggleRoller(){
+    setSpinnerEnabled(!spinnerEnabled);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("setSpinnerEnabled", spinner_enabled);
@@ -85,5 +90,9 @@ public class Intake extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  public void setSpinnerReverse() {
+    intakeMotor.set(ControlMode.PercentOutput, -SPINNER_SPEED);
   }
 }

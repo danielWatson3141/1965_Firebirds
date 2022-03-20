@@ -58,9 +58,11 @@ public class Cannon extends SubsystemBase {
   // on controls on/off
 
   private static final double BELT_SPEED = 1.0;
+  public boolean beltEnabled = false;
 
   public void toggleBelt(boolean enabled) {
-    
+    beltEnabled = enabled;
+
     if (enabled) {
       cannonMotor.set(ControlMode.PercentOutput, BELT_SPEED);
       Logging.log("cannon", "belt enabled");
@@ -68,6 +70,16 @@ public class Cannon extends SubsystemBase {
       cannonMotor.set(ControlMode.PercentOutput, 0);
       Logging.log("cannon", "belt disabled");
     }
+  }
+
+  public void setBeltReverse(){
+    Logging.log("cannon", "belt reversed");
+    cannonMotor.set(ControlMode.PercentOutput, -BELT_SPEED);
+  }
+
+  public void toggleBelt(){
+    toggleBelt(!beltEnabled);
+    
   }
 
   // Boolean determines position of the pegs
