@@ -23,6 +23,8 @@ import javax.swing.text.WrappedPlainView;
 
 public class Cannon extends SubsystemBase {
 
+  public static final boolean DEFENSE_MODE = false;
+
   // Stoppers
   // Pneumatic cylinders which control pegs
   // 3 of them
@@ -45,11 +47,11 @@ public class Cannon extends SubsystemBase {
 
     cannonMotor.setInverted(true);
 
-    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+    piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
-    //Make the ultrasonic sensor always on
-    //Ultrasonic.setAutomaticMode(true);
+    // Make the ultrasonic sensor always on
+    // Ultrasonic.setAutomaticMode(true);
     Logging.log("canon", "initialized");
   }
 
@@ -63,6 +65,11 @@ public class Cannon extends SubsystemBase {
   public void toggleBelt(boolean enabled) {
     beltEnabled = enabled;
 
+    if (DEFENSE_MODE) {
+      beltEnabled = false;
+      enabled = false;
+    }
+
     if (enabled) {
       cannonMotor.set(ControlMode.PercentOutput, BELT_SPEED);
       Logging.log("cannon", "belt enabled");
@@ -72,14 +79,18 @@ public class Cannon extends SubsystemBase {
     }
   }
 
-  public void setBeltReverse(){
+  public void setBeltReverse() {
+
+    if (DEFENSE_MODE)
+      return;
+
     Logging.log("cannon", "belt reversed");
     cannonMotor.set(ControlMode.PercentOutput, -BELT_SPEED);
   }
 
-  public void toggleBelt(){
+  public void toggleBelt() {
     toggleBelt(!beltEnabled);
-    
+
   }
 
   // Boolean determines position of the pegs
@@ -88,22 +99,22 @@ public class Cannon extends SubsystemBase {
 
     DoubleSolenoid.Value direction = !up ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse;
     piston.set(direction);
-    if(up)
+    if (up)
       Logging.log("cannon", "pegs up");
     else
       Logging.log("cannon", "pegs down");
-    
+
     SmartDashboard.putBoolean("enable peg", up);
   }
 
-  public void togglePeg(){
+  public void togglePeg() {
     boolean up = piston.get() == DoubleSolenoid.Value.kReverse;
     setPegToggle(!up);
   }
 
   static int pegNum = 1;
 
-  public void testPegs(){
+  public void testPegs() {
     setPegToggle(true);
     try {
       Thread.sleep(1000);
@@ -113,7 +124,7 @@ public class Cannon extends SubsystemBase {
     }
     setPegToggle(false);
   }
-  
+
   private static final double ULTRASONIC_DETECTION_RANGE_MM = 10;
 
   // ultra sensor detects balls within 5 inches
@@ -121,8 +132,8 @@ public class Cannon extends SubsystemBase {
 
     // TODO: Check out this alternate implementation
     // return slot == 1 ?
-    //   ultrasonic1.getRangeMM() < 10 :
-    //   ultrasonic2.getRangeMM() < 10 ;
+    // ultrasonic1.getRangeMM() < 10 :
+    // ultrasonic2.getRangeMM() < 10 ;
 
     return true;
   }
@@ -133,7 +144,7 @@ public class Cannon extends SubsystemBase {
   @Override
   public void periodic() {
     // SmartDashboard.putNumber("UltraSonic Sensor", ultrasonic1.getRangeMM());
-    
+
     // This method will be called once per scheduler run
   }
 

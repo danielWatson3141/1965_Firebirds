@@ -31,15 +31,22 @@ public class Intake extends SubsystemBase {
     intakeMotor = new VictorSPX(9);
     intakeMotor.setInverted(true);
 
-    piston=new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
     Logging.log("intake", "initialized");
   }
 
-  private static final double SPINNER_SPEED = -100;
-public boolean spinnerEnabled = false;
+  private static final double SPINNER_SPEED = -0.65;
+  public boolean spinnerEnabled = false;
+
   // activates/deactivates the spinner based on enabled
   public void setSpinnerEnabled(boolean enabled) {
     spinnerEnabled = enabled;
+
+    if (Cannon.DEFENSE_MODE) {
+      spinnerEnabled = false;
+      enabled = false;
+    }
+
     if (enabled) {
       dropSpinner();
       intakeMotor.set(ControlMode.PercentOutput, SPINNER_SPEED);
@@ -48,18 +55,23 @@ public boolean spinnerEnabled = false;
     } else {
       intakeMotor.set(ControlMode.PercentOutput, 0);
       spinner_enabled = false;
-      //Logging.log("intake", "disabled");
+      // Logging.log("intake", "disabled");
     }
   }
 
   // drops the spinner
   // assumes spinner is up
   // does nothing otherwise
+
   public void dropSpinner() {
-    //TODO: Implement this function.
-    //Should activate a solenoid
-    piston.set(DoubleSolenoid.Value.kForward);
-    Logging.log("intake", "dropped spinner");
+
+    if (Cannon.DEFENSE_MODE) {
+      piston.set(DoubleSolenoid.Value.kReverse);
+    } else{
+      piston.set(DoubleSolenoid.Value.kForward);
+      Logging.log("intake", "dropped spinner");
+    }
+    
   }
 
   public void raiseSpinner() {
@@ -69,14 +81,14 @@ public boolean spinnerEnabled = false;
 
   public void toggleSpinner() {
     boolean up = piston.get() == DoubleSolenoid.Value.kForward;
-    if(up){
+    if (up) {
       raiseSpinner();
     } else {
       dropSpinner();
     }
   }
 
-  public void toggleRoller(){
+  public void toggleRoller() {
     setSpinnerEnabled(!spinnerEnabled);
   }
 
@@ -93,6 +105,9 @@ public boolean spinnerEnabled = false;
   }
 
   public void setSpinnerReverse() {
-    intakeMotor.set(ControlMode.PercentOutput, -SPINNER_SPEED);
+    
+    if (Cannon.DEFENSE_MODE)
+      return;
+      intakeMotor.set(ControlMode.PercentOutput, -SPINNER_SPEED);
   }
 }

@@ -59,7 +59,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     driver = new DifferentialDrive(m_left, m_right);
     steeringLimiter = new SlewRateLimiter(2.5);
-    throttleLimiter = new SlewRateLimiter(1.2);
+    throttleLimiter = new SlewRateLimiter(1.3);
 
     myController = controller;
 

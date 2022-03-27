@@ -40,26 +40,29 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private XboxController myController = new XboxController(0);
+    private XboxController driverController = new XboxController(0);
+    private XboxController coPilotController = new XboxController(1);
 
-    private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(myController);
+    private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
     private ClimbingArmHook arm = new ClimbingArmHook();
     private Intake intake = new Intake();
-
     private Cannon cannon = new Cannon();
-    private JoystickButton aButton = new JoystickButton(myController, XboxController.Button.kA.value);
-    private JoystickButton bButton = new JoystickButton(myController, XboxController.Button.kB.value);
-    private JoystickButton xButton = new JoystickButton(myController, XboxController.Button.kX.value);
-    private JoystickButton yButton = new JoystickButton(myController, XboxController.Button.kY.value);
 
-    private JoystickButton lbButton = new JoystickButton(myController, XboxController.Button.kLeftBumper.value);
-    private JoystickButton rbButton = new JoystickButton(myController, XboxController.Button.kRightBumper.value);
+    private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
-    private JoystickButton backButton = new JoystickButton(myController, XboxController.Button.kBack.value);
-    private JoystickButton startButton = new JoystickButton(myController, XboxController.Button.kStart.value);
+    private JoystickButton aButton = new JoystickButton(driverController, XboxController.Button.kA.value);
+    private JoystickButton bButton = new JoystickButton(driverController, XboxController.Button.kB.value);
+    private JoystickButton xButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+    private JoystickButton yButton = new JoystickButton(driverController, XboxController.Button.kY.value);
 
-    private JoystickButton leftStickButton = new JoystickButton(myController, XboxController.Button.kLeftStick.value);
-    private JoystickButton rightStickButton = new JoystickButton(myController, XboxController.Button.kRightStick.value);
+    private JoystickButton lbButton = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
+    private JoystickButton rbButton = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
+
+    private JoystickButton backButton = new JoystickButton(driverController, XboxController.Button.kBack.value);
+    private JoystickButton startButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
+
+    private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
+    private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
 
     UsbCamera camera1;
     UsbCamera camera2;
@@ -124,6 +127,9 @@ public class RobotContainer {
         bButton.whenPressed(
                 new InstantCommand(() -> cannon.togglePeg(), cannon));
 
+        coPilotBButton.whenPressed(
+                new InstantCommand(() -> cannon.togglePeg(), cannon));
+
     }
 
     boolean frontCamera = true;
@@ -143,40 +149,40 @@ public class RobotContainer {
     public void test() {
         // Logging.log("robot container", "testing mode");
         // test the hooks
-        if (myController.getLeftBumperPressed()) {
+        if (driverController.getLeftBumperPressed()) {
             arm.erectHook();
         }
-        if (myController.getRightBumperPressed()) {
+        if (driverController.getRightBumperPressed()) {
             arm.retractHook();
         }
-        if (myController.getRightBumperReleased() ||
-                myController.getLeftBumperReleased()) {
+        if (driverController.getRightBumperReleased() ||
+                driverController.getLeftBumperReleased()) {
             arm.stopHook();
         }
 
         // test the peg
-        if (myController.getXButtonPressed()) {
+        if (driverController.getXButtonPressed()) {
             cannon.setPegToggle(true);
         }
-        if (myController.getXButtonReleased()) {
+        if (driverController.getXButtonReleased()) {
             cannon.setPegToggle(false);
         }
 
         // test the belt
-        if (myController.getAButtonPressed()) {
+        if (driverController.getAButtonPressed()) {
             cannon.toggleBelt(true);
         }
-        if (myController.getAButtonReleased()) {
+        if (driverController.getAButtonReleased()) {
             cannon.toggleBelt(false);
         }
         // intake
-        if (myController.getBButtonPressed()) {
+        if (driverController.getBButtonPressed()) {
             intake.setSpinnerEnabled(true);
         }
-        if (myController.getBButtonReleased()) {
+        if (driverController.getBButtonReleased()) {
             intake.setSpinnerEnabled(false);
         }
-        if (myController.getYButtonPressed()) {
+        if (driverController.getYButtonPressed()) {
             intake.toggleSpinner();
         }
 
@@ -190,6 +196,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return new GrabBalls(cannon, intake).andThen(
                 new WaitCommand(3).andThen(
-                        new WaitCommand(6).raceWith(new RollAuto(drivetrain))));
+                    new GrabBalls(cannon, intake).andThen(
+                        new WaitCommand(6).raceWith(new RollAuto(drivetrain)))));
     }
 }
