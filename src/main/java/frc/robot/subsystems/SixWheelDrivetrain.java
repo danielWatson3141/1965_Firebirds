@@ -6,17 +6,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Logging;
 
-import java.security.Timestamp;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;

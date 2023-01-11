@@ -6,11 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DropBalls;
 import frc.robot.commands.EjectBall;
-import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
-import frc.robot.commands.RetractHook;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
@@ -21,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySerializer;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;

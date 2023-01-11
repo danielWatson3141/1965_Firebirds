@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
-import frc.robot.subsystems.Cannon;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
