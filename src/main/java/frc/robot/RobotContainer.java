@@ -94,35 +94,35 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
         // rb and lb
-        rbButton.whenPressed(
+        rbButton.onTrue(
                 new InstantCommand(() -> arm.erectHook(), arm));
 
-        lbButton.whenPressed(
+        lbButton.onTrue(
                 new InstantCommand(() -> arm.retractHook(), arm));
 
-        lbButton.whenReleased(
+        lbButton.onFalse(
                 new InstantCommand(() -> arm.stopHook(), arm));
 
-        rbButton.whenReleased(
+        rbButton.onFalse(
                 new InstantCommand(() -> arm.stopHook(), arm));
 
         // // Y Button
-        yButton.whileActiveOnce(
+        yButton.whileTrue(
                 new EjectBall(cannon, intake));
 
         // A Button
-        aButton.whileActiveOnce(
+        aButton.whileTrue(
                 new GrabBalls(cannon, intake));
 
         // X Button
-        xButton.whenPressed(
+        xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
 
         // B Button
-        bButton.whenPressed(
+        bButton.onTrue(
                 new InstantCommand(() -> cannon.togglePeg(), cannon));
 
-        coPilotBButton.whenPressed(
+        coPilotBButton.onTrue(
                 new InstantCommand(() -> cannon.togglePeg(), cannon));
 
     }
