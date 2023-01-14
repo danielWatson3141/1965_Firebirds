@@ -13,16 +13,12 @@ import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
+import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -42,6 +38,7 @@ public class RobotContainer {
     private ClimbingArmHook arm = new ClimbingArmHook();
     private Intake intake = new Intake();
     private Cannon cannon = new Cannon();
+    private Vision vision_system = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -59,9 +56,6 @@ public class RobotContainer {
     private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
     private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
 
-    UsbCamera camera1;
-    UsbCamera camera2;
-    NetworkTableEntry cameraSelection;
 
     // The container for the robot. Contains subsystems, OI devices, and commands.
 
@@ -70,13 +64,6 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
-        camera1 = CameraServer.startAutomaticCapture(0);
-        camera1.setResolution(300, 300);
-        camera2 = CameraServer.startAutomaticCapture(1);
-        camera2.setResolution(300, 300);
-
-        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-
         drivetrain.setDefaultCommand(
                 new RunCommand(
                         () -> drivetrain.drive(),
@@ -116,7 +103,7 @@ public class RobotContainer {
 
         // X Button
         xButton.onTrue(
-                new InstantCommand(() -> switchCamera()));
+                new InstantCommand(() -> vision_system.switchCamera()));
 
         // B Button
         bButton.onTrue(
@@ -127,19 +114,7 @@ public class RobotContainer {
 
     }
 
-    boolean frontCamera = true;
-
-    public void switchCamera() {
-        if (frontCamera) {
-            Logging.log("Camera", "Switching to camera 2");
-            cameraSelection.setString(camera2.getName());
-            frontCamera = false;
-        } else {
-            Logging.log("Camera", "Switching to camera 1");
-            cameraSelection.setString(camera1.getName());
-            frontCamera = true;
-        }
-    }
+    
 
     public void test() {
         // Logging.log("robot container", "testing mode");
