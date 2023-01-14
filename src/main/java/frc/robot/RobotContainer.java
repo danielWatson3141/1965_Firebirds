@@ -6,19 +6,31 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.DropBalls;
 import frc.robot.commands.EjectBall;
+import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
+import frc.robot.commands.RetractHook;
 import frc.robot.commands.RollAuto;
+import frc.robot.commands.TrackCommand;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
-import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySerializer;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,7 +50,6 @@ public class RobotContainer {
     private ClimbingArmHook arm = new ClimbingArmHook();
     private Intake intake = new Intake();
     private Cannon cannon = new Cannon();
-    private Vision vision_system = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -56,6 +67,10 @@ public class RobotContainer {
     private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
     private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
 
+    UsbCamera camera1;
+    UsbCamera camera2;
+    NetworkTableEntry cameraSelection;
+    NetworkTableEntry tx, ty, ta;
 
     // The container for the robot. Contains subsystems, OI devices, and commands.
 
@@ -64,10 +79,28 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
+        camera1 = CameraServer.startAutomaticCapture(0);
+        camera1.setResolution(300, 300);
+        camera2 = CameraServer.startAutomaticCapture(1);
+        camera2.setResolution(300, 300);
+
+        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+
         drivetrain.setDefaultCommand(
                 new RunCommand(
                         () -> drivetrain.drive(),
                         drivetrain));
+
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        tx = table.getEntry("tx");
+        ty = table.getEntry("ty");
+        ta = table.getEntry("ta");
+        SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
+        SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
+        SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
+        SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(), arm));
+        SmartDashboard.putData("Eject", new EjectBall(cannon, intake));
+        SmartDashboard.putData("Grab", new GrabBalls(cannon, intake));
     }
 
     /**
@@ -81,40 +114,52 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
         // rb and lb
-        rbButton.onTrue(
+        rbButton.whenPressed(
                 new InstantCommand(() -> arm.erectHook(), arm));
 
-        lbButton.onTrue(
+        lbButton.whenPressed(
                 new InstantCommand(() -> arm.retractHook(), arm));
 
-        lbButton.onFalse(
+        lbButton.whenReleased(
                 new InstantCommand(() -> arm.stopHook(), arm));
 
-        rbButton.onFalse(
+        rbButton.whenReleased(
                 new InstantCommand(() -> arm.stopHook(), arm));
 
         // // Y Button
-        yButton.whileTrue(
+        yButton.whileActiveOnce(
                 new EjectBall(cannon, intake));
 
         // A Button
-        aButton.whileTrue(
+        aButton.whileActiveOnce(
                 new GrabBalls(cannon, intake));
 
         // X Button
-        xButton.onTrue(
-                new InstantCommand(() -> vision_system.switchCamera()));
+        xButton.whenPressed(
+                new InstantCommand(() -> switchCamera()));
 
         // B Button
-        bButton.onTrue(
+        bButton.whenPressed(
                 new InstantCommand(() -> cannon.togglePeg(), cannon));
 
-        coPilotBButton.onTrue(
+        coPilotBButton.whenPressed(
                 new InstantCommand(() -> cannon.togglePeg(), cannon));
 
     }
 
-    
+    boolean frontCamera = true;
+
+    public void switchCamera() {
+        if (frontCamera) {
+            Logging.log("Camera", "Switching to camera 2");
+            cameraSelection.setString(camera2.getName());
+            frontCamera = false;
+        } else {
+            Logging.log("Camera", "Switching to camera 1");
+            cameraSelection.setString(camera1.getName());
+            frontCamera = true;
+        }
+    }
 
     public void test() {
         // Logging.log("robot container", "testing mode");
@@ -163,10 +208,19 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+    public Command getRollAutoCommand() {
         return new GrabBalls(cannon, intake).andThen(
                 new WaitCommand(3).andThen(
                     new GrabBalls(cannon, intake).andThen(
                         new WaitCommand(6).raceWith(new RollAuto(drivetrain)))));
     }
+
+    public Command getTrackCommand() {
+        return new TrackCommand(drivetrain, tx, ty, ta);
+    }
+
+    public Command getAutonomousCommand() {
+        return getTrackCommand();
+    }
+ 
 }
