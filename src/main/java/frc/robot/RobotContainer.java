@@ -97,6 +97,7 @@ public class RobotContainer {
         ta = table.getEntry("ta");
 
         // Send commands to dashboard
+        //These will be displayed on the commands panel
         SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
         SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
         SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
