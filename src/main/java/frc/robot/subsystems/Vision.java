@@ -17,6 +17,8 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+import edu.wpi.first.apriltag.AprilTagPoseEstimate;
 
 public class Vision extends SubsystemBase {
     UsbCamera camera1;
@@ -74,16 +76,18 @@ public class Vision extends SubsystemBase {
         cvSink.grabFrame(source);
         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
         outputStream.putFrame(output);
+        
         detections = detector.detect(output);
 
     }
 
     public Pose3d poseDetermine() {
-        if (AprilTagDetection[].class == null)  {
-           return null;
-          } else {
-           return null;
-          }
-          
+        if (detections == null || detections.length == 0) {
+            return null;
+        } else {
+
+            return ;
+        }
+
     }
 }
