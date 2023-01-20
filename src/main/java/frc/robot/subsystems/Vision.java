@@ -39,10 +39,6 @@ public class Vision extends SubsystemBase {
     Mat source;
     Mat output;
 
-    public void addFamily(String tag16h5, int bitsCorrected) {
-        addFamily(tag16h5, 2);
-    }
-
     public Vision() {
 
         camera1 = CameraServer.startAutomaticCapture(0);
@@ -55,6 +51,7 @@ public class Vision extends SubsystemBase {
 
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
+        detector.addFamily("tag16h5");
 
         source = new Mat();
         output = new Mat();
