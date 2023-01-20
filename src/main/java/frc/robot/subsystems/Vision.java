@@ -6,8 +6,10 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 import edu.wpi.first.apriltag.jni.AprilTagJNI;
@@ -18,7 +20,7 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagPoseEstimator;
-import edu.wpi.first.apriltag.AprilTagPoseEstimate;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 
 public class Vision extends SubsystemBase {
     UsbCamera camera1;
@@ -30,10 +32,12 @@ public class Vision extends SubsystemBase {
 
     AprilTagDetector detector;
 
+    AprilTagPoseEstimator estimator;
+
+    Config cameraConfig;
+
     Mat source;
     Mat output;
-
-    long m_native;
 
     public Vision() {
 
@@ -47,11 +51,13 @@ public class Vision extends SubsystemBase {
 
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
+        detector.addFamily("tag16h5");
 
-        Mat source = new Mat();
-        Mat output = new Mat();
+        source = new Mat();
+        output = new Mat();
 
-        long m_native = AprilTagJNI.createDetector();
+        cameraConfig = new Config(0.1524, 1430, 1430, 480, 620);
+
     }
 
     boolean frontCamera = true;
@@ -69,6 +75,8 @@ public class Vision extends SubsystemBase {
     }
 
     AprilTagDetection[] detections;
+    Transform3d myPosition;
+
 
     @Override
     public void periodic() {
@@ -76,17 +84,26 @@ public class Vision extends SubsystemBase {
         cvSink.grabFrame(source);
         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
         outputStream.putFrame(output);
-        
-        detections = detector.detect(output);
 
+        detections = detector.detect(output);
+        myPosition = poseDetermine();
+
+        //Send the position to the dashboard
+        if(myPosition != null){
+            SmartDashboard.putNumber("x", myPosition.getX());
+            SmartDashboard.putNumber("y", myPosition.getY());
+            SmartDashboard.putNumber("z", myPosition.getZ());
+        }
+
+        //other stuff
     }
 
-    public Pose3d poseDetermine() {
-        if (detections == null || detections.length == 0) {
+    public Transform3d poseDetermine() {
+        if (detections == null || detections.length == 0) { // No April tag detected
             return null;
-        } else {
-
-            return ;
+        } else { // April Tag detected
+            AprilTagDetection detection = detections[0];
+            return estimator.estimate(detection); 
         }
 
     }

@@ -63,16 +63,5 @@ public class Lifter extends SubsystemBase {
     
     public double getSpeed() {
         return lifterMotor.getMotorOutputPercent();
-     } 
-     
-     public void setTargetAngle(double target){
-
-        target_angle = target;
-     } 
-
-     @Override
-     public void periodic() {
-        
-     }
-
     }
+}
