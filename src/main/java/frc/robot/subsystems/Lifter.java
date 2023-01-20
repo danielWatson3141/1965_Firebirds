@@ -5,13 +5,15 @@ import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Lifter {
+public class Lifter extends SubsystemBase {
 
     public static final double UP_RATE_LIMIT = .2;
     public static final double DOWN_RATE_LIMIT = .2;
@@ -20,6 +22,11 @@ public class Lifter {
 
     Compressor compressor;
     SlewRateLimiter steeringLimiter;
+
+    double target_angle = 0;
+    private double kP=2;
+    private double kI=0;
+    private double kD=0;
   
     public Lifter() {
         lifterMotor = new VictorSPX(10);
@@ -50,7 +57,22 @@ public class Lifter {
     public void setArmPosition(double position){}
         // This function tells the arm to be at a specific position. 
 
+        PIDController pid = new PIDController(kP, kI, kD);
+        // pid.setinputrange 
+        // set output range 
     
     public double getSpeed() {
         return lifterMotor.getMotorOutputPercent();
+     } 
+     
+     public void setTargetAngle(double target){
+
+        target_angle = target;
+     } 
+
+     @Override
+     public void periodic() {
+        
+     }
+
     }
