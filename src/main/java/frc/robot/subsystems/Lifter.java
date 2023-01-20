@@ -54,3 +54,4 @@ public class Lifter {
     public double getSpeed() {
         return lifterMotor.getMotorOutputPercent();
     }
+}

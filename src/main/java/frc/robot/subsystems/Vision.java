@@ -92,11 +92,13 @@ public class Vision extends SubsystemBase {
         myPosition = poseDetermine();
 
         //Send the position to the dashboard
-        
-        SmartDashboard.putNumber("x", myPosition.getX());
-        SmartDashboard.putNumber("y", myPosition.getY());
-        SmartDashboard.putNumber("z", myPosition.getZ());
+        if(myPosition != null){
+            SmartDashboard.putNumber("x", myPosition.getX());
+            SmartDashboard.putNumber("y", myPosition.getY());
+            SmartDashboard.putNumber("z", myPosition.getZ());
+        }
 
+        //other stuff
     }
 
     public Transform3d poseDetermine() {
