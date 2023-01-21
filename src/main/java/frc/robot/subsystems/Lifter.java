@@ -10,10 +10,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 public class Lifter extends SubsystemBase {
+
+    private XboxController myController;
+
 
     public static final double UP_RATE_LIMIT = .2;
     public static final double DOWN_RATE_LIMIT = .2;
@@ -66,7 +71,7 @@ public class Lifter extends SubsystemBase {
     }
 
     public final double ARM_BOTTOM_POSITION = 0;
-    public final double ARM_MIDDLE_POSITION = .5;
+    public final double ARM_MIDDLE_POSITION = 0.5;
     public final double ARM_TOP_POSITION = 1;
 
     public void goToBottom(){
@@ -101,6 +106,13 @@ public class Lifter extends SubsystemBase {
     
     public double getSpeed() {
         return lifterMotor.getSelectedSensorVelocity();
+    }
+
+    double rightStickY = myController.getRightY();
+    double armSpeedFactor = 0.25;
+    
+    public void FineTuning(){
+        setArmSpeed(armSpeedFactor * rightStickY);
     }
 
     @Override
