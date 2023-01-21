@@ -73,7 +73,7 @@ public class Lifter extends SubsystemBase {
     }
     
     public double getSpeed() {
-        return lifterMotor.getMotorOutputPercent();
+        return lifterMotor.getSelectedSensorVelocity();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Lifter extends SubsystemBase {
 
     public void report_data() {
         SmartDashboard.putNumber("Set Point", setPoint);
-        SmartDashboard.putNumber("Position",getArmPosition());
-        SmartDashboard.putNumber("Speed",getSpeed());
+        SmartDashboard.putNumber("Position", getArmPosition());
+        SmartDashboard.putNumber("Speed", getSpeed());
     }
 }
