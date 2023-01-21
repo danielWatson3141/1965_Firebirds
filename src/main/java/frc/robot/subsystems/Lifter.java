@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -70,7 +72,7 @@ public class Lifter extends SubsystemBase {
     }
     
     public double getSpeed() {
-        return lifterMotor.getSelectedSensorVelocity();
+        return lifterMotor.getMotorOutputPercent();
     }
 
     @Override
@@ -85,7 +87,7 @@ public class Lifter extends SubsystemBase {
 
     public void report_data() {
         SmartDashboard.putNumber("Set Point", setPoint);
-        SmartDashboard.putNumber("Position", getArmPosition());
-        SmartDashboard.putNumber("Speed", getSpeed());
+        SmartDashboard.putNumber("Position",getArmPosition());
+        SmartDashboard.putNumber("Speed",getSpeed());
     }
 }
