@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import javax.imageio.plugins.tiff.GeoTIFFTagSet;
+import javax.swing.text.Position;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -12,6 +13,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lifter extends SubsystemBase {
 
@@ -86,6 +89,8 @@ public class Lifter extends SubsystemBase {
     }
 
     public void report_data() {
-        
+        SmartDashboard.putNumber("Set Point", setPoint);
+        SmartDashboard.putNumber("Position", getArmPosition());
+        SmartDashboard.putNumber("Speed", getSpeed());
     }
 }
