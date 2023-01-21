@@ -58,6 +58,7 @@ public class Vision extends SubsystemBase {
 
         cameraConfig = new Config(0.1524, 1430, 1430, 480, 620);
 
+        estimator = new AprilTagPoseEstimator(cameraConfig);
     }
 
     boolean frontCamera = true;

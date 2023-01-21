@@ -27,6 +27,9 @@ public class Lifter extends SubsystemBase {
     private double kP=2;
     private double kI=0;
     private double kD=0;
+
+    PIDController pid;
+    double setPoint = 0;
   
     public Lifter() {
         lifterMotor = new VictorSPX(10);
@@ -35,6 +38,10 @@ public class Lifter extends SubsystemBase {
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
         steeringLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
+
+        pid = new PIDController(kP, kI, kD);
+        // pid.setinputrange 
+        // set output range 
     }
     public void setClawOpen() {
         claw_piston.set(Value.kForward);
@@ -54,14 +61,24 @@ public class Lifter extends SubsystemBase {
         lifterMotor.set(ControlMode.PercentOutput, speed ); 
     }
     
-    public void setArmPosition(double position){}
-        // This function tells the arm to be at a specific position. 
+    public void setArmPosition(double position){
+        setPoint = position;
+    }
 
-        PIDController pid = new PIDController(kP, kI, kD);
-        // pid.setinputrange 
-        // set output range 
+    public double getArmPosition(){
+        return 0;
+    }
     
     public double getSpeed() {
         return lifterMotor.getMotorOutputPercent();
+    }
+
+    @Override
+    public void periodic() {
+        setArmSpeed(
+            pid.calculate(
+                getArmPosition(), setPoint
+            )
+        );
     }
 }
