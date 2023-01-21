@@ -15,24 +15,23 @@ public class OpenClaw extends CommandBase{
     lifter = my_lifter;
   }
 
-private double auto_speed = -.23;
 
 @Override
   public void initialize() {
-    
+    lifter.setClawOpen();
   }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    lifter.setClawClosed();
   }
 
   // Returns true when the command should end.
