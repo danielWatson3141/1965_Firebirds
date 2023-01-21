@@ -21,11 +21,18 @@ public class Balance extends CommandBase{
 
   } 
 
-
+  final double DRIVE_SPEED_SLOW = .1;
+  public final double GYRO_NEAR_ZERO_VALUE = 0 ;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.goAtSpeed(-gyroValue);
+
+    if (Math.abs(gyroValue) < GYRO_NEAR_ZERO_VALUE) 
+      drivetrain.goAtSpeed(0); 
+    else if (gyroValue < 0) 
+      drivetrain.goAtSpeed(DRIVE_SPEED_SLOW);   
+    else 
+      drivetrain.goAtSpeed(-DRIVE_SPEED_SLOW);
 
   }
 
