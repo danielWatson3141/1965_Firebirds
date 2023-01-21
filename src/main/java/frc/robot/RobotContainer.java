@@ -84,6 +84,10 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
+        //hold to open command on dashboard
+        SmartDashboard.putData("Open Claw", new OpenClaw(lifter));
+        //slider of arm... maybe... we'll find out
+        SmartDashboard.putData("Arm Slider", new InstantCommand(() -> lifter.FineTuning(),lifter));
         // Send commands to dashboard
         //These will be displayed on the commands panel
         // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
@@ -113,7 +117,8 @@ public class RobotContainer {
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
         
-        aButton.whileTrue( new OpenClaw(lifter));
+        aButton.whileTrue( 
+                new OpenClaw(lifter));
 
     }
 
