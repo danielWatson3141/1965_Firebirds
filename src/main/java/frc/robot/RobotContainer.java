@@ -7,15 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.DropBalls;
-import frc.robot.commands.EjectBall;
-import frc.robot.commands.ExtendHook;
-import frc.robot.commands.GrabBalls;
-import frc.robot.commands.RetractHook;
 import frc.robot.commands.RollAuto;
-import frc.robot.subsystems.Cannon;
-import frc.robot.subsystems.ClimbingArmHook;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,9 +39,7 @@ public class RobotContainer {
     private XboxController coPilotController = new XboxController(1);
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
-    private ClimbingArmHook arm = new ClimbingArmHook();
-    private Intake intake = new Intake();
-    private Cannon cannon = new Cannon();
+
     private Vision visionSystem = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
@@ -93,12 +83,10 @@ public class RobotContainer {
 
         // Send commands to dashboard
         //These will be displayed on the commands panel
-        SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
-        SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
-        SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
-        SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(), arm));
-        SmartDashboard.putData("Eject", new EjectBall(cannon, intake));
-        SmartDashboard.putData("Grab", new GrabBalls(cannon, intake));
+        // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
+        // SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
+        // SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
+        // SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(), arm));
     }
 
     /**
@@ -160,44 +148,7 @@ public class RobotContainer {
     }
 
     public void test() {
-        // Logging.log("robot container", "testing mode");
-        // test the hooks
-        if (driverController.getLeftBumperPressed()) {
-            arm.erectHook();
-        }
-        if (driverController.getRightBumperPressed()) {
-            arm.retractHook();
-        }
-        if (driverController.getRightBumperReleased() ||
-                driverController.getLeftBumperReleased()) {
-            arm.stopHook();
-        }
 
-        // test the peg
-        if (driverController.getXButtonPressed()) {
-            cannon.setPegToggle(true);
-        }
-        if (driverController.getXButtonReleased()) {
-            cannon.setPegToggle(false);
-        }
-
-        // test the belt
-        if (driverController.getAButtonPressed()) {
-            cannon.toggleBelt(true);
-        }
-        if (driverController.getAButtonReleased()) {
-            cannon.toggleBelt(false);
-        }
-        // intake
-        if (driverController.getBButtonPressed()) {
-            intake.setSpinnerEnabled(true);
-        }
-        if (driverController.getBButtonReleased()) {
-            intake.setSpinnerEnabled(false);
-        }
-        if (driverController.getYButtonPressed()) {
-            intake.toggleSpinner();
-        }
 
     }
 
