@@ -41,7 +41,7 @@ public class RobotContainer {
     private XboxController coPilotController = new XboxController(1);
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
-    private final Lifter lifter = new Lifter();
+    private final Lifter lifter = new Lifter(driverController);
 
     private Vision visionSystem = new Vision();
 

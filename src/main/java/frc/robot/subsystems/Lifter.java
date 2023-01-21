@@ -21,7 +21,6 @@ public class Lifter extends SubsystemBase {
 
     private XboxController myController;
 
-
     public static final double UP_RATE_LIMIT = .2;
     public static final double DOWN_RATE_LIMIT = .2;
     DoubleSolenoid claw_piston;
@@ -38,7 +37,8 @@ public class Lifter extends SubsystemBase {
     PIDController pid;
     double setPoint = 0;
   
-    public Lifter() {
+    public Lifter(XboxController cont) {
+        myController = cont;
         lifterMotor = new TalonSRX(10);
         lifterMotor.setInverted(true);
         
@@ -110,11 +110,11 @@ public class Lifter extends SubsystemBase {
         return lifterMotor.getMotorOutputPercent();
     }
 
-    double rightStickY = myController.getRightY();
-    double armSpeedFactor = 0.25;
+    double ARM_SPEED_FACTOR = 0.25;
     
     public void FineTuning(){
-        setArmSpeed(armSpeedFactor * rightStickY);
+        double rightStickY = myController.getRightY();
+        setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
     @Override
