@@ -65,6 +65,36 @@ public class Lifter extends SubsystemBase {
         setPoint = position;
     }
 
+    public final double ARM_BOTTOM_POSITION = 0;
+    public final double ARM_MIDDLE_POSITION = .5;
+    public final double ARM_TOP_POSITION = 1;
+
+    public void goToBottom(){
+        setArmPosition(ARM_BOTTOM_POSITION);
+    }
+
+    public void goToMiddle(){
+        setArmPosition(ARM_MIDDLE_POSITION);
+    }
+
+    public void goToTop(){
+        setArmPosition(ARM_TOP_POSITION);
+    }
+
+    public void moveArmUp(){
+        if (getArmPosition() >= ARM_MIDDLE_POSITION)
+            goToTop();
+        else 
+            goToMiddle();
+    }
+
+    public void moveArmDown(){
+        if (getArmPosition() > ARM_MIDDLE_POSITION)
+            goToMiddle();
+        else 
+            goToBottom();
+    }
+
     public double getArmPosition(){
         return lifterMotor.getSelectedSensorPosition();
     }

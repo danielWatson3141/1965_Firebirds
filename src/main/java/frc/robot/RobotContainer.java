@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.RollAuto;
+import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,7 @@ public class RobotContainer {
     private XboxController coPilotController = new XboxController(1);
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
+    private final Lifter lifter = new Lifter();
 
     private Vision visionSystem = new Vision();
 
@@ -101,35 +103,15 @@ public class RobotContainer {
         Logging.log("robot container", "buttons configured");
         // rb and lb
         rbButton.onTrue(
-                new InstantCommand(() -> arm.erectHook(), arm));
+                new InstantCommand(() -> lifter.moveArmUp(), lifter));
 
         lbButton.onTrue(
-                new InstantCommand(() -> arm.retractHook(), arm));
-
-        lbButton.onFalse(
-                new InstantCommand(() -> arm.stopHook(), arm));
-
-        rbButton.onFalse(
-                new InstantCommand(() -> arm.stopHook(), arm));
-
-        // // Y Button
-        yButton.whileTrue(
-                new EjectBall(cannon, intake));
-
-        // A Button
-        aButton.whileTrue(
-                new GrabBalls(cannon, intake));
+                new InstantCommand(() -> lifter.moveArmDown(), lifter));
 
         // X Button
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
-
-        // B Button
-        bButton.onTrue(
-                new InstantCommand(() -> cannon.togglePeg(), cannon));
-
-        coPilotBButton.onTrue(
-                new InstantCommand(() -> cannon.togglePeg(), cannon));
+        
 
     }
 
