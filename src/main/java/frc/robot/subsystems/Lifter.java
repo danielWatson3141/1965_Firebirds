@@ -75,10 +75,17 @@ public class Lifter extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        report_data();
+
         setArmSpeed(
             pid.calculate(
                 getArmPosition(), setPoint
             )
         );
+    }
+
+    public void report_data() {
+        
     }
 }
