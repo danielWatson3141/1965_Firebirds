@@ -41,7 +41,7 @@ public class RobotContainer {
     private XboxController coPilotController = new XboxController(1);
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
-    private final Lifter lifter = new Lifter();
+    private final Lifter lifter = new Lifter(driverController);
 
     private Vision visionSystem = new Vision();
 
@@ -88,6 +88,7 @@ public class RobotContainer {
         SmartDashboard.putData("Open Claw", new OpenClaw(lifter));
         //slider of arm... maybe... we'll find out
         SmartDashboard.putData("Arm Slider", new InstantCommand(() -> lifter.FineTuning(),lifter));
+        
         // Send commands to dashboard
         //These will be displayed on the commands panel
         // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));

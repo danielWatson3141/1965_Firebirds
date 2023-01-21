@@ -40,16 +40,3 @@ public class OpenClaw extends CommandBase{
     return false;
   }
 }
-
-
-
-//  private void configureButtonBindings() {
-//         Logging.log("robot container", "buttons configured");
- 
-//         aButton.whileTrue(
-//             new openClaw(claw_piston.set(Value.kForward));
-//         )
-//         aButton.whileFalse(
-//             new closeClaw(claw_piston.set(Value.kReverse));
-//         )
-//     }
