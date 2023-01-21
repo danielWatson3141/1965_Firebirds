@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
-import javax.imageio.plugins.tiff.GeoTIFFTagSet;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -78,9 +75,7 @@ public class Lifter extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         report_data();
-
         setArmSpeed(
             pid.calculate(
                 getArmPosition(), setPoint
