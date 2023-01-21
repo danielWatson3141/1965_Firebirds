@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
 import javax.imageio.plugins.tiff.GeoTIFFTagSet;
-import javax.swing.text.Position;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -21,7 +21,7 @@ public class Lifter extends SubsystemBase {
     public static final double UP_RATE_LIMIT = .2;
     public static final double DOWN_RATE_LIMIT = .2;
     DoubleSolenoid claw_piston;
-    VictorSPX lifterMotor;
+    TalonSRX lifterMotor;
 
     Compressor compressor;
     SlewRateLimiter steeringLimiter;
@@ -35,7 +35,7 @@ public class Lifter extends SubsystemBase {
     double setPoint = 0;
   
     public Lifter() {
-        lifterMotor = new VictorSPX(10);
+        lifterMotor = new TalonSRX(10);
         lifterMotor.setInverted(true);
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
@@ -69,7 +69,7 @@ public class Lifter extends SubsystemBase {
     }
 
     public double getArmPosition(){
-        return 0;
+        return lifterMotor.getSelectedSensorPosition();
     }
     
     public double getSpeed() {
@@ -89,8 +89,6 @@ public class Lifter extends SubsystemBase {
     }
 
     public void report_data() {
-        SmartDashboard.putNumber("Set Point", setPoint);
-        SmartDashboard.putNumber("Position", getArmPosition());
-        SmartDashboard.putNumber("Speed", getSpeed());
+        
     }
 }
