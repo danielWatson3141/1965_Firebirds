@@ -207,13 +207,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new GrabBalls(cannon, intake).andThen(
-                new WaitCommand(3).andThen(
-                    new GrabBalls(cannon, intake).andThen(
-                        new WaitCommand(6).raceWith(new RollAuto(drivetrain)))));
-    }
-
-    public Command getAutonomousCommand() {
         return null;
     }
  
