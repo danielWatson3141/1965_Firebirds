@@ -13,11 +13,11 @@ import frc.robot.commands.ExtendHook;
 import frc.robot.commands.GrabBalls;
 import frc.robot.commands.RetractHook;
 import frc.robot.commands.RollAuto;
-import frc.robot.commands.TrackCommand;
 import frc.robot.subsystems.Cannon;
 import frc.robot.subsystems.ClimbingArmHook;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SixWheelDrivetrain;
+import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -50,6 +50,7 @@ public class RobotContainer {
     private ClimbingArmHook arm = new ClimbingArmHook();
     private Intake intake = new Intake();
     private Cannon cannon = new Cannon();
+    private Vision visionSystem = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -79,12 +80,6 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
-        camera1 = CameraServer.startAutomaticCapture(0);
-        camera1.setResolution(300, 300);
-        camera2 = CameraServer.startAutomaticCapture(1);
-        camera2.setResolution(300, 300);
-
-        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
 
         drivetrain.setDefaultCommand(
                 new RunCommand(
@@ -218,12 +213,8 @@ public class RobotContainer {
                         new WaitCommand(6).raceWith(new RollAuto(drivetrain)))));
     }
 
-    public Command getTrackCommand() {
-        return new TrackCommand(drivetrain, tx, ty, ta);
-    }
-
     public Command getAutonomousCommand() {
-        return getTrackCommand();
+        return null;
     }
  
 }

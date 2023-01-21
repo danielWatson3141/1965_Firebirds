@@ -39,10 +39,6 @@ public class Vision extends SubsystemBase {
     Mat source;
     Mat output;
 
-    public void addFamily(String tag16h5, int bitsCorrected) {
-        addFamily(tag16h5, 2);
-    }
-
     public Vision() {
 
         camera1 = CameraServer.startAutomaticCapture(0);
@@ -55,12 +51,14 @@ public class Vision extends SubsystemBase {
 
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
+        detector.addFamily("tag16h5");
 
         source = new Mat();
         output = new Mat();
 
         cameraConfig = new Config(0.1524, 1430, 1430, 480, 620);
 
+        estimator = new AprilTagPoseEstimator(cameraConfig);
     }
 
     boolean frontCamera = true;
@@ -92,11 +90,13 @@ public class Vision extends SubsystemBase {
         myPosition = poseDetermine();
 
         //Send the position to the dashboard
-        
-        SmartDashboard.putNumber("x", myPosition.getX());
-        SmartDashboard.putNumber("y", myPosition.getY());
-        SmartDashboard.putNumber("z", myPosition.getZ());
+        if(myPosition != null){
+            SmartDashboard.putNumber("x", myPosition.getX());
+            SmartDashboard.putNumber("y", myPosition.getY());
+            SmartDashboard.putNumber("z", myPosition.getZ());
+        }
 
+        //other stuff
     }
 
     public Transform3d poseDetermine() {
