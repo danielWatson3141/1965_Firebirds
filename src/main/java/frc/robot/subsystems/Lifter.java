@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.Logging;
 
 public class Lifter extends SubsystemBase {
 
@@ -51,10 +51,13 @@ public class Lifter extends SubsystemBase {
         // set output range 
     }
     public void setClawOpen() {
+        Logging.log("Lifter:setClawOpen", "opening the claw");
         claw_piston.set(Value.kForward);
     }
 
     public void setClawClosed() {
+        Logging.log( "Lifter:setClawClosed","closing the claw");
+    
         claw_piston.set(Value.kReverse);
     }
 
@@ -65,10 +68,12 @@ public class Lifter extends SubsystemBase {
     }
     
     public void setArmSpeed(double speed){
+        Logging.log("Lifter:setArmPosition", "Setting ArmSpeed to "+speed);
         lifterMotor.set(ControlMode.PercentOutput, speed ); 
     }
     
     public void setArmPosition(double position){
+        Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
         setPoint = position;
     }
 
@@ -78,9 +83,11 @@ public class Lifter extends SubsystemBase {
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
+      Logging.log("Lifter:goToBottom","Setting ArmPositon to bottom");  
     }
 
     public void goToMiddle(){
+     Logging.log("Lifter:goToMiddle","Setting ArmPosition to middle");
         setArmPosition(ARM_MIDDLE_POSITION);
     }
 
