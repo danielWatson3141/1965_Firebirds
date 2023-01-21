@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.OpenClaw;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.SixWheelDrivetrain;
@@ -112,6 +113,7 @@ public class RobotContainer {
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
         
+        aButton.whileTrue( new OpenClaw(lifter));
 
     }
 

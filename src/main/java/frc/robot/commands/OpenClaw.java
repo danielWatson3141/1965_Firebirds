@@ -15,7 +15,6 @@ public class OpenClaw extends CommandBase{
     lifter = my_lifter;
   }
 
-private double auto_speed = -.23;
 
 @Override
   public void initialize() {
