@@ -94,8 +94,11 @@ public class Vision extends SubsystemBase {
             SmartDashboard.putNumber("x", myPosition.getX());
             SmartDashboard.putNumber("y", myPosition.getY());
             SmartDashboard.putNumber("z", myPosition.getZ());
+        } else {
+            SmartDashboard.putNumber("x", 0);
+            SmartDashboard.putNumber("y", 0);
+            SmartDashboard.putNumber("z", 0);        
         }
-
         //other stuff
     }
 
