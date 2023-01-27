@@ -313,6 +313,45 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/x",
+              "_title": "x",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/y",
+              "_title": "y",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/z",
+              "_title": "z",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -482,7 +521,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/throttle": true
                 },
                 {
                   "_type": "Graph",
@@ -495,7 +535,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/steerLimit": true
                 },
                 {
                   "_type": "Graph",
@@ -508,7 +549,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 0.02,
                   "Y-axis/Lower bound": -0.02,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/steerOutput": true
                 }
               ]
             }
@@ -608,27 +650,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "5,0": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://limelight",
-              "_title": "limelight",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": 0,
-              "imageHeight": 0
-            }
-          },
           "0,0": {
             "size": [
               4,
@@ -650,17 +671,28 @@
               "imageHeight": -1
             }
           },
-          "4,1": {
+          "4,0": {
             "size": [
-              1,
-              1
+              4,
+              3
             ],
             "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Switch",
-              "_title": "/SmartDashboard/Switch",
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/z",
+              "_source1": "network_table:///SmartDashboard/y",
+              "_source2": "network_table:///SmartDashboard/x",
+              "_title": "Graph (3 sources)",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/x": true,
+              "Visible data/SmartDashboard/y": true,
+              "Visible data/SmartDashboard/z": true
             }
           }
         }
@@ -783,9 +815,9 @@
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/steerLimit",
-              "_source1": "network_table:///SmartDashboard/steerOutput",
-              "_source2": "network_table:///SmartDashboard/throttle",
+              "_source0": "network_table:///SmartDashboard/throttle",
+              "_source1": "network_table:///SmartDashboard/steerLimit",
+              "_source2": "network_table:///SmartDashboard/steerOutput",
               "_title": "Graph (3 sources)",
               "_glyph": 148,
               "_showGlyph": false,
@@ -794,7 +826,10 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/steerLimit": true,
+              "Visible data/SmartDashboard/steerOutput": true,
+              "Visible data/SmartDashboard/throttle": true
             }
           }
         }
