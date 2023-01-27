@@ -90,7 +90,7 @@ public class RobotContainer {
         SmartDashboard.putData("Arm Slider", new InstantCommand(() -> lifter.FineTuning(),lifter));
         
         // Send commands to dashboard
-        //These will be displayed on the commands panel
+        //These will be displayed on the commands panel Ex from last year:
         // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
         // SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
         // SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
