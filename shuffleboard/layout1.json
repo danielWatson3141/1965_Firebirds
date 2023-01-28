@@ -521,8 +521,7 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/throttle": true
+                  "Y-axis/Unit": "ul"
                 },
                 {
                   "_type": "Graph",
@@ -535,8 +534,7 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/steerLimit": true
+                  "Y-axis/Unit": "ul"
                 },
                 {
                   "_type": "Graph",
@@ -549,8 +547,7 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 0.02,
                   "Y-axis/Lower bound": -0.02,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/steerOutput": true
+                  "Y-axis/Unit": "ul"
                 }
               ]
             }
@@ -689,10 +686,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/x": true,
-              "Visible data/SmartDashboard/y": true,
-              "Visible data/SmartDashboard/z": true
+              "Y-axis/Unit": "ul"
             }
           }
         }
@@ -708,73 +702,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {
-          "1,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Eject",
-              "_title": "/SmartDashboard/Eject",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Grab",
-              "_title": "/SmartDashboard/Grab",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Retract",
-              "_title": "/SmartDashboard/Retract",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Stop",
-              "_title": "/SmartDashboard/Stop",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Switch",
-              "_title": "/SmartDashboard/Switch",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          }
-        }
+        "tiles": {}
       }
     },
     {
@@ -826,10 +754,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/steerLimit": true,
-              "Visible data/SmartDashboard/steerOutput": true,
-              "Visible data/SmartDashboard/throttle": true
+              "Y-axis/Unit": "ul"
             }
           }
         }

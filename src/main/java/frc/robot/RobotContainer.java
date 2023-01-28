@@ -83,9 +83,11 @@ public class RobotContainer {
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
+
+        //open claw command on shuffleboard
         SmartDashboard.putData("OpenClaw", new OpenClaw(lifter));
-        SmartDashboard.putData("ArmSlider", new InstantCommand(()-> lifter.FineTuning(),lifter) );
-        
+        //arm slider command on shuffleboard... hopefully... we'll find out
+        SmartDashboard.putData("ArmSlider", new InstantCommand(()-> lifter.FineTuning(),lifter));
 
         // Send commands to dashboard
         //These will be displayed on the commands panel
