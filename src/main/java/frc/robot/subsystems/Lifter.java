@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -67,9 +70,13 @@ public class Lifter extends SubsystemBase {
     public void setArmSpeed(double speed){
         lifterMotor.set(ControlMode.PercentOutput, speed ); 
     }
+
+    TrapezoidProfile profile;
     
     public void setArmPosition(double position){
-        setPoint = position;
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
+                                                new TrapezoidProfile.State(5, 0),
+                                                new TrapezoidProfile.State(0, 0));
     }
 
     public final double ARM_BOTTOM_POSITION = 0;
@@ -117,14 +124,23 @@ public class Lifter extends SubsystemBase {
         setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
+    long previousTime = 0;
     @Override
     public void periodic() {
         report_data();
-        setArmSpeed(
-            pid.calculate(
-                getArmPosition(), setPoint
-            )
-        );
+
+        //Get the current time
+        long currentTime = System.currentTimeMillis();
+        //Calculate how much time has passed
+        long elapsedTime = currentTime - previousTime; 
+        //Set the previous time up for later
+        previousTime = currentTime;
+
+        //Compute where the arm should be after the time elapsed
+        State setpoint = profile.calculate(elapsedTime);
+        
+        double output = pid.calculate(lifterMotor.getSelectedSensorPosition(), setpoint.position);
+        lifterMotor.set(ControlMode.Position, output);
     }
 
     public void report_data() {
