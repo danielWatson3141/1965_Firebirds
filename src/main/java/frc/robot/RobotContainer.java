@@ -43,7 +43,7 @@ public class RobotContainer {
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
     private final Lifter lifter = new Lifter(driverController);
 
-    private Vision visionSystem = new Vision();
+    //private Vision visionSystem = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -84,7 +84,7 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
-        //open claw command on shuffleboard
+        //hold to open claw command on shuffleboard
         SmartDashboard.putData("OpenClaw", new OpenClaw(lifter));
         //arm slider command on shuffleboard... hopefully... we'll find out
         SmartDashboard.putData("ArmSlider", new InstantCommand(()-> lifter.FineTuning(),lifter));
@@ -137,7 +137,7 @@ public class RobotContainer {
     }
 
     public void test() {
-
+        SmartDashboard.getNumber("arm position", 0.01);
 
     }
 

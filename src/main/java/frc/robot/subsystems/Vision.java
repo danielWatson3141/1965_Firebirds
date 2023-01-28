@@ -84,13 +84,16 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
 
-        cvSink.grabFrame(source);
-        Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-        outputStream.putFrame(output);
+        try{
+            cvSink.grabFrame(source);
+            Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+            outputStream.putFrame(output);
 
-        detections = detector.detect(output);
-        myPosition = poseDetermine();
-
+            detections = detector.detect(output);
+            myPosition = poseDetermine();
+        } catch (Exception E){
+           // Logging.log("Vision:Periodic",E.getMessage());
+        }
 
         //Send the position to the dashboard
         if(myPosition != null){

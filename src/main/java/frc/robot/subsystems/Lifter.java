@@ -42,7 +42,7 @@ public class Lifter extends SubsystemBase {
   
     public Lifter(XboxController cont) {
         myController = cont;
-        lifterMotor = new TalonSRX(10);
+        lifterMotor = new TalonSRX(2);
         lifterMotor.setInverted(true);
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
@@ -76,11 +76,13 @@ public class Lifter extends SubsystemBase {
     }
 
     TrapezoidProfile profile;
+    double destination;
     
     public void setArmPosition(double position){
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
                                                 new TrapezoidProfile.State(5, 0),
                                                 new TrapezoidProfile.State(0, 0));
+        destination = position;
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
 
@@ -103,14 +105,16 @@ public class Lifter extends SubsystemBase {
     }
 
     public void moveArmUp(){
-        if (getArmPosition() >= ARM_MIDDLE_POSITION)
+        Logging.log("Lifter:moveArmUp", "Moving arm up");
+        if (destination >= ARM_MIDDLE_POSITION)
             goToTop();
         else 
             goToMiddle();
     }
 
     public void moveArmDown(){
-        if (getArmPosition() > ARM_MIDDLE_POSITION)
+        Logging.log("Lifter:moveArmDown", "Moving arm Down");
+        if (destination > ARM_MIDDLE_POSITION)
             goToMiddle();
         else 
             goToBottom();
@@ -121,7 +125,7 @@ public class Lifter extends SubsystemBase {
     }
     
     public double getSpeed() {
-        return lifterMotor.getMotorOutputPercent();
+        return lifterMotor.getSelectedSensorVelocity();
     }
 
     double ARM_SPEED_FACTOR = 0.25;
@@ -131,6 +135,8 @@ public class Lifter extends SubsystemBase {
         setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
+    State setpoint = new State();
+
     long previousTime = 0;
     @Override
     public void periodic() {
@@ -139,20 +145,30 @@ public class Lifter extends SubsystemBase {
         //Get the current time
         long currentTime = System.currentTimeMillis();
         //Calculate how much time has passed
+        if(previousTime == 0){
+            previousTime = currentTime;
+        }
+
         long elapsedTime = currentTime - previousTime; 
         //Set the previous time up for later
         previousTime = currentTime;
 
         //Compute where the arm should be after the time elapsed
-        State setpoint = profile.calculate(elapsedTime);
+        if( profile == null)
+            return;
         
-        double output = pid.calculate(lifterMotor.getSelectedSensorPosition(), setpoint.position);
-        lifterMotor.set(ControlMode.Position, output);
+        setpoint = profile.calculate(elapsedTime);
+        
+        double output = pid.calculate(getSpeed(), setpoint.velocity);
+        lifterMotor.set(ControlMode.PercentOutput, output);
     }
 
     public void report_data() {
-        SmartDashboard.putNumber("Set Point", setPoint);
         SmartDashboard.putNumber("Position",getArmPosition());
+        SmartDashboard.putNumber("Goal Position", destination);
         SmartDashboard.putNumber("Speed",getSpeed());
+        SmartDashboard.putNumber("setPoint Displ", setpoint.position);
+        SmartDashboard.putNumber("setPoint Speed", setpoint.position);
+
     }
 }

@@ -521,7 +521,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/throttle": true
                 },
                 {
                   "_type": "Graph",
@@ -534,7 +535,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 1.0,
                   "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/steerLimit": true
                 },
                 {
                   "_type": "Graph",
@@ -547,7 +549,8 @@
                   "Y-axis/Automatic bounds": true,
                   "Y-axis/Upper bound": 0.02,
                   "Y-axis/Lower bound": -0.02,
-                  "Y-axis/Unit": "ul"
+                  "Y-axis/Unit": "ul",
+                  "Visible data/SmartDashboard/steerOutput": true
                 }
               ]
             }
@@ -702,7 +705,36 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_title": "Command",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_title": "Number Slider",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.0625,
+              "Visuals/Display value": true
+            }
+          }
+        }
       }
     },
     {
@@ -754,7 +786,10 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/steerLimit": true,
+              "Visible data/SmartDashboard/steerOutput": true,
+              "Visible data/SmartDashboard/throttle": true
             }
           }
         }
@@ -771,6 +806,66 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {}
+      }
+    },
+    {
+      "title": "Tab 9",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 500.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Position",
+              "_title": "/SmartDashboard/Position",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Position": true
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Goal Position",
+              "_source1": "network_table:///SmartDashboard/Speed",
+              "_source2": "network_table:///SmartDashboard/setPoint Displ",
+              "_source3": "network_table:///SmartDashboard/setPoint Speed",
+              "_title": "Graph (4 sources)",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Goal Position": true,
+              "Visible data/SmartDashboard/Speed": true,
+              "Visible data/SmartDashboard/setPoint Displ": true,
+              "Visible data/SmartDashboard/setPoint Speed": true
+            }
+          }
+        }
       }
     }
   ],
