@@ -3,31 +3,32 @@ package frc.robot.subsystems;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.SixWheelDrivetrain;
+import edu.wpi.first.math.geometry.Transform3d;
 
 public class AutoTag {
 
-    double leftTagAngle = vision.___;
-    double rightTagAngle = vision.___;
-    double tagDistance = vision.___;
-    //above is info needed from vision
-private void tagAngle() {
-    if (leftTagAngle > rightTagAngle) {
-        //return rightTagAngle
-    }
-    else {
-        //return leftTagAngle
-    } 
-}
+    Transform3d myPosition;
+    
+    double zeX = myPosition.getX();
+    double zeY = myPosition.getX();
+    double h = (Math.sqrt((zeX * zeX) + (zeY * zeY)));
+    double angleA = Math.sin(zeY / h);
 
-double horozontalDistance = (tagDistance * Math.cos(tagAngle()));
-double verticleDistance = (horozontalDistance * Math.tan(tagAngle()));
-
-private void directions() {
-    if (leftTagAngle > rightTagAngle) {
-        //turn left
+public void directions() {
+    if (zeX > 0) {
+        //turn angleA, turn right, move left motors
+        //move x
+        //Turn -90°, left
+        //move zeY
     }
-    else {
-        //turn right
+    else if (zeX < 0) {
+        //turn -angleA, turn left, move right motors
+        //move x
+        //Turn 90°, right
+        //move zeY
     }  
+    else {
+    //don't move
+    }
 }
 }
