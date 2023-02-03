@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
@@ -51,12 +52,13 @@ public class Vision extends SubsystemBase {
 
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
-        detector.addFamily("tag16h5");
+        detector.addFamily("tag16h5", 1);
 
         source = new Mat();
         output = new Mat();
 
-        cameraConfig = new Config(0.1524, 1430, 1430, 480, 620);
+        //cameraConfig = new Config(0.1524, 672.41409, 673.81997, 320.73015, 241.70637);
+        cameraConfig = new Config(0.1524, 271.75562,272.26474, 322.90119, 227.79356);
 
         estimator = new AprilTagPoseEstimator(cameraConfig);
     }
@@ -82,22 +84,30 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
 
-        cvSink.grabFrame(source);
-        Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-        outputStream.putFrame(output);
+        try{
+            cvSink.grabFrame(source);
+            Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+            outputStream.putFrame(output);
 
-        detections = detector.detect(output);
-        myPosition = poseDetermine();
+            detections = detector.detect(output);
+            myPosition = poseDetermine();
+        } catch (Exception E){
+           // Logging.log("Vision:Periodic",E.getMessage());
+        }
 
         //Send the position to the dashboard
         if(myPosition != null){
-            SmartDashboard.putNumber("x", myPosition.getX());
-            SmartDashboard.putNumber("y", myPosition.getY());
-            SmartDashboard.putNumber("z", myPosition.getZ());
-        } else {
-            SmartDashboard.putNumber("x", 0);
-            SmartDashboard.putNumber("y", 0);
-            SmartDashboard.putNumber("z", 0);        
+            SmartDashboard.putNumber("tagX", myPosition.getX());
+            SmartDashboard.putNumber("tagY", myPosition.getY());
+            SmartDashboard.putNumber("tagZ", myPosition.getZ());
+            double roll = myPosition.getRotation().getX();
+            double pitch = myPosition.getRotation().getY();
+            double yaw = myPosition.getRotation().getZ();
+    
+            SmartDashboard.putNumber("tagPitch", pitch);
+            SmartDashboard.putNumber("tagRoll", roll);
+            SmartDashboard.putNumber("tagYaw", yaw);
+            
         }
         //other stuff
     }

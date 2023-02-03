@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -15,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.Logging;
 
 public class Lifter extends SubsystemBase {
 
@@ -39,7 +42,7 @@ public class Lifter extends SubsystemBase {
   
     public Lifter(XboxController cont) {
         myController = cont;
-        lifterMotor = new TalonSRX(10);
+        lifterMotor = new TalonSRX(2);
         lifterMotor.setInverted(true);
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
@@ -51,10 +54,13 @@ public class Lifter extends SubsystemBase {
         // set output range 
     }
     public void setClawOpen() {
+        Logging.log("Lifter:setClawOpen", "opening the claw");
         claw_piston.set(Value.kForward);
     }
 
     public void setClawClosed() {
+        Logging.log( "Lifter:setClawClosed","closing the claw");
+    
         claw_piston.set(Value.kReverse);
     }
 
@@ -65,11 +71,19 @@ public class Lifter extends SubsystemBase {
     }
     
     public void setArmSpeed(double speed){
+        Logging.log("Lifter:setArmPosition", "Setting ArmSpeed to "+speed);
         lifterMotor.set(ControlMode.PercentOutput, speed ); 
     }
+
+    TrapezoidProfile profile;
+    double destination;
     
     public void setArmPosition(double position){
-        setPoint = position;
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
+                                                new TrapezoidProfile.State(5, 0),
+                                                new TrapezoidProfile.State(0, 0));
+        destination = position;
+        Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
 
     public final double ARM_BOTTOM_POSITION = 0;
@@ -78,9 +92,11 @@ public class Lifter extends SubsystemBase {
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
+      Logging.log("Lifter:goToBottom","Setting ArmPositon to bottom");  
     }
 
     public void goToMiddle(){
+     Logging.log("Lifter:goToMiddle","Setting ArmPosition to middle");
         setArmPosition(ARM_MIDDLE_POSITION);
     }
 
@@ -89,14 +105,16 @@ public class Lifter extends SubsystemBase {
     }
 
     public void moveArmUp(){
-        if (getArmPosition() >= ARM_MIDDLE_POSITION)
+        Logging.log("Lifter:moveArmUp", "Moving arm up");
+        if (destination >= ARM_MIDDLE_POSITION)
             goToTop();
         else 
             goToMiddle();
     }
 
     public void moveArmDown(){
-        if (getArmPosition() > ARM_MIDDLE_POSITION)
+        Logging.log("Lifter:moveArmDown", "Moving arm Down");
+        if (destination > ARM_MIDDLE_POSITION)
             goToMiddle();
         else 
             goToBottom();
@@ -107,7 +125,7 @@ public class Lifter extends SubsystemBase {
     }
     
     public double getSpeed() {
-        return lifterMotor.getMotorOutputPercent();
+        return lifterMotor.getSelectedSensorVelocity();
     }
 
     double ARM_SPEED_FACTOR = 0.25;
@@ -117,19 +135,40 @@ public class Lifter extends SubsystemBase {
         setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
+    State setpoint = new State();
+
+    long previousTime = 0;
     @Override
     public void periodic() {
         report_data();
-        setArmSpeed(
-            pid.calculate(
-                getArmPosition(), setPoint
-            )
-        );
+
+        //Get the current time
+        long currentTime = System.currentTimeMillis();
+        //Calculate how much time has passed
+        if(previousTime == 0){
+            previousTime = currentTime;
+        }
+
+        long elapsedTime = currentTime - previousTime; 
+        //Set the previous time up for later
+        previousTime = currentTime;
+
+        //Compute where the arm should be after the time elapsed
+        if( profile == null)
+            return;
+        
+        setpoint = profile.calculate(elapsedTime);
+        
+        double output = pid.calculate(getSpeed(), setpoint.velocity);
+        lifterMotor.set(ControlMode.PercentOutput, output);
     }
 
     public void report_data() {
-        SmartDashboard.putNumber("Set Point", setPoint);
         SmartDashboard.putNumber("Position",getArmPosition());
+        SmartDashboard.putNumber("Goal Position", destination);
         SmartDashboard.putNumber("Speed",getSpeed());
+        SmartDashboard.putNumber("setPoint Displ", setpoint.position);
+        SmartDashboard.putNumber("setPoint Speed", setpoint.position);
+
     }
 }

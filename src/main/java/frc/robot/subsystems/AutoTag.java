@@ -12,7 +12,7 @@ public class AutoTag {
     double zeX = myPosition.getX();
     double zeY = myPosition.getX();
     double h = (Math.sqrt((zeX * zeX) + (zeY * zeY)));
-    double angleA = Math.sin(zeY / h);
+    double angleA = Math.asin(zeY / h);
 
 public void directions() {
     if (zeX > 0) {

@@ -43,7 +43,7 @@ public class RobotContainer {
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
     private final Lifter lifter = new Lifter(driverController);
 
-    private Vision visionSystem = new Vision();
+    //private Vision visionSystem = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -84,11 +84,19 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
+<<<<<<< HEAD
         //hold to open command on dashboard
         SmartDashboard.putData("Open Claw", new OpenClaw(lifter));
         //slider of arm... maybe... we'll find out
         SmartDashboard.putData("Arm Slider", new InstantCommand(() -> lifter.FineTuning(),lifter));
         
+=======
+        //hold to open claw command on shuffleboard
+        SmartDashboard.putData("OpenClaw", new OpenClaw(lifter));
+        //arm slider command on shuffleboard... hopefully... we'll find out
+        SmartDashboard.putData("ArmSlider", new InstantCommand(()-> lifter.FineTuning(),lifter));
+
+>>>>>>> 5888e07e5dde31a0906f0bbd7f56eed28538eb0d
         // Send commands to dashboard
         //These will be displayed on the commands panel Ex from last year:
         // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
@@ -138,7 +146,7 @@ public class RobotContainer {
     }
 
     public void test() {
-
+        SmartDashboard.getNumber("arm position", 0.01);
 
     }
 
