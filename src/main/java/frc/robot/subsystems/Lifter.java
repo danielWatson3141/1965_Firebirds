@@ -100,18 +100,10 @@ public class Lifter extends SubsystemBase {
 
         return state == Value.kForward;
     }
-    
-    public void setArmSpeed(double speed){
-        Logging.log("Lifter:setArmPosition", "Setting ArmSpeed to "+speed);
-        lifterMotor.set(ControlMode.PercentOutput, speed ); 
-    }
 
     TrapezoidProfile profile;
     
     public void setArmPosition(double position){
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
-                                                new TrapezoidProfile.State(5, 0),
-                                                new TrapezoidProfile.State(0, 0));
         setPoint = position;
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
@@ -131,10 +123,13 @@ public class Lifter extends SubsystemBase {
     }
 
     public void goToTop(){
+        Logging.log("Lifter:goToTop","Setting ArmPosition to top");
         setArmPosition(ARM_TOP_POSITION);
     }
 
     public void moveArmUp(){
+        Logging.log("Lifter:moveArmUp","Setpoint: "+setPoint);  
+
         Logging.log("Lifter:moveArmUp", "Moving arm up");
         if (setPoint >= ARM_MIDDLE_POSITION)
             goToTop();
@@ -143,6 +138,8 @@ public class Lifter extends SubsystemBase {
     }
 
     public void moveArmDown(){
+        Logging.log("Lifter:moveArmDown","Setpoint: "+setPoint);  
+
         Logging.log("Lifter:moveArmDown", "Moving arm Down");
         if (setPoint > ARM_MIDDLE_POSITION)
             goToMiddle();
@@ -156,13 +153,6 @@ public class Lifter extends SubsystemBase {
     
     public double getSpeed() {
         return lifterMotor.getSelectedSensorVelocity();
-    }
-
-    double ARM_SPEED_FACTOR = 0.25;
-    
-    public void FineTuning(){
-        double rightStickY = myController.getRightY();
-        setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
     //10% of range per second
@@ -189,7 +179,7 @@ public class Lifter extends SubsystemBase {
 
         double rightStickY = myController.getRightY();
 
-        setPoint += rightStickY * ARM_STICK_SPEED * elapsedTime/1000.0;
+        setPoint += rightStickY * ARM_STICK_SPEED * elapsedTime;
         lifterMotor.set(ControlMode.MotionMagic, setPoint );
     }
 
@@ -197,8 +187,5 @@ public class Lifter extends SubsystemBase {
         SmartDashboard.putNumber("Position",getArmPosition());
         SmartDashboard.putNumber("Goal Position", setPoint);
         SmartDashboard.putNumber("Speed",getSpeed());
-        SmartDashboard.putNumber("setPoint Displ", setpoint.position);
-        SmartDashboard.putNumber("setPoint Speed", setpoint.velocity);
-
     }
 }
