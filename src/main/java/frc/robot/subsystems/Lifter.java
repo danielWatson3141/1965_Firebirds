@@ -170,10 +170,11 @@ public class Lifter extends SubsystemBase {
         }
 
         {
-            setpoint = profile.calculate(elapsedTime);
+            // setpoint = profile.calculate(elapsedTime);
             
-            double output = pid.calculate(getSpeed(), setpoint.velocity);
-            lifterMotor.set(ControlMode.PercentOutput, output);
+            // double output = pid.calculate(getSpeed(), setpoint.velocity);
+            // lifterMotor.set(ControlMode.PercentOutput, output);
+            lifterMotor.set(ControlMode.MotionMagic, destination );
         }
     }
 
