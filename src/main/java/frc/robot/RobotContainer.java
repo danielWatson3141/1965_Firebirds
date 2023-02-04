@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ser.std.StdArraySerializers.FloatArraySeri
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -84,10 +85,10 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
+        
+
         //hold to open claw command on shuffleboard
         SmartDashboard.putData("OpenClaw", new OpenClaw(lifter));
-        //arm slider command on shuffleboard... hopefully... we'll find out
-        SmartDashboard.putData("ArmSlider", new InstantCommand(()-> lifter.FineTuning(),lifter));
 
         // Send commands to dashboard
         //These will be displayed on the commands panel Ex from last year:
@@ -138,8 +139,10 @@ public class RobotContainer {
     }
 
     public void test() {
-        SmartDashboard.getNumber("arm position", 0.01);
-
+       //SmartDashboard.getNumber("setpoint", 0);
+       SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
+       SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
+       SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
     }
 
     /**

@@ -78,6 +78,7 @@ public class Lifter extends SubsystemBase {
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
         lifterSpeedLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
+        SlewRateLimiter lifterLimiter = new SlewRateLimiter(1.3);
 
         pid = new PIDController(kP, kI, kD);
         // pid.setinputrange 
@@ -188,8 +189,14 @@ public class Lifter extends SubsystemBase {
             return;
         
         if(direct_input_mode){
-            //TODO
+            
+            double rightStickY = myController.getRightY();
+
+            double targetSpeed = lifterSpeedLimiter.calculate( rightStickY );
+
+            setArmSpeed(targetSpeed);
         }
+
         {
             // setpoint = profile.calculate(elapsedTime);
             
