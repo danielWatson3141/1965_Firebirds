@@ -107,13 +107,12 @@ public class Lifter extends SubsystemBase {
     }
 
     TrapezoidProfile profile;
-    double destination;
     
     public void setArmPosition(double position){
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
                                                 new TrapezoidProfile.State(5, 0),
                                                 new TrapezoidProfile.State(0, 0));
-        destination = position;
+        setPoint = position;
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
 
@@ -137,7 +136,7 @@ public class Lifter extends SubsystemBase {
 
     public void moveArmUp(){
         Logging.log("Lifter:moveArmUp", "Moving arm up");
-        if (destination >= ARM_MIDDLE_POSITION)
+        if (setPoint >= ARM_MIDDLE_POSITION)
             goToTop();
         else 
             goToMiddle();
@@ -145,7 +144,7 @@ public class Lifter extends SubsystemBase {
 
     public void moveArmDown(){
         Logging.log("Lifter:moveArmDown", "Moving arm Down");
-        if (destination > ARM_MIDDLE_POSITION)
+        if (setPoint > ARM_MIDDLE_POSITION)
             goToMiddle();
         else 
             goToBottom();
@@ -166,7 +165,9 @@ public class Lifter extends SubsystemBase {
         setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
 
-    State setpoint = new State();
+    //10% of range per second
+    double ARM_STICK_SPEED = 0.1;
+
 
     long previousTime = 0;
     @Override
@@ -185,39 +186,16 @@ public class Lifter extends SubsystemBase {
         previousTime = currentTime;
 
         //Compute where the arm should be after the time elapsed
-        if( profile == null)
-            return;
-        
-        if(direct_input_mode){
-            
-            double rightStickY = myController.getRightY();
 
-            double targetSpeed = lifterSpeedLimiter.calculate( rightStickY );
+        double rightStickY = myController.getRightY();
 
-            setArmSpeed(targetSpeed);
-        }
-
-        {
-            // setpoint = profile.calculate(elapsedTime);
-            
-            double output = pid.calculate(getArmPosition(), setpoint.position);
-            SmartDashboard.putNumber("pid output", setpoint.velocity);
-
-            // Logging.log("PID", "position: "+getArmPosition());
-            // Logging.log("PID", "setpoint pos: "+setpoint.position);
-            // Logging.log("PID", "setpoint vel: "+setpoint.velocity);
-            // Logging.log("PID", "setpoint output: "+output);
-            //System.out.println();
-
-            // double output = pid.calculate(getSpeed(), setpoint.velocity);
-            // lifterMotor.set(ControlMode.PercentOutput, output);
-            lifterMotor.set(ControlMode.MotionMagic, destination );
-        }
+        setPoint += rightStickY * ARM_STICK_SPEED * elapsedTime/1000.0;
+        lifterMotor.set(ControlMode.MotionMagic, setPoint );
     }
 
     public void report_data() {
         SmartDashboard.putNumber("Position",getArmPosition());
-        SmartDashboard.putNumber("Goal Position", destination);
+        SmartDashboard.putNumber("Goal Position", setPoint);
         SmartDashboard.putNumber("Speed",getSpeed());
         SmartDashboard.putNumber("setPoint Displ", setpoint.position);
         SmartDashboard.putNumber("setPoint Speed", setpoint.velocity);
