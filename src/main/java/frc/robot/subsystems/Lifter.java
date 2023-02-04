@@ -78,7 +78,6 @@ public class Lifter extends SubsystemBase {
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
         lifterSpeedLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
-        SlewRateLimiter lifterLimiter = new SlewRateLimiter(1.3);
 
         pid = new PIDController(kP, kI, kD);
         // pid.setinputrange 
@@ -100,14 +99,8 @@ public class Lifter extends SubsystemBase {
 
         return state == Value.kForward;
     }
-    
-    public void setArmSpeed(double speed){
-        Logging.log("Lifter:setArmPosition", "Setting ArmSpeed to "+speed);
-        lifterMotor.set(ControlMode.PercentOutput, speed ); 
-    }
 
     TrapezoidProfile profile;
-    double destination;
     
     public void setArmPosition(double position){
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
@@ -132,20 +125,25 @@ public class Lifter extends SubsystemBase {
     }
 
     public void goToTop(){
+        Logging.log("Lifter:goToTop","Setting ArmPosition to top");
         setArmPosition(ARM_TOP_POSITION);
     }
 
     public void moveArmUp(){
+        Logging.log("Lifter:moveArmUp","Setpoint: "+setPoint);  
+
         Logging.log("Lifter:moveArmUp", "Moving arm up");
-        if (destination >= ARM_MIDDLE_POSITION)
+        if (setPoint >= ARM_MIDDLE_POSITION)
             goToTop();
         else 
             goToMiddle();
     }
 
     public void moveArmDown(){
+        Logging.log("Lifter:moveArmDown","Setpoint: "+setPoint);  
+
         Logging.log("Lifter:moveArmDown", "Moving arm Down");
-        if (destination > ARM_MIDDLE_POSITION)
+        if (setPoint > ARM_MIDDLE_POSITION)
             goToMiddle();
         else 
             goToBottom();
@@ -189,26 +187,11 @@ public class Lifter extends SubsystemBase {
             return;
         
         if(direct_input_mode){
-            
-            double rightStickY = myController.getRightY();
-
-            double targetSpeed = lifterSpeedLimiter.calculate( rightStickY );
-
-            setArmSpeed(targetSpeed);
+            //TODO
         }
-
         {
             // setpoint = profile.calculate(elapsedTime);
             
-            double output = pid.calculate(getArmPosition(), setpoint.position);
-            SmartDashboard.putNumber("pid output", setpoint.velocity);
-
-            // Logging.log("PID", "position: "+getArmPosition());
-            // Logging.log("PID", "setpoint pos: "+setpoint.position);
-            // Logging.log("PID", "setpoint vel: "+setpoint.velocity);
-            // Logging.log("PID", "setpoint output: "+output);
-            //System.out.println();
-
             // double output = pid.calculate(getSpeed(), setpoint.velocity);
             // lifterMotor.set(ControlMode.PercentOutput, output);
             lifterMotor.set(ControlMode.MotionMagic, destination );
@@ -217,10 +200,7 @@ public class Lifter extends SubsystemBase {
 
     public void report_data() {
         SmartDashboard.putNumber("Position",getArmPosition());
-        SmartDashboard.putNumber("Goal Position", destination);
+        SmartDashboard.putNumber("Goal Position", setPoint);
         SmartDashboard.putNumber("Speed",getSpeed());
-        SmartDashboard.putNumber("setPoint Displ", setpoint.position);
-        SmartDashboard.putNumber("setPoint Speed", setpoint.velocity);
-
     }
 }
