@@ -435,6 +435,22 @@
                   "_showGlyph": false,
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Subsystem Layout",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Scheduler/Ids",
+                  "_title": "Scheduler/Ids",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": []
+                },
+                {
+                  "_type": "PID Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
+                  "_title": "PIDController[1]",
+                  "_glyph": 148,
+                  "_showGlyph": false
                 }
               ]
             }
@@ -482,158 +498,6 @@
               "_showGlyph": false,
               "Layout/Label position": "BOTTOM",
               "_children": []
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "graphs",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "1,0": {
-            "size": [
-              7,
-              3
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "List Layout",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/throttle",
-                  "_title": "SmartDashboard/throttle",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/throttle": true
-                },
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/steerLimit",
-                  "_title": "SmartDashboard/steerLimit",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/steerLimit": true
-                },
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/steerOutput",
-                  "_title": "SmartDashboard/steerOutput",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 0.02,
-                  "Y-axis/Lower bound": -0.02,
-                  "Y-axis/Unit": "ul",
-                  "Visible data/SmartDashboard/steerOutput": true
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "graphs 2",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "1,0": {
-            "size": [
-              7,
-              4
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "List Layout",
-              "_glyph": 149,
-              "_showGlyph": false,
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/leftStickX",
-                  "_title": "SmartDashboard/leftStickX",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
-                },
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/leftStickY",
-                  "_title": "SmartDashboard/leftStickY",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
-                },
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/leftTrigger",
-                  "_title": "SmartDashboard/leftTrigger",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
-                },
-                {
-                  "_type": "Graph",
-                  "_source0": "network_table:///SmartDashboard/rightTrigger",
-                  "_title": "SmartDashboard/rightTrigger",
-                  "_glyph": 148,
-                  "_showGlyph": false,
-                  "Graph/Visible time": 30.0,
-                  "Graph/X-axis auto scrolling": true,
-                  "Y-axis/Automatic bounds": true,
-                  "Y-axis/Upper bound": 1.0,
-                  "Y-axis/Lower bound": -1.0,
-                  "Y-axis/Unit": "ul"
-                }
-              ]
             }
           }
         }
@@ -738,64 +602,6 @@
       }
     },
     {
-      "title": "combied graphs",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "4,0": {
-            "size": [
-              4,
-              3
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/rightTrigger",
-              "_source1": "network_table:///SmartDashboard/leftTrigger",
-              "_title": "left \u0026 right trigger",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
-            }
-          },
-          "0,0": {
-            "size": [
-              4,
-              3
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/throttle",
-              "_source1": "network_table:///SmartDashboard/steerLimit",
-              "_source2": "network_table:///SmartDashboard/steerOutput",
-              "_title": "Graph (3 sources)",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/steerLimit": true,
-              "Visible data/SmartDashboard/steerOutput": true,
-              "Visible data/SmartDashboard/throttle": true
-            }
-          }
-        }
-      }
-    },
-    {
       "title": "Tab 8",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
@@ -809,7 +615,7 @@
       }
     },
     {
-      "title": "Tab 9",
+      "title": "graph",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -819,26 +625,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Position",
-              "_title": "/SmartDashboard/Position",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Position": true
-            }
-          },
           "1,0": {
             "size": [
               1,
@@ -846,23 +632,19 @@
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Goal Position",
-              "_source1": "network_table:///SmartDashboard/Speed",
-              "_source2": "network_table:///SmartDashboard/setPoint Displ",
-              "_source3": "network_table:///SmartDashboard/setPoint Speed",
-              "_title": "Graph (4 sources)",
+              "_source0": "network_table:///SmartDashboard/Position",
+              "_source1": "network_table:///SmartDashboard/Goal Position",
+              "_title": "cam\u0027s graph",
               "_glyph": 148,
               "_showGlyph": false,
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10000.0,
+              "Y-axis/Lower bound": -10000.0,
               "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Goal Position": true,
-              "Visible data/SmartDashboard/Speed": true,
-              "Visible data/SmartDashboard/setPoint Displ": true,
-              "Visible data/SmartDashboard/setPoint Speed": true
+              "Visible data/SmartDashboard/Goal Position": false,
+              "Visible data/SmartDashboard/Position": true
             }
           }
         }
