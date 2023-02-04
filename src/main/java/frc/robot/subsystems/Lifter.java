@@ -163,11 +163,10 @@ public class Lifter extends SubsystemBase {
             //TODO
         }
         {
-            setpoint = profile.calculate(elapsedTime);
+            // setpoint = profile.calculate(elapsedTime);
             
             double output = pid.calculate(getArmPosition(), setpoint.position);
             SmartDashboard.putNumber("pid output", setpoint.velocity);
-            lifterMotor.set(ControlMode.PercentOutput, output);
 
             Logging.log("PID", "position: "+getArmPosition());
             Logging.log("PID", "setpoint pos: "+setpoint.position);
@@ -175,6 +174,9 @@ public class Lifter extends SubsystemBase {
             Logging.log("PID", "setpoint output: "+output);
             System.out.println();
 
+            // double output = pid.calculate(getSpeed(), setpoint.velocity);
+            // lifterMotor.set(ControlMode.PercentOutput, output);
+            lifterMotor.set(ControlMode.MotionMagic, destination );
         }
     }
 
