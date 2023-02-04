@@ -32,7 +32,7 @@ public class Lifter extends SubsystemBase {
     Compressor compressor;
     SlewRateLimiter lifterSpeedLimiter;
 
-    boolean direct_input_mode = true;
+    boolean direct_input_mode = false;
 
     double target_angle = 0;
     private double kP=2;
@@ -45,7 +45,7 @@ public class Lifter extends SubsystemBase {
     public Lifter(XboxController cont) {
         myController = cont;
         lifterMotor = new TalonSRX(2);
-        lifterMotor.setInverted(true);
+        lifterMotor.setInverted(false);
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
@@ -89,8 +89,8 @@ public class Lifter extends SubsystemBase {
     }
 
     public final double ARM_BOTTOM_POSITION = 0;
-    public final double ARM_MIDDLE_POSITION = 0.5;
-    public final double ARM_TOP_POSITION = 1;
+    public final double ARM_MIDDLE_POSITION = 1000;
+    public final double ARM_TOP_POSITION = 3000;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
@@ -165,8 +165,16 @@ public class Lifter extends SubsystemBase {
         {
             setpoint = profile.calculate(elapsedTime);
             
-            double output = pid.calculate(getSpeed(), setpoint.velocity);
+            double output = pid.calculate(getArmPosition(), setpoint.position);
+            SmartDashboard.putNumber("pid output", setpoint.velocity);
             lifterMotor.set(ControlMode.PercentOutput, output);
+
+            Logging.log("PID", "position: "+getArmPosition());
+            Logging.log("PID", "setpoint pos: "+setpoint.position);
+            Logging.log("PID", "setpoint vel: "+setpoint.velocity);
+            Logging.log("PID", "setpoint output: "+output);
+            System.out.println();
+
         }
     }
 
@@ -175,7 +183,7 @@ public class Lifter extends SubsystemBase {
         SmartDashboard.putNumber("Goal Position", destination);
         SmartDashboard.putNumber("Speed",getSpeed());
         SmartDashboard.putNumber("setPoint Displ", setpoint.position);
-        SmartDashboard.putNumber("setPoint Speed", setpoint.position);
+        SmartDashboard.putNumber("setPoint Speed", setpoint.velocity);
 
     }
 }
