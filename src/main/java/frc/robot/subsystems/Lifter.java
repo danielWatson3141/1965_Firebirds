@@ -30,9 +30,7 @@ public class Lifter extends SubsystemBase {
     TalonSRX lifterMotor;
 
     Compressor compressor;
-    SlewRateLimiter lifterSpeedLimiter;
-
-    boolean direct_input_mode = true;
+    SlewRateLimiter steeringLimiter;
 
     double target_angle = 0;
     private double kP=2;
@@ -49,7 +47,7 @@ public class Lifter extends SubsystemBase {
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-        lifterSpeedLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
+        steeringLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
 
         pid = new PIDController(kP, kI, kD);
         // pid.setinputrange 
@@ -81,6 +79,7 @@ public class Lifter extends SubsystemBase {
     double destination;
     
     public void setArmPosition(double position){
+    
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
                                                 new TrapezoidProfile.State(5, 0),
                                                 new TrapezoidProfile.State(0, 0));
@@ -133,6 +132,7 @@ public class Lifter extends SubsystemBase {
     double ARM_SPEED_FACTOR = 0.25;
     
     public void FineTuning(){
+
         double rightStickY = myController.getRightY();
         setArmSpeed(ARM_SPEED_FACTOR * rightStickY);
     }
@@ -159,16 +159,10 @@ public class Lifter extends SubsystemBase {
         if( profile == null)
             return;
         
-        if(direct_input_mode){
-            //TODO
-        }
-        {
-            // setpoint = profile.calculate(elapsedTime);
-            
-            // double output = pid.calculate(getSpeed(), setpoint.velocity);
-            // lifterMotor.set(ControlMode.PercentOutput, output);
-            lifterMotor.set(ControlMode.MotionMagic, destination );
-        }
+        setpoint = profile.calculate(elapsedTime);
+        
+        double output = pid.calculate(getSpeed(), setpoint.velocity);
+        lifterMotor.set(ControlMode.PercentOutput, output);
     }
 
     public void report_data() {
