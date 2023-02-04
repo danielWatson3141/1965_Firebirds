@@ -15,6 +15,7 @@ public class OpenClaw extends CommandBase{
     lifter = my_lifter;
   }
 
+//hold to open claw
 
 @Override
   public void initialize() {

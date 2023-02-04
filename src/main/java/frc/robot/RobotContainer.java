@@ -119,6 +119,7 @@ public class RobotContainer {
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
         
+        //gained from OpenClaw.java
         aButton.whileTrue( 
                 new OpenClaw(lifter));
 
@@ -139,7 +140,7 @@ public class RobotContainer {
     }
 
     public void test() {
-       //SmartDashboard.getNumber("setpoint", 0);
+       //ShuffleBoard widget commands for movement of arm
        SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
        SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
        SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));

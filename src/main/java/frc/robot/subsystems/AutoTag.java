@@ -9,8 +9,10 @@ public class AutoTag {
 
     Transform3d myPosition;
     
+    //already givem
     double zeX = myPosition.getX();
     double zeY = myPosition.getX();
+    //calculated using triganometry
     double h = (Math.sqrt((zeX * zeX) + (zeY * zeY)));
     double angleA = Math.asin(zeY / h);
 
