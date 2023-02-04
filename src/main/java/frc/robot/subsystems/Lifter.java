@@ -141,10 +141,10 @@ public class Lifter extends SubsystemBase {
         Logging.log("Lifter:moveArmDown","Setpoint: "+setPoint);  
 
         Logging.log("Lifter:moveArmDown", "Moving arm Down");
-        if (setPoint > ARM_MIDDLE_POSITION)
-            goToMiddle();
-        else 
+        if (setPoint <= ARM_MIDDLE_POSITION )
             goToBottom();
+        else 
+            goToMiddle();
     }
 
     public double getArmPosition(){
@@ -156,8 +156,8 @@ public class Lifter extends SubsystemBase {
     }
 
     //10% of range per second
-    double ARM_STICK_SPEED = 0.1;
-
+    double ARM_STICK_SPEED = 10;
+    double RIGHT_STICK_DEADZONE = 0.05;
 
     long previousTime = 0;
     @Override
@@ -179,7 +179,11 @@ public class Lifter extends SubsystemBase {
 
         double rightStickY = myController.getRightY();
 
+        if (Math.abs(rightStickY) < RIGHT_STICK_DEADZONE)
+            rightStickY = 0;
+
         setPoint += rightStickY * ARM_STICK_SPEED * elapsedTime;
+
         lifterMotor.set(ControlMode.MotionMagic, setPoint );
     }
 
