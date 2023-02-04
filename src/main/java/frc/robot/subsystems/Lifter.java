@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -45,6 +47,32 @@ public class Lifter extends SubsystemBase {
     public Lifter(XboxController cont) {
         myController = cont;
         lifterMotor = new TalonSRX(2);
+        lifterMotor.configFactoryDefault();
+        lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+        lifterMotor.configNeutralDeadband(.001, 30);
+        lifterMotor.setSensorPhase(false);
+        lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
+
+        /* Set the peak and nominal outputs */
+		lifterMotor.configNominalOutputForward(0, 30);
+		lifterMotor.configNominalOutputReverse(0, 30);
+		lifterMotor.configPeakOutputForward(1, 30);
+		lifterMotor.configPeakOutputReverse(-1, 30);
+
+		/* Set Motion Magic gains in slot0 - see documentation */
+		lifterMotor.selectProfileSlot(0, 0);
+		lifterMotor.config_kF(0, 0.2, 30);
+		lifterMotor.config_kP(0, 0.2, 30);
+		lifterMotor.config_kI(0, 0, 30);
+		lifterMotor.config_kD(0, 0, 30);
+
+		/* Set acceleration and vcruise velocity - see documentation */
+		lifterMotor.configMotionCruiseVelocity(3000, 30);
+		lifterMotor.configMotionAcceleration(3000, 30);
+
+		/* Zero the sensor once on robot boot up */
+		lifterMotor.setSelectedSensorPosition(0, 0, 30);
+
         lifterMotor.setInverted(false);
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
@@ -88,9 +116,9 @@ public class Lifter extends SubsystemBase {
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
 
-    public final double ARM_BOTTOM_POSITION = 0;
-    public final double ARM_MIDDLE_POSITION = 1000;
-    public final double ARM_TOP_POSITION = 3000;
+    public final double ARM_BOTTOM_POSITION = -10000;
+    public final double ARM_MIDDLE_POSITION = 0;
+    public final double ARM_TOP_POSITION = 10000;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
@@ -168,11 +196,11 @@ public class Lifter extends SubsystemBase {
             double output = pid.calculate(getArmPosition(), setpoint.position);
             SmartDashboard.putNumber("pid output", setpoint.velocity);
 
-            Logging.log("PID", "position: "+getArmPosition());
-            Logging.log("PID", "setpoint pos: "+setpoint.position);
-            Logging.log("PID", "setpoint vel: "+setpoint.velocity);
-            Logging.log("PID", "setpoint output: "+output);
-            System.out.println();
+            // Logging.log("PID", "position: "+getArmPosition());
+            // Logging.log("PID", "setpoint pos: "+setpoint.position);
+            // Logging.log("PID", "setpoint vel: "+setpoint.velocity);
+            // Logging.log("PID", "setpoint output: "+output);
+            //System.out.println();
 
             // double output = pid.calculate(getSpeed(), setpoint.velocity);
             // lifterMotor.set(ControlMode.PercentOutput, output);
