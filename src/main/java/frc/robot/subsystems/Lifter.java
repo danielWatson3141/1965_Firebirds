@@ -78,7 +78,6 @@ public class Lifter extends SubsystemBase {
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
         lifterSpeedLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
-        SlewRateLimiter lifterLimiter = new SlewRateLimiter(1.3);
 
         pid = new PIDController(kP, kI, kD);
         // pid.setinputrange 
@@ -104,7 +103,10 @@ public class Lifter extends SubsystemBase {
     TrapezoidProfile profile;
     
     public void setArmPosition(double position){
-        setPoint = position;
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
+                                                new TrapezoidProfile.State(5, 0),
+                                                new TrapezoidProfile.State(0, 0));
+        destination = position;
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
 
