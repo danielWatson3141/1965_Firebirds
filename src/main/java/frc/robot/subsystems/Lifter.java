@@ -30,7 +30,9 @@ public class Lifter extends SubsystemBase {
     TalonSRX lifterMotor;
 
     Compressor compressor;
-    SlewRateLimiter steeringLimiter;
+    SlewRateLimiter lifterSpeedLimiter;
+
+    boolean direct_input_mode = true;
 
     double target_angle = 0;
     private double kP=2;
@@ -47,7 +49,7 @@ public class Lifter extends SubsystemBase {
         
         claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-        steeringLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
+        lifterSpeedLimiter = new SlewRateLimiter(UP_RATE_LIMIT, DOWN_RATE_LIMIT, 0);
 
         pid = new PIDController(kP, kI, kD);
         // pid.setinputrange 
@@ -157,10 +159,15 @@ public class Lifter extends SubsystemBase {
         if( profile == null)
             return;
         
-        setpoint = profile.calculate(elapsedTime);
-        
-        double output = pid.calculate(getSpeed(), setpoint.velocity);
-        lifterMotor.set(ControlMode.PercentOutput, output);
+        if(direct_input_mode){
+            //TODO
+        }
+        {
+            setpoint = profile.calculate(elapsedTime);
+            
+            double output = pid.calculate(getSpeed(), setpoint.velocity);
+            lifterMotor.set(ControlMode.PercentOutput, output);
+        }
     }
 
     public void report_data() {
