@@ -183,7 +183,12 @@ public class Lifter extends SubsystemBase {
             rightStickY = 0;
 
         setPoint += rightStickY * ARM_STICK_SPEED * elapsedTime;
-
+        if (setPoint > ARM_TOP_POSITION){
+            setPoint = ARM_TOP_POSITION;
+        }
+        if (setPoint < ARM_BOTTOM_POSITION){
+            setPoint = ARM_BOTTOM_POSITION;
+        }
         lifterMotor.set(ControlMode.MotionMagic, setPoint );
     }
 
