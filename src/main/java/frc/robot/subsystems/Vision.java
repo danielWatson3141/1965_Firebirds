@@ -39,6 +39,7 @@ public class Vision extends SubsystemBase {
 
     Mat source;
     Mat output;
+    
 
     public Vision() {
 
@@ -46,13 +47,17 @@ public class Vision extends SubsystemBase {
         camera1.setResolution(300, 300);
         camera2 = CameraServer.startAutomaticCapture(1);
         camera2.setResolution(300, 300);
+        //creates 2 usb cameras
 
         cvSink = CameraServer.getVideo();
         outputStream = CameraServer.putVideo("Blur", 640, 480);
+        //creates a cvsink for camera1 that allows the apriltagdetector to detect apriltags by 
 
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
+        //adds a new apriltagdetector
         detector.addFamily("tag16h5", 1);
+        //adds the tag family being used in this year's competition
 
         source = new Mat();
         output = new Mat();
@@ -78,7 +83,9 @@ public class Vision extends SubsystemBase {
     }
 
     AprilTagDetection[] detections;
+    //creates the apriltagdetection array
     Transform3d myPosition;
+    //creates myPosition as a way to set pose
 
 
     @Override
@@ -95,14 +102,16 @@ public class Vision extends SubsystemBase {
            // Logging.log("Vision:Periodic",E.getMessage());
         }
 
-        //Send the position to the dashboard
+        //Send the position to the dashboard if the position does not equal null
         if(myPosition != null){
             SmartDashboard.putNumber("tagX", myPosition.getX());
             SmartDashboard.putNumber("tagY", myPosition.getY());
             SmartDashboard.putNumber("tagZ", myPosition.getZ());
+
             double roll = myPosition.getRotation().getX();
             double pitch = myPosition.getRotation().getY();
             double yaw = myPosition.getRotation().getZ();
+            //gets the x y and z coordinates from poseDetermine
     
             SmartDashboard.putNumber("tagPitch", pitch);
             SmartDashboard.putNumber("tagRoll", roll);
@@ -119,6 +128,7 @@ public class Vision extends SubsystemBase {
             AprilTagDetection detection = detections[0];
             return estimator.estimate(detection); 
         }
+
 
     }
 }
