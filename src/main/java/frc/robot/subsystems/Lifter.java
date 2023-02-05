@@ -1,18 +1,9 @@
 package frc.robot.subsystems;
 
-import javax.imageio.plugins.tiff.GeoTIFFTagSet;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -57,13 +48,8 @@ public class Lifter extends SubsystemBase {
 
         return state == Value.kForward;
     }
-
-    TrapezoidProfile profile;
     
     public void setArmPosition(double position){
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(5, 10),
-                                                new TrapezoidProfile.State(5, 0),
-                                                new TrapezoidProfile.State(0, 0));
         setPoint = position;
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
     }
