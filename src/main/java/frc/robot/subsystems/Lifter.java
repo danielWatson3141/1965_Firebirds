@@ -7,10 +7,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Logging;
 
 public class Lifter extends SubsystemBase {
@@ -141,9 +141,9 @@ public class Lifter extends SubsystemBase {
     }
 
     public void report_data() {
-        SmartDashboard.putNumber("Position",getArmPosition());
-        SmartDashboard.putNumber("Goal Position", setPoint);
-        SmartDashboard.putNumber("Speed",getSpeed());
+        Shuffleboard.getTab(getName()).add("Position", getArmPosition());
+        Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
+        Shuffleboard.getTab(getName()).add("Speed", getSpeed());
     }
 
     private void configMotor(){
