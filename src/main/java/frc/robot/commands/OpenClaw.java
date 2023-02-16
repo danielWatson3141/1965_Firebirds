@@ -1,25 +1,25 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Lifter;
+import frc.robot.subsystems.Claw;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class OpenClaw extends CommandBase{
 
-    Lifter lifter;
+    Claw claw;
     // Called when the command is initially scheduled.
 
 
-  public OpenClaw(Lifter my_lifter) {
-    lifter = my_lifter;
+  public OpenClaw(Claw my_claw) {
+    claw = my_claw;
   }
 
 //hold to open claw
 
 @Override
   public void initialize() {
-    lifter.setClawOpen();
+    claw.clawCease();
   }
 
 
@@ -32,7 +32,7 @@ public class OpenClaw extends CommandBase{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    lifter.setClawClosed();
+    claw.clawUnfurl();
   }
 
   // Returns true when the command should end.
