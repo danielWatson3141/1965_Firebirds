@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.OpenClaw;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Lifter;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.SixWheelDrivetrain;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +44,7 @@ public class RobotContainer {
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
     private final Lifter lifter = new Lifter(driverController);
+    private final Claw claw = new Claw(driverController);
 
     //private Vision visionSystem = new Vision();
 
@@ -88,7 +90,7 @@ public class RobotContainer {
         
 
         //hold to open claw command on shuffleboard
-        SmartDashboard.putData("OpenClaw", new OpenClaw(lifter));
+        SmartDashboard.putData("OpenClaw", new OpenClaw(claw));
 
         // Send commands to dashboard
         //These will be displayed on the commands panel Ex from last year:
@@ -121,7 +123,7 @@ public class RobotContainer {
         
         //gained from OpenClaw.java
         aButton.whileTrue( 
-                new OpenClaw(lifter));
+                new OpenClaw(claw));
 
     }
 
