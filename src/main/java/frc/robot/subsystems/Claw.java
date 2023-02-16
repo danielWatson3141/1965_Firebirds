@@ -34,7 +34,7 @@ public class Claw extends SubsystemBase {
 
     public void setClawState(double position) {
         setPoint = position;
-        Logging.log("claw:setArmPosition", "Setting ArmPosition to: " + position);
+        Logging.log("claw:setClawState", "Setting ClawState to: " + position);
     }
 
     public final double CLAW_SHUT = -10000;
@@ -49,8 +49,6 @@ public class Claw extends SubsystemBase {
         setClawState(CLAW_SHUT);
         Logging.log("Claw:clawShut", "setting claw position to shut");
     }
-
-    
 
     private void configMotor() {
         clawMotor.configFactoryDefault();

@@ -91,6 +91,9 @@ public class RobotContainer {
 
         //hold to open claw command on shuffleboard
         SmartDashboard.putData("OpenClaw", new OpenClaw(claw));
+        //individual open/shut commands on shuffleboard
+        SmartDashboard.putData("Unfurl Claw", new InstantCommand(() -> claw.clawOpen(), claw));
+        SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() -> claw.clawShut(), claw));
 
         // Send commands to dashboard
         //These will be displayed on the commands panel Ex from last year:
