@@ -19,7 +19,7 @@ public class Lifter extends SubsystemBase {
 
     public static final double UP_RATE_LIMIT = .2;
     public static final double DOWN_RATE_LIMIT = .2;
-    DoubleSolenoid claw_piston;
+
     TalonSRX lifterMotor;
 
     double setPoint = 0;
@@ -29,24 +29,7 @@ public class Lifter extends SubsystemBase {
         lifterMotor = new TalonSRX(2);
         configMotor();
         
-        claw_piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
-    }
-
-    public void setClawOpen() {
-        Logging.log("Lifter:setClawOpen", "opening the claw");
-        claw_piston.set(Value.kForward);
-    }
-
-    public void setClawClosed() {
-        Logging.log( "Lifter:setClawClosed","closing the claw");
-    
-        claw_piston.set(Value.kReverse);
-    }
-
-    public boolean getClawOpen() {
-        Value state = claw_piston.get();
-
-        return state == Value.kForward;
+ 
     }
     
     public void setArmPosition(double position){
