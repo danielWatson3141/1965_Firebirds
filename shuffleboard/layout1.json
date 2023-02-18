@@ -642,9 +642,7 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 10000.0,
               "Y-axis/Lower bound": -10000.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Goal Position": false,
-              "Visible data/SmartDashboard/Position": true
+              "Y-axis/Unit": "ul"
             }
           }
         }

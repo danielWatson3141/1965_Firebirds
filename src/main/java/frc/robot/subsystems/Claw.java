@@ -24,10 +24,10 @@ public class Claw extends SubsystemBase {
 
     double setPoint = 0;
 
-    public Claw(XboxController cont) {
+    public Claw(XboxController cont)
         myController = cont;
         // check device number
-        clawMotor = new TalonSRX(3);
+        clawMotor = new TalonSRX(1);
         configMotor();
 
     }
