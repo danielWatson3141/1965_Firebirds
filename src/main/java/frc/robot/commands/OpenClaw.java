@@ -19,7 +19,7 @@ public class OpenClaw extends CommandBase{
 
 @Override
   public void initialize() {
-    claw.clawCease();
+    claw.clawShut();
   }
 
 
@@ -32,7 +32,7 @@ public class OpenClaw extends CommandBase{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    claw.clawUnfurl();
+    claw.clawOpen();
   }
 
   // Returns true when the command should end.
