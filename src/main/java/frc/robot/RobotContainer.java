@@ -116,10 +116,8 @@ public class RobotContainer {
         // rb and lb
         rbButton.onTrue(
                 new InstantCommand(() -> lifter.moveArmUp(), lifter));
-
         lbButton.onTrue(
                 new InstantCommand(() -> lifter.moveArmDown(), lifter));
-
         // X Button
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));

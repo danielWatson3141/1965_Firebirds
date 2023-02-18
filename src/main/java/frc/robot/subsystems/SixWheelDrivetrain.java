@@ -85,7 +85,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
 
-    double leftStickX = myController.getLeftX();
+    double leftStickX = -myController.getLeftX();
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run

@@ -24,17 +24,16 @@ public class Claw extends SubsystemBase {
 
     double setPoint = 0;
 
-    public Claw(XboxController cont)
+    public Claw(XboxController cont){
         myController = cont;
-        // check device number
+        // check device number 
         clawMotor = new TalonSRX(1);
         configMotor();
-
     }
 
-    public void setClawState(double position) {
-        setPoint = position;
-        Logging.log("claw:setClawState", "Setting ClawState to: " + position);
+    public void setClawState(double cposition) {
+        setPoint = cposition;
+        Logging.log("claw:setClawState", "Setting ClawState to: " + cposition);
     }
 
     public final double CLAW_SHUT = -10000;
