@@ -22,7 +22,7 @@ public class Claw extends SubsystemBase {
 
     TalonSRX clawMotor;
 
-    double setPoint = 0;
+    public double setPoint = 0;
 
     public Claw(XboxController cont){
         myController = cont;
@@ -40,7 +40,7 @@ public class Claw extends SubsystemBase {
     public final double CLAW_OPEN = 10000;
 
     public void clawOpen() {
-        setClawState(OPEN_RATE_LIMIT);
+        setClawState(CLAW_OPEN);
         Logging.log("Claw:clawOpen", "setting claw position to open");
     }
 
