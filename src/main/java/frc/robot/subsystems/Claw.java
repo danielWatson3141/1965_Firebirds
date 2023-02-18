@@ -79,4 +79,10 @@ public class Claw extends SubsystemBase {
         /* Zero the sensor once on robot boot up */
         clawMotor.setSelectedSensorPosition(0, 0, 30);
     }
+
+    public void clawCease() {
+    }
+
+    public void clawUnfurl() {
+    }
 }
