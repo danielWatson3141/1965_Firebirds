@@ -22,7 +22,7 @@ public class Claw extends SubsystemBase {
 
     TalonSRX clawMotor;
 
-    public double setPoint = 0;
+    double setPoint = 0;
 
     public Claw(XboxController cont){
         myController = cont;
@@ -40,7 +40,7 @@ public class Claw extends SubsystemBase {
     public final double CLAW_OPEN = 10000;
 
     public void clawOpen() {
-        setClawState(CLAW_OPEN);
+        setClawState(OPEN_RATE_LIMIT);
         Logging.log("Claw:clawOpen", "setting claw position to open");
     }
 
@@ -49,6 +49,10 @@ public class Claw extends SubsystemBase {
         Logging.log("Claw:clawShut", "setting claw position to shut");
     }
 
+    @Override
+    public void periodic() {
+       
+    }
     private void configMotor() {
         clawMotor.configFactoryDefault();
         clawMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
@@ -77,9 +81,4 @@ public class Claw extends SubsystemBase {
         clawMotor.setSelectedSensorPosition(0, 0, 30);
     }
 
-    public void clawCease() {
-    }
-
-    public void clawUnfurl() {
-    }
 }
