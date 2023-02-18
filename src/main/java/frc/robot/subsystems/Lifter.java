@@ -32,9 +32,9 @@ public class Lifter extends SubsystemBase {
  
     }
     
-    public void setArmPosition(double position){
-        setPoint = position;
-        Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+position);
+    public void setArmPosition(double lposition){
+        setPoint = lposition;
+        Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+lposition);
     }
 
     public final double ARM_BOTTOM_POSITION = -10000;
@@ -124,9 +124,9 @@ public class Lifter extends SubsystemBase {
     }
 
     public void report_data() {
-        Shuffleboard.getTab(getName()).add("Position", getArmPosition());
-        Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
-        Shuffleboard.getTab(getName()).add("Speed", getSpeed());
+        // Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
+        // Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
+        // Shuffleboard.getTab(getName()).add("Speed", getSpeed());
     }
 
     private void configMotor(){

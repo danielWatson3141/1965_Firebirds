@@ -24,17 +24,16 @@ public class Claw extends SubsystemBase {
 
     double setPoint = 0;
 
-    public Claw(XboxController cont) {
+    public Claw(XboxController cont){
         myController = cont;
-        // check device number
-        clawMotor = new TalonSRX(3);
+        // check device number 
+        clawMotor = new TalonSRX(1);
         configMotor();
-
     }
 
-    public void setClawState(double position) {
-        setPoint = position;
-        Logging.log("claw:setArmPosition", "Setting ArmPosition to: " + position);
+    public void setClawState(double cposition) {
+        setPoint = cposition;
+        Logging.log("claw:setClawState", "Setting ClawState to: " + cposition);
     }
 
     public final double CLAW_SHUT = -10000;
@@ -49,8 +48,6 @@ public class Claw extends SubsystemBase {
         setClawState(CLAW_SHUT);
         Logging.log("Claw:clawShut", "setting claw position to shut");
     }
-
-    
 
     private void configMotor() {
         clawMotor.configFactoryDefault();
@@ -78,5 +75,11 @@ public class Claw extends SubsystemBase {
 
         /* Zero the sensor once on robot boot up */
         clawMotor.setSelectedSensorPosition(0, 0, 30);
+    }
+
+    public void clawCease() {
+    }
+
+    public void clawUnfurl() {
     }
 }
