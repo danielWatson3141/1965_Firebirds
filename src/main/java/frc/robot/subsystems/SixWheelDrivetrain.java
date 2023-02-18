@@ -41,11 +41,12 @@ public class SixWheelDrivetrain extends SubsystemBase {
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
     WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
+    m_left.setInverted(true);
 
     MotorController m_frontRight = new WPI_TalonSRX(4);
     MotorController m_rearRight = new WPI_TalonSRX(6);
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
-    m_right.setInverted(true);
+    m_right.setInverted(false);
 
     driver = new DifferentialDrive(m_left, m_right);
     steeringLimiter = new SlewRateLimiter(2.5);
@@ -85,7 +86,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
 
-    double leftStickX = -myController.getLeftX();
+    double leftStickX = myController.getLeftX();
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run
@@ -97,7 +98,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     //SmartDashboard.putNumber("rightTrigger", rightTrigger);
     double leftTrigger = myController.getLeftTriggerAxis();
     //SmartDashboard.putNumber("leftTrigger", leftTrigger);
-
+//rt = backwards, lt = foward
     double throttle = rightTrigger + (-leftTrigger);
 
     SmartDashboard.putNumber("throttle", throttle);
