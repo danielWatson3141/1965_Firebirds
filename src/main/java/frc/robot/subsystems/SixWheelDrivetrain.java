@@ -35,6 +35,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public static boolean driveOverride = false;
 
+  WPI_TalonSRX m_blinkin = new WPI_TalonSRX(8);
+
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
@@ -119,6 +121,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     double steerOutput = steeringLimiter.calculate((steerInput));
     targetSpeed = throttleLimiter.calculate( throttle );
+    
+    double blinkin_color = targetSpeed * 1000 + 1000;
+
+    m_blinkin.set(blinkin_color);
 
     SmartDashboard.putNumber("steerOutput", steerOutput);
 
@@ -143,6 +149,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   public void goAtSpeed(double speed){
     System.out.println("GO at speed "+speed);
     driver.curvatureDrive(speed, 0, false);
+    m_blinkin.set(1500);
   }
 
 }
