@@ -4,10 +4,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,13 +28,15 @@ public class Lifter extends SubsystemBase {
     TalonSRX lifterMotor;
 
     double setPoint = 0;
-  
+
+    private ShuffleboardTab lifterTab = Shuffleboard.getTab("Lifter");
+    private GenericEntry armPositionEntry = lifterTab.add("armPosition", 0).getEntry();
+    private GenericEntry armSPEntry = lifterTab.add("armSetPoint", 0).getEntry();
+
     public Lifter(XboxController cont) {
         myController = cont;
         lifterMotor = new TalonSRX(2);
         configMotor();
-        
- 
     }
     
     public void setArmPosition(double lposition){
@@ -128,7 +134,8 @@ public class Lifter extends SubsystemBase {
         // Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
         // Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
         // Shuffleboard.getTab(getName()).add("Speed", getSpeed());
-        Shuffleboard.getTab("lifer position").add("lPosition", getArmPosition()).getEntry();
+        armPositionEntry.setDouble(getArmPosition());
+        armSPEntry.setDouble(setPoint);
     }
 
     private void configMotor(){
