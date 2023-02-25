@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -31,35 +32,48 @@ public class Claw extends SubsystemBase {
     private ShuffleboardTab clawTab = Shuffleboard.getTab("Claw");
     private GenericEntry clawPositionEntry = clawTab.add("clawPosition", 0).getEntry();
     private GenericEntry clawSetPointEntry = clawTab.add("clawSetpoint", 0).getEntry();
-    public Claw(XboxController cont){
+
+    public Claw(XboxController cont) {
         myController = cont;
-        // check device number 
+        // check device number
         clawMotor = new TalonSRX(1);
-        configMotor();
     }
 
-    public void setClawState(double cposition) {
-        setPoint = cposition;
-        Logging.log("claw:setClawState", "Setting ClawState to: " + cposition);
-    }
+    DigitalInput toplimitSwitch = new DigitalInput(0);
+    DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
-    public final double CLAW_SHUT = 50;
-    public final double CLAW_OPEN = 100;
+    private boolean CLAW_OPEN = true;
+    private boolean CLAW_CLOSED = !CLAW_OPEN;
+    boolean clawState;
 
-    public void clawOpen() {
-        setClawState(CLAW_OPEN);
-        Logging.log("Claw:clawOpen", "setting claw position to open");
-    }
+    double CLAW_SPEED = 1;
 
-    public void clawShut() {
-        setClawState(CLAW_SHUT);
-        Logging.log("Claw:clawShut", "setting claw position to shut");
-    }
+    public void clawToggle() {
+        clawState = !clawState;
 
-    @Override
-    public void periodic() {
-       
+        Logging.log("Claw:clawToggle","setting claw position to " + (clawState ? "OPEN" : "CLOSE" ));
     }
 
    
+    @Override
+    public void periodic() {
+        if (clawState == CLAW_OPEN) {
+            if (toplimitSwitch.get()) {
+                clawMotor.set(ControlMode.PercentOutput, 0);
+            } else {
+                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED);
+            }
+        } else {
+            if (bottomlimitSwitch.get()) {
+                clawMotor.set(ControlMode.PercentOutput, 0);
+            } else {
+                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED);
+            }
+        }
+    }
+
+    public void report_data() {
+
+    }
+
 }
