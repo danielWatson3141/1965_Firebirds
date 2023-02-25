@@ -139,11 +139,11 @@ public class Lifter extends SubsystemBase {
     }
     /* Motor constant, DONT CHANGE */
     private double KF = .2;
-    /* Proportional coefficient -  */
+    /* Proportional coefficient */
     private double KP = .01;
-    /* */
+    /* Integral coefficient */
     private double KI = .00025;
-    /* */
+    /* Dont Care */
     private double KD = 0;
 
     private double CRUISE_SPEED = 30;
@@ -151,13 +151,16 @@ public class Lifter extends SubsystemBase {
 
     private void configMotor(){
         
+        /* Revert all configurations to factory default values */
         lifterMotor.configFactoryDefault();
-
+        /* Ensures green light = good */
         lifterMotor.setInverted(true);
 
-
+        /* Select the feedback device for the motor controller */
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+        /* Configures the output deadband percentage */
         lifterMotor.configNeutralDeadband(.01, 30);
+        /* Sets the period of the given status frame */
         lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 
         /* Set the peak and nominal outputs */
