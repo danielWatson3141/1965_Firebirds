@@ -45,9 +45,9 @@ public class Lifter extends SubsystemBase {
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+lposition);
     }
 
-    public final double ARM_BOTTOM_POSITION = -5000;
-    public final double ARM_MIDDLE_POSITION = 0;
-    public final double ARM_TOP_POSITION = 5000;
+    public final double ARM_BOTTOM_POSITION = 100;
+    public final double ARM_MIDDLE_POSITION = 500;
+    public final double ARM_TOP_POSITION = 900;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
@@ -93,18 +93,21 @@ public class Lifter extends SubsystemBase {
     }
 
     //10% of range per second
-    double ARM_STICK_SPEED = 5;
+    double ARM_STICK_SPEED = .5;
     double RIGHT_STICK_DEADZONE = 0.05;
+
+    private GenericEntry rightStickEntry = lifterTab.add("RightStick_Y", 0).getEntry();
 
     @Override
     public void periodic() {
-        report_data();
+        dashboard_update();
 
         //get how much time has passed since last iteration
         double elapsedTime = time_elapsed();
 
         //get input from the controller
         double rightStickY = -myController.getRightY();
+        rightStickEntry.setDouble(rightStickY);
 
         //Don't take stick input if its close to zero
         if (Math.abs(rightStickY) < RIGHT_STICK_DEADZONE)
@@ -130,38 +133,62 @@ public class Lifter extends SubsystemBase {
         }
     }
 
-    public void report_data() {
+    public void dashboard_update() {
         armPositionEntry.setDouble(getArmPosition());
         armSPEntry.setDouble(setPoint);
     }
+    /* Motor constant, DONT CHANGE */
+    private double KF = .2;
+    /* Proportional coefficient -  */
+    private double KP = .01;
+    /* */
+    private double KI = .00025;
+    /* */
+    private double KD = 0;
+
+    private double CRUISE_SPEED = 30;
+    private double ACCEL = 200;
 
     private void configMotor(){
         
         lifterMotor.configFactoryDefault();
+
+        lifterMotor.setInverted(true);
+
+
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
         lifterMotor.configNeutralDeadband(.01, 30);
-        lifterMotor.setSensorPhase(false);
         lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 
         /* Set the peak and nominal outputs */
 		lifterMotor.configNominalOutputForward(0, 30);
 		lifterMotor.configNominalOutputReverse(0, 30);
 		lifterMotor.configPeakOutputForward(1, 30);
-		lifterMotor.configPeakOutputReverse(-1, 30);
+		lifterMotor.configPeakOutputReverse(1, 30);
 
 		/* Set Motion Magic gains in slot0 - see documentation */
 		lifterMotor.selectProfileSlot(0, 0);
-		lifterMotor.config_kF(0, 0.2, 30);
-		lifterMotor.config_kP(0, 0.1, 30);
-		lifterMotor.config_kI(0, 0.00025, 30);
-		lifterMotor.config_kD(0, 0, 30);
+		lifterMotor.config_kF(0, KF, 30);
+		lifterMotor.config_kP(0, KP, 30);
+		lifterMotor.config_kI(0, KI, 30);
+		lifterMotor.config_kD(0, KD, 30);
 
 		/* Set acceleration and vcruise velocity - see documentation */
-		lifterMotor.configMotionCruiseVelocity(3000, 30);
-		lifterMotor.configMotionAcceleration(3000, 30);
-
+        /* Max speed */
+		lifterMotor.configMotionCruiseVelocity(CRUISE_SPEED, 30);
+        /* Speed of acceleration */
+		lifterMotor.configMotionAcceleration(ACCEL, 30);
 		/* Zero the sensor once on robot boot up */
 		lifterMotor.setSelectedSensorPosition(0, 0, 30);
+
+        /* Upper limit of motor */
+        lifterMotor.configForwardSoftLimitThreshold(900, 0);
+        /* Lower limit of motor */
+        lifterMotor.configReverseSoftLimitThreshold(-50, 0);
+        /* Enable/disable upper limit of motor */
+        lifterMotor.configForwardSoftLimitEnable(true, 0);
+        /* Enable/disable lower limit of motor */
+        lifterMotor.configReverseSoftLimitEnable(true, 0);
     }
 
     long previousTime = 0;

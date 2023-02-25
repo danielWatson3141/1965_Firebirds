@@ -43,11 +43,11 @@ public class Claw extends SubsystemBase {
         Logging.log("claw:setClawState", "Setting ClawState to: " + cposition);
     }
 
-    public final double CLAW_SHUT = -10000;
-    public final double CLAW_OPEN = 10000;
+    public final double CLAW_SHUT = 50;
+    public final double CLAW_OPEN = 100;
 
     public void clawOpen() {
-        setClawState(OPEN_RATE_LIMIT);
+        setClawState(CLAW_OPEN);
         Logging.log("Claw:clawOpen", "setting claw position to open");
     }
 
@@ -61,36 +61,5 @@ public class Claw extends SubsystemBase {
        
     }
 
-    public void report_data() {
-        clawPositionEntry.setDouble(clawMotor.getSelectedSensorPosition());
-        clawSetPointEntry.setDouble(setPoint);
-    }
-    private void configMotor() {
-        clawMotor.configFactoryDefault();
-        clawMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
-        clawMotor.configNeutralDeadband(.001, 30);
-        clawMotor.setSensorPhase(false);
-        clawMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
-
-        /* Set the peak and nominal outputs */
-        clawMotor.configNominalOutputForward(0, 30);
-        clawMotor.configNominalOutputReverse(0, 30);
-        clawMotor.configPeakOutputForward(1, 30);
-        clawMotor.configPeakOutputReverse(-1, 30);
-
-        /* Set Motion Magic gains in slot0 - see documentation */
-        clawMotor.selectProfileSlot(0, 0);
-        clawMotor.config_kF(0, 0.2, 30);
-        clawMotor.config_kP(0, 0.2, 30);
-        clawMotor.config_kI(0, 0, 30);
-        clawMotor.config_kD(0, 0, 30);
-
-        /* Set acceleration and vcruise velocity - see documentation */
-        clawMotor.configMotionCruiseVelocity(3000, 30);
-        clawMotor.configMotionAcceleration(3000, 30);
-
-        /* Zero the sensor once on robot boot up */
-        clawMotor.setSelectedSensorPosition(0, 0, 30);
-    }
-
+   
 }
