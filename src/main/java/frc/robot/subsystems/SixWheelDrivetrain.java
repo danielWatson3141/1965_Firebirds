@@ -122,7 +122,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     double steerOutput = steeringLimiter.calculate((steerInput));
     targetSpeed = throttleLimiter.calculate( throttle );
     
-    double blinkin_color = targetSpeed * 1000 + 1000;
+    double blinkin_color = (Math.abs(targetSpeed * 1000 + 1000));
 
     m_blinkin.set(blinkin_color);
 
