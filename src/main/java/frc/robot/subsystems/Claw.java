@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -52,6 +53,11 @@ public class Claw extends SubsystemBase {
     @Override
     public void periodic() {
        
+    }
+
+    public void report_data() {
+        Shuffleboard.getTab(getName()).add("lPosition", clawMotor.getSelectedSensorPosition());
+        Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
     }
     private void configMotor() {
         clawMotor.configFactoryDefault();

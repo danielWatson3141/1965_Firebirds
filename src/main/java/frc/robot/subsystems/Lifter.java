@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Logging;
 
@@ -34,12 +35,13 @@ public class Lifter extends SubsystemBase {
     
     public void setArmPosition(double lposition){
         setPoint = lposition;
+        lifterMotor.set(ControlMode.MotionMagic, setPoint);
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+lposition);
     }
 
-    public final double ARM_BOTTOM_POSITION = -10000;
+    public final double ARM_BOTTOM_POSITION = -5000;
     public final double ARM_MIDDLE_POSITION = 0;
-    public final double ARM_TOP_POSITION = 10000;
+    public final double ARM_TOP_POSITION = 5000;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
@@ -85,7 +87,7 @@ public class Lifter extends SubsystemBase {
     }
 
     //10% of range per second
-    double ARM_STICK_SPEED = 10;
+    double ARM_STICK_SPEED = 5;
     double RIGHT_STICK_DEADZONE = 0.05;
 
     @Override
@@ -96,7 +98,7 @@ public class Lifter extends SubsystemBase {
         double elapsedTime = time_elapsed();
 
         //get input from the controller
-        double rightStickY = myController.getRightY();
+        double rightStickY = -myController.getRightY();
 
         //Don't take stick input if its close to zero
         if (Math.abs(rightStickY) < RIGHT_STICK_DEADZONE)
@@ -118,22 +120,25 @@ public class Lifter extends SubsystemBase {
         //Don't re-apply the setPoint if it has not changed
         if(Math.abs(newSetPoint - setPoint) > 0 )
         {
-            setPoint = newSetPoint;
-            lifterMotor.set(ControlMode.MotionMagic, setPoint);
+            setArmPosition(newSetPoint);
         }
     }
 
     public void report_data() {
-        // Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
-        // Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
-        // Shuffleboard.getTab(getName()).add("Speed", getSpeed());
+        //Who did this \/
+        //Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
+        //Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
+        //Shuffleboard.getTab(getName()).add("Speed", getSpeed());
+        SmartDashboard.putNumber("lPosition", getArmPosition());
+        SmartDashboard.putNumber("SetPoint", setPoint);
+        SmartDashboard.putNumber("Speed", getSpeed());
     }
 
     private void configMotor(){
         
         lifterMotor.configFactoryDefault();
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
-        lifterMotor.configNeutralDeadband(.001, 30);
+        lifterMotor.configNeutralDeadband(.01, 30);
         lifterMotor.setSensorPhase(false);
         lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 
@@ -146,8 +151,8 @@ public class Lifter extends SubsystemBase {
 		/* Set Motion Magic gains in slot0 - see documentation */
 		lifterMotor.selectProfileSlot(0, 0);
 		lifterMotor.config_kF(0, 0.2, 30);
-		lifterMotor.config_kP(0, 0.2, 30);
-		lifterMotor.config_kI(0, 0, 30);
+		lifterMotor.config_kP(0, 0.1, 30);
+		lifterMotor.config_kI(0, 0.00025, 30);
 		lifterMotor.config_kD(0, 0, 30);
 
 		/* Set acceleration and vcruise velocity - see documentation */
