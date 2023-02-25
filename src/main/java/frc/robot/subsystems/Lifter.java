@@ -127,6 +127,7 @@ public class Lifter extends SubsystemBase {
         // Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
         // Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
         // Shuffleboard.getTab(getName()).add("Speed", getSpeed());
+        Shuffleboard.getTab("lifer position").add("lPosition", getArmPosition()).getEntry();
     }
 
     private void configMotor(){
