@@ -36,7 +36,7 @@ public class Claw extends SubsystemBase {
     public Claw(XboxController cont) {
         myController = cont;
         // check device number
-        clawMotor = new TalonSRX(1);
+        clawMotor = new TalonSRX(11);
     }
 
     DigitalInput toplimitSwitch = new DigitalInput(0);

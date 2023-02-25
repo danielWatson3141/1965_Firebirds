@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.OpenClaw;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.Claw;
@@ -90,10 +89,9 @@ public class RobotContainer {
         
 
         //hold to open claw command on shuffleboard
-        SmartDashboard.putData("OpenClaw", new OpenClaw(claw));
         //individual open/shut commands on shuffleboard
-        SmartDashboard.putData("Unfurl Claw", new InstantCommand(() -> claw.clawOpen(), claw));
-        SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() -> claw.clawShut(), claw));
+        // SmartDashboard.putData("Unfurl Claw", new InstantCommand(() -> claw.clawOpen(), claw));
+        // SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() -> claw.clawShut(), claw));
 
         // Send commands to dashboard
         //These will be displayed on the commands panel Ex from last year:
@@ -122,9 +120,9 @@ public class RobotContainer {
         xButton.onTrue(
                 new InstantCommand(() -> switchCamera()));
         
-        //gained from OpenClaw.java
-        aButton.whileTrue( 
-                new OpenClaw(claw));
+        // a Button
+        aButton.onTrue(
+                new InstantCommand(() -> claw.clawToggle()));
 
     }
 

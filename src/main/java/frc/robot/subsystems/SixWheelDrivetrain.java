@@ -35,7 +35,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public static boolean driveOverride = false;
 
-  WPI_TalonSRX m_blinkin = new WPI_TalonSRX(4);
+  WPI_TalonSRX m_blinkin = new WPI_TalonSRX(14);
 
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {

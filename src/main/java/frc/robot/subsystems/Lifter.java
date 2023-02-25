@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -140,13 +141,13 @@ public class Lifter extends SubsystemBase {
     /* Motor constant, DONT CHANGE */
     private double KF = .2;
     /* Proportional coefficient */
-    private double KP = .01;
+    private double KP = .1;
     /* Integral coefficient */
-    private double KI = .00025;
+    private double KI = .0025;
     /* Dont Care */
     private double KD = 0;
 
-    private double CRUISE_SPEED = 30;
+    private double CRUISE_SPEED = 150;
     private double ACCEL = 200;
 
     private void configMotor(){
@@ -155,6 +156,8 @@ public class Lifter extends SubsystemBase {
         lifterMotor.configFactoryDefault();
         /* Ensures green light = good */
         lifterMotor.setInverted(true);
+
+        lifterMotor.setNeutralMode(NeutralMode.Brake);
 
         /* Select the feedback device for the motor controller */
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
@@ -189,9 +192,9 @@ public class Lifter extends SubsystemBase {
         /* Lower limit of motor */
         lifterMotor.configReverseSoftLimitThreshold(-50, 0);
         /* Enable/disable upper limit of motor */
-        lifterMotor.configForwardSoftLimitEnable(true, 0);
+        lifterMotor.configForwardSoftLimitEnable(false, 0);
         /* Enable/disable lower limit of motor */
-        lifterMotor.configReverseSoftLimitEnable(true, 0);
+        lifterMotor.configReverseSoftLimitEnable(false, 0);
     }
 
     long previousTime = 0;
