@@ -4,10 +4,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,6 +28,9 @@ public class Claw extends SubsystemBase {
 
     double setPoint = 0;
 
+    private ShuffleboardTab clawTab = Shuffleboard.getTab("Claw");
+    private GenericEntry clawPositionEntry = clawTab.add("clawPosition", 0).getEntry();
+    private GenericEntry clawSetPointEntry = clawTab.add("clawSetpoint", 0).getEntry();
     public Claw(XboxController cont){
         myController = cont;
         // check device number 
@@ -56,8 +62,8 @@ public class Claw extends SubsystemBase {
     }
 
     public void report_data() {
-        Shuffleboard.getTab(getName()).add("lPosition", clawMotor.getSelectedSensorPosition());
-        Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
+        clawPositionEntry.setDouble(clawMotor.getSelectedSensorPosition());
+        clawSetPointEntry.setDouble(setPoint);
     }
     private void configMotor() {
         clawMotor.configFactoryDefault();

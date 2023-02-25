@@ -131,9 +131,6 @@ public class Lifter extends SubsystemBase {
     }
 
     public void report_data() {
-        // Shuffleboard.getTab(getName()).add("lPosition", getArmPosition());
-        // Shuffleboard.getTab(getName()).add("SetPoint", setPoint);
-        // Shuffleboard.getTab(getName()).add("Speed", getSpeed());
         armPositionEntry.setDouble(getArmPosition());
         armSPEntry.setDouble(setPoint);
     }
