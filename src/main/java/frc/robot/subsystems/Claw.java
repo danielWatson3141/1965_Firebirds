@@ -32,40 +32,48 @@ public class Claw extends SubsystemBase {
     private ShuffleboardTab clawTab = Shuffleboard.getTab("Claw");
     private GenericEntry clawPositionEntry = clawTab.add("clawPosition", 0).getEntry();
     private GenericEntry clawSetPointEntry = clawTab.add("clawSetpoint", 0).getEntry();
-    public Claw(XboxController cont){
+
+    public Claw(XboxController cont) {
         myController = cont;
-        // check device number 
+        // check device number
         clawMotor = new TalonSRX(1);
     }
 
     DigitalInput toplimitSwitch = new DigitalInput(0);
     DigitalInput bottomlimitSwitch = new DigitalInput(1);
 
-    
+    private boolean CLAW_OPEN = true;
+    private boolean CLAW_CLOSED = !CLAW_OPEN;
+    boolean clawState;
+
+    double CLAW_SPEED = 1;
 
     public void clawToggle() {
-        if (toplimitSwitch.get()){
-            
-        }
-    
-    
+        clawState = !clawState;
 
-
-
-        Logging.log("Claw:clawOpen", "setting claw position to open");
+        Logging.log("Claw:clawToggle","setting claw position to " + (clawState ? "OPEN" : "CLOSE" ));
     }
 
-    public void clawShut() {
-        Logging.log("Claw:clawShut", "setting claw position to shut");
-    }
-
+   
     @Override
     public void periodic() {
-       
+        if (clawState == CLAW_OPEN) {
+            if (toplimitSwitch.get()) {
+                clawMotor.set(ControlMode.PercentOutput, 0);
+            } else {
+                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED);
+            }
+        } else {
+            if (bottomlimitSwitch.get()) {
+                clawMotor.set(ControlMode.PercentOutput, 0);
+            } else {
+                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED);
+            }
+        }
     }
 
     public void report_data() {
 
     }
-    
+
 }
