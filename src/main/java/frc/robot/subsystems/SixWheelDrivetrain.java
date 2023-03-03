@@ -52,7 +52,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     driver = new DifferentialDrive(m_left, m_right);
     steeringLimiter = new SlewRateLimiter(2.5);
-    throttleLimiter = new SlewRateLimiter(1.3);
+    throttleLimiter = new SlewRateLimiter(2.0);
 
     myController = controller;
 
@@ -77,7 +77,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   double currentSpeed = 0;
 
   final double MAX_ACCEL = .2;
-  final double STEER_LIMIT_FACTOR = .38;
+  final double STEER_LIMIT_FACTOR = .28;
 
   public void drive() {
     if(driveOverride)
@@ -110,7 +110,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
     double steerLimit = -STEER_LIMIT_FACTOR * throttle + 1;
 
     if(quickturn){
-      steerLimit = .43;
+      steerLimit = .33;
     }
 
     SmartDashboard.putNumber("steerLimit", steerLimit);
