@@ -39,7 +39,7 @@ public class Claw extends SubsystemBase {
     private boolean CLAW_CLOSED = !CLAW_OPEN;
     boolean clawState;
 
-    double CLAW_SPEED = 1;
+    double CLAW_SPEED = 0.1;
 
     public void clawToggle() {
         clawState = !clawState;
