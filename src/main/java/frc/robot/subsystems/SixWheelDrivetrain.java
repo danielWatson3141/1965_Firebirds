@@ -126,7 +126,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     m_blinkin.set(blinkin_color);
 
-    SmartDashboard.putNumber("steerOutput", steerOutput);
+    SmartDashboard.putNumber("steerOutput", steerOutput*100);
 
     //TODO Come back to this
     // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){

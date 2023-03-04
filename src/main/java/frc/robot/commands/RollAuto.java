@@ -21,12 +21,12 @@ private double auto_speed = -.23;
   public void initialize() {
   }
 
-  long DRIVE_TIME=3000;
+  long DRIVE_TIME=1000;
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.goAtSpeed(auto_speed);
+    drivetrain.goAtSpeed(-auto_speed);
   }
 
   // Called once the command ends or is interrupted.

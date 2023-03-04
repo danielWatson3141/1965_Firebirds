@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Balance;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lifter;
@@ -116,6 +117,8 @@ public class RobotContainer {
         // a Button
         aButton.onTrue(
                 new InstantCommand(() -> claw.clawToggle()));
+
+        yButton.toggleOnTrue(new Balance(drivetrain));
 
     }
 
