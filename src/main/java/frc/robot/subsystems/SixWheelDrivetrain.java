@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -41,6 +43,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
+
     WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
     m_left.setInverted(true);

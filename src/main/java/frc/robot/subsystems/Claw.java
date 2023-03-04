@@ -23,8 +23,9 @@ public class Claw extends SubsystemBase {
     double setPoint = 0;
 
     private ShuffleboardTab clawTab = Shuffleboard.getTab("Claw");
-    private GenericEntry clawPositionEntry = clawTab.add("clawPosition", 0).getEntry();
-    private GenericEntry clawSetPointEntry = clawTab.add("clawSetpoint", 0).getEntry();
+    private GenericEntry topLimitEntry = clawTab.add("toplimit", 0).getEntry();
+    private GenericEntry bottomLimitEntry = clawTab.add("bottomlimit", 0).getEntry();
+    private GenericEntry clawStateEntry = clawTab.add("clawState", 0).getEntry();
 
     public Claw(XboxController cont) {
         myController = cont;
@@ -39,36 +40,39 @@ public class Claw extends SubsystemBase {
     private boolean CLAW_CLOSED = !CLAW_OPEN;
     boolean clawState = true;
 
-    double CLAW_SPEED_OPEN = 0.4;
+    double CLAW_SPEED_OPEN = .4;
     double CLAW_SPEED_CLOSE = 1;
 
     public void clawToggle() {
         clawState = !clawState;
 
-        Logging.log("Claw:clawToggle","setting claw position to " + (clawState ? "OPEN" : "CLOSE" ));
-        Logging.log("Claw:clawToggle", "top:"+ toplimitSwitch.get() + " bottom:"+ bottomlimitSwitch.get());
+        Logging.log("Claw:clawToggle", "setting claw position to " + (clawState ? "OPEN" : "CLOSE"));
+        Logging.log("Claw:clawToggle", "top:" + toplimitSwitch.get() + " bottom:" + bottomlimitSwitch.get());
     }
 
-   
     @Override
     public void periodic() {
         if (clawState == CLAW_OPEN) {
             if (!toplimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_OPEN);
+                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_CLOSE);
             }
         } else {
             if (!bottomlimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED_CLOSE);
+                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED_OPEN);
             }
         }
+
+        report_data();
     }
 
     public void report_data() {
-
+        topLimitEntry.setBoolean(toplimitSwitch.get());
+        bottomLimitEntry.setBoolean(bottomlimitSwitch.get());
+        clawStateEntry.setBoolean(clawState);
     }
 
 }

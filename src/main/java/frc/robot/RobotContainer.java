@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -74,6 +75,11 @@ public class RobotContainer {
                 new RunCommand(
                         () -> drivetrain.drive(),
                         drivetrain));
+        
+        camera1 = CameraServer.startAutomaticCapture(0);
+        camera1.setResolution(200, 200);
+        camera2 = CameraServer.startAutomaticCapture(1);
+        camera2.setResolution(100, 100);
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
@@ -111,19 +117,20 @@ public class RobotContainer {
         lbButton.onTrue(
                 new InstantCommand(() -> lifter.moveArmDown(), lifter));
         // X Button
-        xButton.onTrue(
-                new InstantCommand(() -> switchCamera()));
+       // xButton.onTrue(
+         //       new InstantCommand(() -> switchCamera()));
         
         // a Button
         aButton.onTrue(
                 new InstantCommand(() -> claw.clawToggle()));
 
-        yButton.toggleOnTrue(new Balance(drivetrain));
+        // yButton.toggleOnTrue(new Balance(drivetrain));
 
     }
 
     boolean frontCamera = true;
 
+    
     public void switchCamera() {
         if (frontCamera) {
             Logging.log("Camera", "Switching to camera 2");
@@ -148,8 +155,11 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+
+    long DRIVE_TIME=5;
+
     public Command getAutonomousCommand() {
-        return new RollAuto(drivetrain);
+        return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
     }
  
 }

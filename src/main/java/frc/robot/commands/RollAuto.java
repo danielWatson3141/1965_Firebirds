@@ -20,9 +20,7 @@ private double auto_speed = -.23;
 @Override
   public void initialize() {
   }
-
-  long DRIVE_TIME=1000;
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
