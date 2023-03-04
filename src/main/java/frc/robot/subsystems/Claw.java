@@ -32,14 +32,15 @@ public class Claw extends SubsystemBase {
         clawMotor = new TalonSRX(11);
     }
 
-    DigitalInput toplimitSwitch = new DigitalInput(0);
-    DigitalInput bottomlimitSwitch = new DigitalInput(1);
+    DigitalInput toplimitSwitch = new DigitalInput(8);
+    DigitalInput bottomlimitSwitch = new DigitalInput(9);
 
     private boolean CLAW_OPEN = true;
     private boolean CLAW_CLOSED = !CLAW_OPEN;
-    boolean clawState;
+    boolean clawState = true;
 
-    double CLAW_SPEED = 0.1;
+    double CLAW_SPEED_OPEN = 0.4;
+    double CLAW_SPEED_CLOSE = 1;
 
     public void clawToggle() {
         clawState = !clawState;
@@ -52,16 +53,16 @@ public class Claw extends SubsystemBase {
     @Override
     public void periodic() {
         if (clawState == CLAW_OPEN) {
-            if (toplimitSwitch.get()) {
+            if (!toplimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED);
+                clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_OPEN);
             }
         } else {
-            if (bottomlimitSwitch.get()) {
+            if (!bottomlimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED);
+                clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED_CLOSE);
             }
         }
     }
