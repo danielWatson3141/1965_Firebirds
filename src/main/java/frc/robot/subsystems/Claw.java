@@ -62,6 +62,7 @@ public class Claw extends SubsystemBase {
                 if (CLAW_TIMER >= 3) {
                     clawMotor.set(ControlMode.PercentOutput, 0);
                     CLAW_TIMER = 0;
+                    Logging.log("Claw:stopping claw", "time exceeded");
                 } else {
                     clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_CLOSE);
                     CLAW_TIMER = CLAW_TIMER + .1;
@@ -77,6 +78,7 @@ public class Claw extends SubsystemBase {
                 } else {
                     clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_OPEN);
                     CLAW_TIMER = CLAW_TIMER + .1;
+                    Logging.log("Claw:stopping claw", "time exceeded");
                 }
             }
         }
