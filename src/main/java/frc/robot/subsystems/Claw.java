@@ -48,7 +48,7 @@ public class Claw extends SubsystemBase {
     public void clawToggle() {
         clawState = !clawState;
 
-        long timeWhenPressed = System.currentTimeMillis();
+        timeWhenPressed = System.currentTimeMillis();
 
         Logging.log("Claw:clawToggle", "setting claw position to " + (clawState ? "OPEN" : "CLOSE"));
         Logging.log("Claw:clawToggle", "top:" + toplimitSwitch.get() + " bottom:" + bottomlimitSwitch.get());
