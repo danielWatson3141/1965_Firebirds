@@ -54,17 +54,20 @@ public class Claw extends SubsystemBase {
         Logging.log("Claw:clawToggle", "top:" + toplimitSwitch.get() + " bottom:" + bottomlimitSwitch.get());
     }
 
+    double CLAW_TIMER = 3000;
+
     @Override
     public void periodic() {
 
-        long elapsedTime = timeWhenPressed - System.currentTimeMillis();
+        long elapsedTime = System.currentTimeMillis() - timeWhenPressed;
 
         if (clawState == CLAW_OPEN) {
             if (!toplimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                if (elapsedTime >= 4000) {
+                if (elapsedTime >= CLAW_TIMER) {
                     clawMotor.set(ControlMode.PercentOutput, 0);
+                    Logging.log("Claw:claw stopped", "time limit met");
                 }
                 else {
                     clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_CLOSE);
@@ -74,8 +77,9 @@ public class Claw extends SubsystemBase {
             if (!bottomlimitSwitch.get()) {
                 clawMotor.set(ControlMode.PercentOutput, 0);
             } else {
-                if (elapsedTime >= 4000) {
+                if (elapsedTime >= CLAW_TIMER) {
                     clawMotor.set(ControlMode.PercentOutput, 0);
+                    Logging.log("Claw:claw stopped", "time limit met");
                 }
                 else {
                     clawMotor.set(ControlMode.PercentOutput, -CLAW_SPEED_OPEN);
