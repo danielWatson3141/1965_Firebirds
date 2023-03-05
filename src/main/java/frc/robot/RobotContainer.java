@@ -77,7 +77,7 @@ public class RobotContainer {
                         drivetrain));
         
         camera1 = CameraServer.startAutomaticCapture(0);
-        camera1.setResolution(200, 200);
+        camera1.setResolution(300, 300);
         camera2 = CameraServer.startAutomaticCapture(1);
         camera2.setResolution(100, 100);
 
