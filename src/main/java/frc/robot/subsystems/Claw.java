@@ -64,7 +64,7 @@ public class Claw extends SubsystemBase {
                     CLAW_TIMER = 0;
                 } else {
                     clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_CLOSE);
-                    CLAW_TIMER = CLAW_TIMER + .2;
+                    CLAW_TIMER = CLAW_TIMER + .1;
                 }
             }
         } else {
@@ -76,7 +76,7 @@ public class Claw extends SubsystemBase {
                     CLAW_TIMER = 0;
                 } else {
                     clawMotor.set(ControlMode.PercentOutput, CLAW_SPEED_OPEN);
-                    CLAW_TIMER = CLAW_TIMER + .2;
+                    CLAW_TIMER = CLAW_TIMER + .1;
                 }
             }
         }
