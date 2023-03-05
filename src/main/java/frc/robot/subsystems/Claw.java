@@ -64,7 +64,6 @@ public class Claw extends SubsystemBase {
         long elapsedTime = System.currentTimeMillis() - timeWhenPressed;
         if (elapsedTime >= CLAW_TIMER) {
             clawMotor.set(ControlMode.PercentOutput, 0);
-            Logging.log("Claw:claw stopped", "time limit met");
             return;
         }
 
