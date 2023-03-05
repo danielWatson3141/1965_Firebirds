@@ -59,6 +59,8 @@ public class Claw extends SubsystemBase {
     @Override
     public void periodic() {
 
+        report_data();
+
         long elapsedTime = System.currentTimeMillis() - timeWhenPressed;
         if (elapsedTime >= CLAW_TIMER) {
             clawMotor.set(ControlMode.PercentOutput, 0);
@@ -80,7 +82,6 @@ public class Claw extends SubsystemBase {
             }
         }
 
-        report_data();
     }
 
     public void report_data() {
