@@ -89,7 +89,7 @@ public class Lifter extends SubsystemBase {
 
     //10% of range per second
     double ARM_STICK_SPEED = .5;
-    double RIGHT_STICK_DEADZONE = 0.05;
+    double RIGHT_STICK_DEADZONE = 0.1;
 
     private GenericEntry rightStickEntry = lifterTab.add("RightStick_Y", 0).getEntry();
 
