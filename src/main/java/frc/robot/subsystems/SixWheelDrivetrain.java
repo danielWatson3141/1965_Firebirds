@@ -5,20 +5,21 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SixWheelDrivetrain extends SubsystemBase {
 
@@ -29,8 +30,6 @@ public class SixWheelDrivetrain extends SubsystemBase {
   public DifferentialDrive driver;
 
   private XboxController myController;
-
-  private ADIS16470_IMU imu;
 
   private SlewRateLimiter steeringLimiter;
   private SlewRateLimiter throttleLimiter;
@@ -43,6 +42,12 @@ public class SixWheelDrivetrain extends SubsystemBase {
   WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
   WPI_TalonSRX m_frontRight = new WPI_TalonSRX(4);
   WPI_TalonSRX m_rearRight = new WPI_TalonSRX(6);
+
+  private final Gyro m_gyro = new ADXRS450_Gyro();
+
+  private ShuffleboardTab gyroTab = Shuffleboard.getTab("Gyro");
+  private GenericEntry gyroEntry = gyroTab.add("toplimit", 0).getEntry();
+
 
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
@@ -98,7 +103,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    gyroEntry.setDouble(getGyroValue());
   }
 
   double targetSpeed = 0;
@@ -178,6 +183,15 @@ public class SixWheelDrivetrain extends SubsystemBase {
     System.out.println("GO at speed " + speed);
     driver.curvatureDrive(speed, 0, false);
     m_blinkin.set(1500);
+  }
+
+  
+  public double getGyroValue() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+
+  public void resetGyro() {
+    m_gyro.reset();
   }
 
 }
