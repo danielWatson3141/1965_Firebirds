@@ -41,7 +41,7 @@ public class Claw extends SubsystemBase {
     boolean clawState = true;
 
     double CLAW_SPEED_OPEN = .4;
-    double CLAW_SPEED_CLOSE = 1;
+    double CLAW_SPEED_CLOSE = 0.8;
 
     long timeWhenPressed = 0;
 
