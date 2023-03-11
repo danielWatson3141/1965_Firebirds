@@ -90,7 +90,7 @@ public class Lifter extends SubsystemBase {
 
     //10% of range per second
     double ARM_STICK_SPEED = .5;
-    double RIGHT_STICK_DEADZONE = 0.05;
+    double RIGHT_STICK_DEADZONE = 0.1;
 
     private GenericEntry rightStickEntry = lifterTab.add("RightStick_Y", 0).getEntry();
 
@@ -157,7 +157,7 @@ public class Lifter extends SubsystemBase {
         /* Select the feedback device for the motor controller */
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
         /* Configures the output deadband percentage */
-        lifterMotor.configNeutralDeadband(.01, 30);
+        lifterMotor.configNeutralDeadband(.04, 30);
         /* Sets the period of the given status frame */
         lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 
@@ -187,9 +187,9 @@ public class Lifter extends SubsystemBase {
         /* Lower limit of motor */
         lifterMotor.configReverseSoftLimitThreshold(-50, 0);
         /* Enable/disable upper limit of motor */
-        lifterMotor.configForwardSoftLimitEnable(false, 0);
+        lifterMotor.configForwardSoftLimitEnable(true, 0);
         /* Enable/disable lower limit of motor */
-        lifterMotor.configReverseSoftLimitEnable(false, 0);
+        lifterMotor.configReverseSoftLimitEnable(true, 0);
     }
 
     long previousTime = 0;
