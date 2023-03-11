@@ -156,7 +156,7 @@ public class Lifter extends SubsystemBase {
         /* Select the feedback device for the motor controller */
         lifterMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
         /* Configures the output deadband percentage */
-        lifterMotor.configNeutralDeadband(.01, 30);
+        lifterMotor.configNeutralDeadband(.04, 30);
         /* Sets the period of the given status frame */
         lifterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 
@@ -186,9 +186,9 @@ public class Lifter extends SubsystemBase {
         /* Lower limit of motor */
         lifterMotor.configReverseSoftLimitThreshold(-50, 0);
         /* Enable/disable upper limit of motor */
-        lifterMotor.configForwardSoftLimitEnable(false, 0);
+        lifterMotor.configForwardSoftLimitEnable(true, 0);
         /* Enable/disable lower limit of motor */
-        lifterMotor.configReverseSoftLimitEnable(false, 0);
+        lifterMotor.configReverseSoftLimitEnable(true, 0);
     }
 
     long previousTime = 0;
