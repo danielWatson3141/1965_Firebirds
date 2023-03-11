@@ -129,7 +129,7 @@ public class RobotContainer {
         yButton.onTrue(
                 new InstantCommand(() -> drivetrain.brakeToggle()));
 
-        yButton.toggleOnTrue(new Balance(drivetrain));
+        bButton.toggleOnTrue(new Balance(drivetrain));
 
     }
 
