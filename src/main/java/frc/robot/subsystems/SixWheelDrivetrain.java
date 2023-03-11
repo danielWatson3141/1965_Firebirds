@@ -46,7 +46,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   private final Gyro m_gyro = new ADXRS450_Gyro();
 
   private ShuffleboardTab gyroTab = Shuffleboard.getTab("Gyro");
-  private GenericEntry gyroEntry = gyroTab.add("toplimit", 0).getEntry();
+  private GenericEntry gyroEntry = gyroTab.add("gyroValue", 0).getEntry();
 
 
   /** Creates a new SixWheelDrivetrain. */
