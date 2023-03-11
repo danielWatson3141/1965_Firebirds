@@ -117,14 +117,19 @@ public class RobotContainer {
         lbButton.onTrue(
                 new InstantCommand(() -> lifter.moveArmDown(), lifter));
         // X Button
-       // xButton.onTrue(
+       // Button.onTrue(
          //       new InstantCommand(() -> switchCamera()));
         
+         //y Button
+        
+
         // a Button
         aButton.onTrue(
                 new InstantCommand(() -> claw.clawToggle()));
+        yButton.onTrue(
+                new InstantCommand(() -> drivetrain.brakeToggle()));
 
-        // yButton.toggleOnTrue(new Balance(drivetrain));
+        bButton.toggleOnTrue(new Balance(drivetrain));
 
     }
 
