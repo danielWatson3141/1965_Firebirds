@@ -31,6 +31,7 @@ public class Lifter extends SubsystemBase {
     public Lifter(XboxController cont) {
         myController = cont;
         lifterMotor = new TalonSRX(2);
+        lifterMotor.setNeutralMode(NeutralMode.Brake);
         configMotor();
     }
     
@@ -41,8 +42,8 @@ public class Lifter extends SubsystemBase {
     }
 
     public final double ARM_BOTTOM_POSITION = 100;
-    public final double ARM_MIDDLE_POSITION = 500;
-    public final double ARM_TOP_POSITION = 900;
+    public final double ARM_MIDDLE_POSITION = 600;
+    public final double ARM_TOP_POSITION = 950;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);

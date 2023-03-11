@@ -400,12 +400,38 @@
           }
         }
       }
+    },
+    {
+      "title": "",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 500.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Tab 10",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 500.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
     }
   ],
   "windowGeometry": {
-    "x": -38.66666793823242,
-    "y": 36.66666793823242,
+    "x": -12.666666984558105,
+    "y": 0.0,
     "width": 1294.6666259765625,
-    "height": 694.6666870117188
+    "height": 725.3333129882812
   }
 }
