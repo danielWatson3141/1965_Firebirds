@@ -53,10 +53,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_frontLeft.setNeutralMode(NeutralMode.Coast);
     m_rearLeft.setNeutralMode(NeutralMode.Coast);
 
-
-
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(false);
+    m_frontRight.setNeutralMode(NeutralMode.Coast);
+    m_rearRight.setNeutralMode(NeutralMode.Coast);
 
     driver = new DifferentialDrive(m_left, m_right);
     steeringLimiter = new SlewRateLimiter(2.5);
@@ -64,7 +64,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     myController = controller;
 
-    //imu = new ADIS16470_IMU();
+    // imu = new ADIS16470_IMU();
   }
 
   // radians / sec
@@ -82,25 +82,24 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   public void brakeToggle() {
     brakeState = !brakeState;
-  }
 
-  @Override
-  public void periodic() {
-    if (brakeState == BRAKE_ON) {
+    if (brakeState == BRAKE_OFF) {
       m_frontLeft.setNeutralMode(NeutralMode.Coast);
       m_rearLeft.setNeutralMode(NeutralMode.Coast);
       m_frontRight.setNeutralMode(NeutralMode.Coast);
       m_rearRight.setNeutralMode(NeutralMode.Coast);
- }  else {
+    } else {
       m_frontLeft.setNeutralMode(NeutralMode.Brake);
-      m_rearLeft.setNeutralMode(NeutralMode.Brake); 
+      m_rearLeft.setNeutralMode(NeutralMode.Brake);
       m_frontRight.setNeutralMode(NeutralMode.Brake);
-      m_rearRight.setNeutralMode(NeutralMode.Brake); 
- }
-
+      m_rearRight.setNeutralMode(NeutralMode.Brake);
     }
-  
+  }
 
+  @Override
+  public void periodic() {
+
+  }
 
   double targetSpeed = 0;
   double currentSpeed = 0;
@@ -109,10 +108,10 @@ public class SixWheelDrivetrain extends SubsystemBase {
   final double STEER_LIMIT_FACTOR = .28;
 
   public void drive() {
-    if(driveOverride)
+    if (driveOverride)
       return;
-    
-   //Logging.log("drivetrain", "driving");
+
+    // Logging.log("drivetrain", "driving");
 
     long currentTime = System.currentTimeMillis();
     SmartDashboard.putNumber("time", currentTime);
@@ -121,15 +120,15 @@ public class SixWheelDrivetrain extends SubsystemBase {
     double leftStickY = myController.getLeftY();
 
     // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("leftStickX", leftStickX);
-    //SmartDashboard.putNumber("leftStickY", leftStickY);
+    // SmartDashboard.putNumber("leftStickX", leftStickX);
+    // SmartDashboard.putNumber("leftStickY", leftStickY);
     SmartDashboard.putNumber("speed", currentSpeed);
 
     double rightTrigger = myController.getRightTriggerAxis();
-    //SmartDashboard.putNumber("rightTrigger", rightTrigger);
+    // SmartDashboard.putNumber("rightTrigger", rightTrigger);
     double leftTrigger = myController.getLeftTriggerAxis();
-    //SmartDashboard.putNumber("leftTrigger", leftTrigger);
-//rt = backwards, lt = foward
+    // SmartDashboard.putNumber("leftTrigger", leftTrigger);
+    // rt = backwards, lt = foward
     double throttle = rightTrigger + (-leftTrigger);
 
     SmartDashboard.putNumber("throttle", throttle);
@@ -138,7 +137,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
     double steerLimit = -STEER_LIMIT_FACTOR * throttle + 1;
 
-    if(quickturn){
+    if (quickturn) {
       steerLimit = .33;
     }
 
@@ -149,23 +148,23 @@ public class SixWheelDrivetrain extends SubsystemBase {
       steerInput = steerLimit * steerInput;
 
     double steerOutput = steeringLimiter.calculate((steerInput));
-    targetSpeed = throttleLimiter.calculate( throttle );
-    
+    targetSpeed = throttleLimiter.calculate(throttle);
+
     double blinkin_color = (Math.abs(targetSpeed * 1000 + 1000));
 
     m_blinkin.set(blinkin_color);
 
-    SmartDashboard.putNumber("steerOutput", steerOutput*100);
+    SmartDashboard.putNumber("steerOutput", steerOutput * 100);
 
-    //TODO Come back to this
+    // TODO Come back to this
     // if(Math.abs(targetSpeed - currentSpeed) < MAX_ACCEL){
-    //   currentSpeed = targetSpeed;
+    // currentSpeed = targetSpeed;
     // } else if(currentSpeed < targetSpeed){
-    //   currentSpeed += MAX_ACCEL;
+    // currentSpeed += MAX_ACCEL;
     // } else {
-    //   currentSpeed -= MAX_ACCEL;
+    // currentSpeed -= MAX_ACCEL;
     // }
-    //Logging.log("drivetrain", "ending");
+    // Logging.log("drivetrain", "ending");
 
     driver.curvatureDrive(-targetSpeed, steerOutput, quickturn);
   }
@@ -175,8 +174,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void goAtSpeed(double speed){
-    System.out.println("GO at speed "+speed);
+  public void goAtSpeed(double speed) {
+    System.out.println("GO at speed " + speed);
     driver.curvatureDrive(speed, 0, false);
     m_blinkin.set(1500);
   }
