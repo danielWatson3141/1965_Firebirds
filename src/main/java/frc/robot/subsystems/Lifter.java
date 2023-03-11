@@ -41,9 +41,9 @@ public class Lifter extends SubsystemBase {
         Logging.log("Lifter:setArmPosition","Setting ArmPosition to: "+lposition);
     }
 
-    public final double ARM_BOTTOM_POSITION = 100;
+    public final double ARM_BOTTOM_POSITION = 0;
     public final double ARM_MIDDLE_POSITION = 600;
-    public final double ARM_TOP_POSITION = 950;
+    public final double ARM_TOP_POSITION = 850;
 
     public void goToBottom(){
         setArmPosition(ARM_BOTTOM_POSITION);
@@ -136,7 +136,7 @@ public class Lifter extends SubsystemBase {
     /* Motor constant, DONT CHANGE */
     private double KF = .2;
     /* Proportional coefficient */
-    private double KP = .1;
+    private double KP = .30;
     /* Integral coefficient */
     private double KI = .0025;
     /* Dont Care */
