@@ -39,17 +39,22 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   WPI_TalonSRX m_blinkin = new WPI_TalonSRX(14);
 
+  WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
+  WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
+  WPI_TalonSRX m_frontRight = new WPI_TalonSRX(4);
+  WPI_TalonSRX m_rearRight = new WPI_TalonSRX(6);
+
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(3);
 
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(5);
     MotorControllerGroup m_left = new MotorControllerGroup(m_frontLeft, m_rearLeft);
     m_left.setInverted(true);
+    m_frontLeft.setNeutralMode(NeutralMode.Coast);
+    m_rearLeft.setNeutralMode(NeutralMode.Coast);
 
-    MotorController m_frontRight = new WPI_TalonSRX(4);
-    MotorController m_rearRight = new WPI_TalonSRX(6);
+
+
     MotorControllerGroup m_right = new MotorControllerGroup(m_frontRight, m_rearRight);
     m_right.setInverted(false);
 
@@ -71,10 +76,31 @@ public class SixWheelDrivetrain extends SubsystemBase {
     return 0; // unitsPerRadian;
   }
 
+  private boolean BRAKE_ON = true;
+  private boolean BRAKE_OFF = !BRAKE_ON;
+  boolean brakeState;
+
+  public void brakeToggle() {
+    brakeState = !brakeState;
+  }
+
   @Override
   public void periodic() {
+    if (brakeState == BRAKE_ON) {
+      m_frontLeft.setNeutralMode(NeutralMode.Coast);
+      m_rearLeft.setNeutralMode(NeutralMode.Coast);
+      m_frontRight.setNeutralMode(NeutralMode.Coast);
+      m_rearRight.setNeutralMode(NeutralMode.Coast);
+ }  else {
+      m_frontLeft.setNeutralMode(NeutralMode.Brake);
+      m_rearLeft.setNeutralMode(NeutralMode.Brake); 
+      m_frontRight.setNeutralMode(NeutralMode.Brake);
+      m_rearRight.setNeutralMode(NeutralMode.Brake); 
+ }
 
-  }
+    }
+  
+
 
   double targetSpeed = 0;
   double currentSpeed = 0;
