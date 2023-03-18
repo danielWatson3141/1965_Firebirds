@@ -84,11 +84,15 @@ public class SixWheelDrivetrain extends SubsystemBase {
     }
   }
 
+  double xAccel;
+  double yAccel;
+  double zAccel;
+
   @Override
   public void periodic() {
-    double xAccel = accelerometer.getX();
-    double yAccel = accelerometer.getY();
-    double zAccel = accelerometer.getZ();
+    xAccel = accelerometer.getX();
+    yAccel = accelerometer.getY();
+    zAccel = accelerometer.getZ();
 
     SmartDashboard.putNumber("xAccel", xAccel);
     SmartDashboard.putNumber("yAccel", yAccel);
@@ -174,8 +178,13 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_blinkin.set(1500);
   }
 
+  public double tiltAngle;
+
   public double getTiltValue() {
-    return 0;
+    tiltAngle = Math.atan2(yAccel, xAccel);
+
+    return tiltAngle; 
+
   }
 
 }

@@ -14,6 +14,7 @@ public class Balance extends CommandBase {
 
   public Balance(SixWheelDrivetrain my_SixWheelDrivetrain) {
     sixWheelDrivetrain = my_SixWheelDrivetrain;
+
   }
 
 
@@ -29,7 +30,15 @@ public class Balance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if (sixWheelDrivetrain.tiltAngle >= 5) {
+      sixWheelDrivetrain.goAtSpeed(DRIVE_SPEED_SLOW);
+    }
+    else if (sixWheelDrivetrain.tiltAngle <=5) {
+      sixWheelDrivetrain.goAtSpeed(-DRIVE_SPEED_SLOW);
+    }
+    else {
+      sixWheelDrivetrain.goAtSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

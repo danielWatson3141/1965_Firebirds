@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.XboxController;
@@ -12,15 +13,26 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 
-public class PnuLifter extends SubsystemBase {
+public class PneuLifter extends SubsystemBase {
+
+    DoubleSolenoid pneuArm = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
     private XboxController myController;
 
-    public static final double UP_RATE_LIMIT = .2;
-    public static final double DOWN_RATE_LIMIT = .2;
-
-    public PnuLifter(XboxController cont) {
+    public PneuLifter(XboxController cont) {
         myController = cont;
+    }
+
+    public void toggleLifter(){
+        pneuArm.toggle();
+    }
+
+    public void rbLifter(){
+        pneuArm.set(Value.kForward);
+    }
+
+    public void lbLifter(){
+        pneuArm.set(Value.kReverse);
     }
 
     @Override
@@ -29,6 +41,7 @@ public class PnuLifter extends SubsystemBase {
         // get how much time has passed since last iteration
         double elapsedTime = time_elapsed();
 
+       
     }
 
     long previousTime = 0;
