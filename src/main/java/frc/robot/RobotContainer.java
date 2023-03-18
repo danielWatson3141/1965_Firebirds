@@ -78,8 +78,8 @@ public class RobotContainer {
         
         camera1 = CameraServer.startAutomaticCapture(0);
         camera1.setResolution(300, 300);
-        camera2 = CameraServer.startAutomaticCapture(1);
-        camera2.setResolution(100, 100);
+        //camera2 = CameraServer.startAutomaticCapture(1);
+        //camera2.setResolution(100, 100);
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
