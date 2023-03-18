@@ -10,11 +10,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,10 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SixWheelDrivetrain extends SubsystemBase {
-
-  // L and R encoders
-  private Encoder lEncoder;
-  private Encoder rEncoder;
 
   public DifferentialDrive driver;
 
@@ -43,11 +38,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   WPI_TalonSRX m_frontRight = new WPI_TalonSRX(4);
   WPI_TalonSRX m_rearRight = new WPI_TalonSRX(6);
 
-  private final Gyro m_gyro = new ADXRS450_Gyro();
-
-  private ShuffleboardTab gyroTab = Shuffleboard.getTab("Gyro");
-  private GenericEntry gyroEntry = gyroTab.add("gyroValue", 0).getEntry();
-
+  AnalogAccelerometer accelerometer = new AnalogAccelerometer(0);
 
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
@@ -103,7 +94,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    gyroEntry.setDouble(getGyroValue());
+
   }
 
   double targetSpeed = 0;
@@ -185,13 +176,8 @@ public class SixWheelDrivetrain extends SubsystemBase {
     m_blinkin.set(1500);
   }
 
-  
-  public double getGyroValue() {
-    return m_gyro.getRotation2d().getDegrees();
-  }
-
-  public void resetGyro() {
-    m_gyro.reset();
+  public double getTiltValue() {
+    return 0;
   }
 
 }
