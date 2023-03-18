@@ -20,6 +20,7 @@ import frc.robot.commands.Balance;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lifter;
+import frc.robot.subsystems.PneuLifter;
 import frc.robot.subsystems.SixWheelDrivetrain;
 
 /**
@@ -38,9 +39,10 @@ public class RobotContainer {
 
     private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
     private final Lifter lifter = new Lifter(driverController);
+    private final PneuLifter pneulifter = new PneuLifter(driverController);
     private final Claw claw = new Claw(driverController);
 
-    //private Vision visionSystem = new Vision();
+    // private Vision visionSystem = new Vision();
 
     private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
@@ -55,8 +57,10 @@ public class RobotContainer {
     private JoystickButton backButton = new JoystickButton(driverController, XboxController.Button.kBack.value);
     private JoystickButton startButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
 
-    private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
-    private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
+    private JoystickButton leftStickButton = new JoystickButton(driverController,
+            XboxController.Button.kLeftStick.value);
+    private JoystickButton rightStickButton = new JoystickButton(driverController,
+            XboxController.Button.kRightStick.value);
 
     UsbCamera camera1;
     UsbCamera camera2;
@@ -75,7 +79,7 @@ public class RobotContainer {
                 new RunCommand(
                         () -> drivetrain.drive(),
                         drivetrain));
-        
+
         camera1 = CameraServer.startAutomaticCapture(0);
         camera1.setResolution(300, 300);
         //camera2 = CameraServer.startAutomaticCapture(1);
@@ -86,19 +90,23 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
-        
-
-        //hold to open claw command on shuffleboard
-        //individual open/shut commands on shuffleboard
-        // SmartDashboard.putData("Unfurl Claw", new InstantCommand(() -> claw.clawOpen(), claw));
-        // SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() -> claw.clawShut(), claw));
+        // hold to open claw command on shuffleboard
+        // individual open/shut commands on shuffleboard
+        // SmartDashboard.putData("Unfurl Claw", new InstantCommand(() ->
+        // claw.clawOpen(), claw));
+        // SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() ->
+        // claw.clawShut(), claw));
 
         // Send commands to dashboard
-        //These will be displayed on the commands panel Ex from last year:
-        // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(), arm));
-        // SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(), arm));
-        // SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(), arm));
-        // SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(), arm));
+        // These will be displayed on the commands panel Ex from last year:
+        // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(),
+        // arm));
+        // SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(),
+        // arm));
+        // SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(),
+        // arm));
+        // SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(),
+        // arm));
     }
 
     /**
@@ -117,11 +125,10 @@ public class RobotContainer {
         lbButton.onTrue(
                 new InstantCommand(() -> lifter.moveArmDown(), lifter));
         // X Button
-       // Button.onTrue(
-         //       new InstantCommand(() -> switchCamera()));
-        
-         //y Button
-        
+        // Button.onTrue(
+        // new InstantCommand(() -> switchCamera()));
+
+        // y Button
 
         // a Button
         aButton.onTrue(
@@ -131,11 +138,13 @@ public class RobotContainer {
 
         bButton.toggleOnTrue(new Balance(drivetrain));
 
+       // xButton.onTrue(
+               // new InstantCommand(() -> pneulifter.toggleLifter()));
+
     }
 
     boolean frontCamera = true;
 
-    
     public void switchCamera() {
         if (frontCamera) {
             Logging.log("Camera", "Switching to camera 2");
@@ -149,10 +158,10 @@ public class RobotContainer {
     }
 
     public void test() {
-       //ShuffleBoard widget commands for movement of arm
-       SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
-       SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
-       SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
+        // ShuffleBoard widget commands for movement of arm
+        SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
+        SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
+        SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
     }
 
     /**
@@ -161,10 +170,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-    long DRIVE_TIME=5;
+    long DRIVE_TIME = 5;
 
     public Command getAutonomousCommand() {
         return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
     }
- 
+
 }
