@@ -10,10 +10,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.AnalogAccelerometer;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -38,7 +39,7 @@ public class SixWheelDrivetrain extends SubsystemBase {
   WPI_TalonSRX m_frontRight = new WPI_TalonSRX(4);
   WPI_TalonSRX m_rearRight = new WPI_TalonSRX(6);
 
-  AnalogAccelerometer accelerometer = new AnalogAccelerometer(0);
+  Accelerometer accelerometer = new BuiltInAccelerometer();
 
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
@@ -63,15 +64,6 @@ public class SixWheelDrivetrain extends SubsystemBase {
     // imu = new ADIS16470_IMU();
   }
 
-  // radians / sec
-  protected double rotationRate() {
-
-    // double unitsPers = l2Talon.getSelectedSensorVelocity(0) * 10;
-    // SmartDashboard.putNumber("RotationRate", unitsPers/unitsPerRadian);
-    // TODO: Make in radians
-    return 0; // unitsPerRadian;
-  }
-
   private boolean BRAKE_ON = true;
   private boolean BRAKE_OFF = !BRAKE_ON;
   boolean brakeState;
@@ -94,7 +86,13 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    double xAccel = accelerometer.getX();
+    double yAccel = accelerometer.getY();
+    double zAccel = accelerometer.getZ();
 
+    SmartDashboard.putNumber("xAccel", xAccel);
+    SmartDashboard.putNumber("yAccel", yAccel);
+    SmartDashboard.putNumber("zAccel", zAccel);
   }
 
   double targetSpeed = 0;
