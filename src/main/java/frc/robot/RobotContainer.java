@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Balance;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lifter;
@@ -57,10 +56,8 @@ public class RobotContainer {
     private JoystickButton backButton = new JoystickButton(driverController, XboxController.Button.kBack.value);
     private JoystickButton startButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
 
-    private JoystickButton leftStickButton = new JoystickButton(driverController,
-            XboxController.Button.kLeftStick.value);
-    private JoystickButton rightStickButton = new JoystickButton(driverController,
-            XboxController.Button.kRightStick.value);
+    private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
+    private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
 
     UsbCamera camera1;
     UsbCamera camera2;
@@ -135,8 +132,6 @@ public class RobotContainer {
                 new InstantCommand(() -> claw.clawToggle()));
         yButton.onTrue(
                 new InstantCommand(() -> drivetrain.brakeToggle()));
-
-        bButton.toggleOnTrue(new Balance(drivetrain));
 
        // xButton.onTrue(
                // new InstantCommand(() -> pneulifter.toggleLifter()));

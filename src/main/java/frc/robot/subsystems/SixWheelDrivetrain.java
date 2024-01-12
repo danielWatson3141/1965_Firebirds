@@ -39,8 +39,6 @@ public class SixWheelDrivetrain extends SubsystemBase {
   WPI_TalonSRX m_frontRight = new WPI_TalonSRX(4);
   WPI_TalonSRX m_rearRight = new WPI_TalonSRX(6);
 
-  Accelerometer accelerometer = new BuiltInAccelerometer();
-
   /** Creates a new SixWheelDrivetrain. */
   public SixWheelDrivetrain(XboxController controller) {
     // 2 groups of motors
@@ -90,9 +88,6 @@ public class SixWheelDrivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    xAccel = accelerometer.getX();
-    yAccel = accelerometer.getY();
-    zAccel = accelerometer.getZ();
 
     SmartDashboard.putNumber("xAccel", xAccel);
     SmartDashboard.putNumber("yAccel", yAccel);

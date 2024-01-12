@@ -2,9 +2,9 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.SixWheelDrivetrain;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class RollAuto extends CommandBase{
+public class RollAuto extends Command{
 
     SixWheelDrivetrain drivetrain;
     // Called when the command is initially scheduled.
