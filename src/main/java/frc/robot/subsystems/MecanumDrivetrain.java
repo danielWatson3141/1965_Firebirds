@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
@@ -15,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.ejml.simple.SimpleMatrix;
 
 
 public class MecanumDrivetrain extends SubsystemBase {
@@ -23,6 +27,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     //private SlewRateLimiter steeringLimiter;
     //private SlewRateLimiter throttleLimiter;
+
+    private double locationX = 0.2794;
+    private double locationY = 0.3048;
 
 
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(69);
@@ -37,9 +44,19 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     private Joystick myJoystick;
 
+    ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(), m_stick.getX(), 0);
+
+    Translation2d m_frontLeftLocation = new Translation2d(locationX, locationY);
+    Translation2d m_frontRightLocation = new Translation2d(locationX, -locationY);
+    Translation2d m_rearLeftLocation = new Translation2d(-locationX, locationY);
+    Translation2d m_rearRightLocation = new Translation2d(-locationX, -locationY);
+
+    MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_rearLeftLocation, m_rearRightLocation);
+
     public MecanumDrivetrain(Joystick joystick){
 
-        driver = new MecanumDrive(m_frontRight, m_rearLeft, m_frontLeft, m_rearLeft);
+    driver = new MecanumDrive(m_frontRight, m_rearLeft, m_frontLeft, m_rearLeft);
+
         //steeringLimiter = new SlewRateLimiter(2.5);
         //throttleLimiter = new SlewRateLimiter(2.0);
 
