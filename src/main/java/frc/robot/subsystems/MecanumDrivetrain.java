@@ -12,7 +12,9 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.IterativeRobotBase;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
@@ -23,32 +25,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.ejml.simple.SimpleMatrix;
 
 
-public class MecanumDrivetrain extends SubsystemBase {
+public class MecanumDrivetrain extends TimedRobot {
 
     public final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
-    public double gyroAngle = m_gyro.getAngle();
-
-    public MecanumDrive driver;
+    //public double gyroAngle = m_gyro.getAngle();
 
     //private SlewRateLimiter steeringLimiter;
     //private SlewRateLimiter throttleLimiter;
 
-    private double locationX = 0.2794;
-    private double locationY = 0.3048;
+    //private double locationX = 0.2794;
+    //private double locationY = 0.3048;
 
-    WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(4);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(3);
-    WPI_TalonSRX m_frontRight = new WPI_TalonSRX(6);
-    WPI_TalonSRX m_rearRight = new WPI_TalonSRX(5);
+    Joystick m_stick;
 
-    MecanumDrive m_robotDrive = new MecanumDrive(m_frontRight, m_frontLeft, m_rearLeft, m_rearRight);
+    WPI_TalonSRX m_frontLeft;
+    WPI_TalonSRX m_rearLeft;
+    WPI_TalonSRX m_frontRight;
+    WPI_TalonSRX m_rearRight;
 
-    public Joystick m_stick = new Joystick(0); 
+    MecanumDrive m_robotDrive;
 
-    private Joystick myJoystick;
 
-    ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(), m_stick.getX(), 0);
+  /*  ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(), m_stick.getX(), 0);
 
     Translation2d m_frontLeftLocation = new Translation2d(locationX, locationY);
     Translation2d m_frontRightLocation = new Translation2d(locationX, -locationY);
@@ -64,18 +63,18 @@ public class MecanumDrivetrain extends SubsystemBase {
     double frontLeft = wheelSpeeds.frontLeftMetersPerSecond;
     double frontRight = wheelSpeeds.frontRightMetersPerSecond;
     double backLeft = wheelSpeeds.rearLeftMetersPerSecond;
-    double backRight = wheelSpeeds.rearRightMetersPerSecond;
+    double backRight = wheelSpeeds.rearRightMetersPerSecond;  */
 
+    @Override
+    public void robotInit(){
+      m_frontLeft = new WPI_TalonSRX(4);
+      m_rearLeft = new WPI_TalonSRX(3);
+      m_frontRight = new WPI_TalonSRX(6);
+      m_rearRight = new WPI_TalonSRX(5);
 
+      m_robotDrive = new MecanumDrive(m_frontRight::set, m_frontLeft::set, m_rearLeft::set, m_rearRight::set);
 
-    public MecanumDrivetrain(Joystick joystick){
-
-    driver = new MecanumDrive(m_frontRight, m_rearLeft, m_frontLeft, m_rearLeft);
-
-        //steeringLimiter = new SlewRateLimiter(2.5);
-        //throttleLimiter = new SlewRateLimiter(2.0);
-
-        myJoystick = joystick;
+      m_stick = new Joystick(0); 
     }
 
     private boolean BRAKE_ON = true;
@@ -100,15 +99,14 @@ public class MecanumDrivetrain extends SubsystemBase {
 
 
   //multipliers for values
-  double speedCap = .2;
-  double rotateCap = .1; 
+  private double speedCap = .2;
+  private double rotateCap = .1; 
 
   public void teleopPeriodic() {
-    m_robotDrive.driveCartesian(-m_stick.getY() * speedCap, m_stick.getX() *speedCap, m_stick.getZ() * rotateCap);
+    m_robotDrive.driveCartesian(-m_stick.getY() * speedCap, m_stick.getX() * speedCap, m_stick.getZ() * rotateCap);
    
     SmartDashboard.putNumber("stickX", m_stick.getX());
-   SmartDashboard.putNumber("stickY", m_stick.getY());
-   SmartDashboard.putNumber("stickZ", m_stick.getZ());
+    SmartDashboard.putNumber("stickY", m_stick.getY());
+    SmartDashboard.putNumber("stickZ", m_stick.getZ());
   }
-}  
-
+}
