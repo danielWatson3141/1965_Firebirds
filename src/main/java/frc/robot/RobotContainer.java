@@ -44,21 +44,29 @@ public class RobotContainer {
 
     // private Vision visionSystem = new Vision();
 
-    private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
+    //private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
 
-    private JoystickButton aButton = new JoystickButton(driverController, XboxController.Button.kA.value);
-    private JoystickButton bButton = new JoystickButton(driverController, XboxController.Button.kB.value);
-    private JoystickButton xButton = new JoystickButton(driverController, XboxController.Button.kX.value);
-    private JoystickButton yButton = new JoystickButton(driverController, XboxController.Button.kY.value);
-
-    private JoystickButton lbButton = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
-    private JoystickButton rbButton = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
-
-    private JoystickButton backButton = new JoystickButton(driverController, XboxController.Button.kBack.value);
-    private JoystickButton startButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
-
-    private JoystickButton leftStickButton = new JoystickButton(driverController, XboxController.Button.kLeftStick.value);
-    private JoystickButton rightStickButton = new JoystickButton(driverController, XboxController.Button.kRightStick.value);
+    private JoystickButton triggerButton = new JoystickButton(driverController, 1);
+    private JoystickButton thumbButton = new JoystickButton(driverController, 2);
+    private JoystickButton topRightButton = new JoystickButton(driverController, 6);
+    private JoystickButton bottomRightButton = new JoystickButton(driverController, 4);
+    private JoystickButton topLeftButton = new JoystickButton(driverController, 5);
+    private JoystickButton bottomLeftButton = new JoystickButton(driverController, 3);
+//10,12 uncomfort 8,11 can be bad dpepnds on grip : 9,7 easiest 
+//most comfortable buttons
+    private JoystickButton nineButton = new JoystickButton(driverController, 9);
+    private JoystickButton sevenButton = new JoystickButton(driverController, 7);
+//average comfortable buttons
+    private JoystickButton eightButton = new JoystickButton(driverController, 8);
+    private JoystickButton elevenButton = new JoystickButton(driverController, 11);
+//least comfortable buttons
+    private JoystickButton tenButton = new JoystickButton(driverController, 10);
+    private JoystickButton twelveButton = new JoystickButton(driverController, 12);
+//topJoy
+    //private JoystickButton topStickButton = new JoystickButton(driverController, );
+//joystick tbd...
+    //private JoystickButton leftStickButton = new JoystickButton(driverController, );
+    //private JoystickButton rightStickButton = new JoystickButton(driverController,);
 
     UsbCamera camera1;
     UsbCamera camera2;
@@ -132,8 +140,8 @@ public class RobotContainer {
         // a Button
         // aButton.onTrue(
         //         new InstantCommand(() -> claw.clawToggle()));
-        yButton.onTrue(
-                new InstantCommand(() -> drivetrain.brakeToggle()));
+        //yButton.onTrue(
+                //new InstantCommand(() -> drivetrain.brakeToggle()));
 
        // xButton.onTrue(
                // new InstantCommand(() -> pneulifter.toggleLifter()));
