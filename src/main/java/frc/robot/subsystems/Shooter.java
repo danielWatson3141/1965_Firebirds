@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,7 +18,7 @@ public class Shooter extends SubsystemBase{
     WPI_TalonSRX sm_two = new WPI_TalonSRX(8);
     WPI_TalonSRX sm_three = new WPI_TalonSRX(7);
 
-    public moveMf(double speed) {
+    public void moveMf(double speed) {
         sm_one.set(speed);
         sm_two.set(speed);
         sm_three.set(speed);
