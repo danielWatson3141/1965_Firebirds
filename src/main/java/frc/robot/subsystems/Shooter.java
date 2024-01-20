@@ -17,16 +17,9 @@ public class Shooter extends SubsystemBase{
     WPI_TalonSRX sm_two = new WPI_TalonSRX(8);
     WPI_TalonSRX sm_three = new WPI_TalonSRX(7);
 
-    public moveMf() {
-        sm_one.set(.5);
-        sm_two.set(.5);
-        sm_three.set(.5);
+    public moveMf(double speed) {
+        sm_one.set(speed);
+        sm_two.set(speed);
+        sm_three.set(speed);
     }
-
-    public stapMf() {
-        sm_one.set(0);
-        sm_two.set(0);
-        sm_three.set(0);
-    }
-
 }
