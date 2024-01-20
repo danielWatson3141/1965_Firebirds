@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.SixWheelDrivetrain;
 import edu.wpi.first.math.geometry.Transform3d;
 
 public class AutoTag {
