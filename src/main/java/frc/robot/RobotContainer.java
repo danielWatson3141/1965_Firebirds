@@ -113,6 +113,9 @@ public class RobotContainer {
         // arm));
         // SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(),
         // arm));
+        SmartDashboard.putData("activate shooter motors", new InstantCommand(() -> shooter.moveMf(.5), shooter));
+        SmartDashboard.putData("disable shooter motors", new InstantCommand(() -> shooter.moveMf(0), shooter));
+
     }
 
     /**

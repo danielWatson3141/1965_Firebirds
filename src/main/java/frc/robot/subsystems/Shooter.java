@@ -13,4 +13,13 @@ import frc.robot.Logging;
 
 public class Shooter extends SubsystemBase{
     
+    WPI_TalonSRX sm_one = new WPI_TalonSRX(9);
+    WPI_TalonSRX sm_two = new WPI_TalonSRX(8);
+    WPI_TalonSRX sm_three = new WPI_TalonSRX(7);
+
+    public moveMf(double speed) {
+        sm_one.set(speed);
+        sm_two.set(speed);
+        sm_three.set(speed);
+    }
 }
