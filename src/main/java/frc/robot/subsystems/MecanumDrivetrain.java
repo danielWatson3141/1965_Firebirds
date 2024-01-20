@@ -34,13 +34,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     private SlewRateLimiter steeringLimiter;
     private SlewRateLimiter throttleLimiter;
 
-    SlewRateLimiter filter = new SlewRateLimiter(0.5);
-    steeringLimiter = new SlewRateLimiter(2.5);
-    throttleLimiter = new SlewRateLimiter(2.0);
-    
-
-
-
     // private double locationX = 0.2794;
     // private double locationY = 0.3048;
 
@@ -84,6 +77,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
       m_frontRight.setInverted(true);
       m_rearRight.setInverted(true);
+
+      //SlewRateLimiter filter = new SlewRateLimiter(0.5);
+      steeringLimiter = new SlewRateLimiter(2.5);
+      throttleLimiter = new SlewRateLimiter(2.0);
     }
 
     private boolean BRAKE_ON = true;

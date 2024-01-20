@@ -24,7 +24,11 @@ public class Shooter extends SubsystemBase {
     int shooterState                   = 0;
 
     private long timeWhenPressed;
-    
+
+    private WPI_TalonSRX shooterMotor1;
+    private WPI_TalonSRX shooterMotor2;
+    private WPI_TalonSRX canMotor;
+
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
     
