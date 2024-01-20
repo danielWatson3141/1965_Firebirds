@@ -23,10 +23,19 @@ public class Shooter extends SubsystemBase{
     long timeWhenPressed = 0;
 
     double shooterTimer = 2000;
-    
 
-    public shooterAccel() {
-        timeWhemPressed = System.currentTimeMillis();
+
+    public boolean shooterMotorDelay() {
+        if (elapsedTime >= shooterTimer) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public void shooterAccel() {
+        timeWhenPressed = System.currentTimeMillis();
 
         shooterMotor1.set(.5);
         shooterMotor2.set(.5);
@@ -35,26 +44,11 @@ public class Shooter extends SubsystemBase{
             shooterMotor1.set(0);
             shooterMotor2.set(0);
         }
-
-<<<<<<< HEAD
-=======
-    public void moveMf(double speed) {
-        sm_one.set(speed);
-        sm_two.set(speed);
-        sm_three.set(speed);
->>>>>>> 01ca1c22f9b7fd7a7d12b4dcdf600af92c80aa6b
-    }
-
-    public bool shooterMotorDelay() {
-        if (elapsedTime >= shooterTimer) {
-            return true;
-        } else {
-            return false;
         }
-    }
+
 
     public void periodic() {
-        elapsedTime = System.currentTimeMillis() - timeWhemPressed;
+        elapsedTime = System.currentTimeMillis() - timeWhenPressed;
 
         shooterMotorDelay();
     }
