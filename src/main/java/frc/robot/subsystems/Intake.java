@@ -1,7 +1,14 @@
-package frc.robot.subsystems;
+public class Intake extends SubsystemBase {
+    public void turnIntakeOn(){
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+    }
+    public void turnIntakeOff(){
 
-public class Intake extends SubsystemBase{
-    
+    }
+    public void deployIntake(){
+
+    }
+    public  void retractIntake(){
+
+    }
 }
