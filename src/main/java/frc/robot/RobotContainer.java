@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RollAuto;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lifter;
+import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.PneuLifter;
 import frc.robot.subsystems.SixWheelDrivetrain;
 
@@ -36,10 +38,12 @@ public class RobotContainer {
     private XboxController driverController = new XboxController(0);
     private XboxController coPilotController = new XboxController(1);
 
-    private final SixWheelDrivetrain drivetrain = new SixWheelDrivetrain(driverController);
-    private final Lifter lifter = new Lifter(driverController);
-    private final PneuLifter pneulifter = new PneuLifter(driverController);
-    private final Claw claw = new Claw(driverController);
+    Joystick m_stick = new Joystick(0); 
+
+    private final MecanumDrivetrain drivetrain = new MecanumDrivetrain(m_stick);
+    //private final Lifter lifter = new Lifter(driverController);
+    //private final PneuLifter pneulifter = new PneuLifter(driverController);
+    //private final Claw claw = new Claw(driverController);
 
     // private Vision visionSystem = new Vision();
 
@@ -117,10 +121,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
         // rb and lb
-        rbButton.onTrue(
-                new InstantCommand(() -> lifter.moveArmUp(), lifter));
-        lbButton.onTrue(
-                new InstantCommand(() -> lifter.moveArmDown(), lifter));
+        // rbButton.onTrue(
+        //         new InstantCommand(() -> lifter.moveArmUp(), lifter));
+        // lbButton.onTrue(
+        //         new InstantCommand(() -> lifter.moveArmDown(), lifter));
         // X Button
         // Button.onTrue(
         // new InstantCommand(() -> switchCamera()));
@@ -128,8 +132,8 @@ public class RobotContainer {
         // y Button
 
         // a Button
-        aButton.onTrue(
-                new InstantCommand(() -> claw.clawToggle()));
+        // aButton.onTrue(
+        //         new InstantCommand(() -> claw.clawToggle()));
         yButton.onTrue(
                 new InstantCommand(() -> drivetrain.brakeToggle()));
 
@@ -154,9 +158,9 @@ public class RobotContainer {
 
     public void test() {
         // ShuffleBoard widget commands for movement of arm
-        SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
-        SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
-        SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
+        // SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
+        // SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
+        // SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
     }
 
     /**
@@ -168,7 +172,9 @@ public class RobotContainer {
     long DRIVE_TIME = 5;
 
     public Command getAutonomousCommand() {
-        return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
+        //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
+        //TODO: Put some autonomous code in here
+        return null;
     }
 
 }

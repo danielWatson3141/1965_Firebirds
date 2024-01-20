@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.ejml.simple.SimpleMatrix;
 
 
-public class MecanumDrivetrain extends TimedRobot {
+public class MecanumDrivetrain extends SubsystemBase {
 
     public final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
@@ -65,16 +65,18 @@ public class MecanumDrivetrain extends TimedRobot {
     double backLeft = wheelSpeeds.rearLeftMetersPerSecond;
     double backRight = wheelSpeeds.rearRightMetersPerSecond;  */
 
-    @Override
-    public void robotInit(){
+    public MecanumDrivetrain(Joystick input_stick){
       m_frontLeft = new WPI_TalonSRX(4);
-      m_rearLeft = new WPI_TalonSRX(3);
-      m_frontRight = new WPI_TalonSRX(6);
+      m_rearLeft = new WPI_TalonSRX(6);
+      m_frontRight = new WPI_TalonSRX(3);
       m_rearRight = new WPI_TalonSRX(5);
 
-      m_robotDrive = new MecanumDrive(m_frontRight::set, m_frontLeft::set, m_rearLeft::set, m_rearRight::set);
+      m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
-      m_stick = new Joystick(0); 
+      m_stick = input_stick; 
+
+      m_frontRight.setInverted(true);
+      m_rearRight.setInverted(true);
     }
 
     private boolean BRAKE_ON = true;
@@ -99,11 +101,11 @@ public class MecanumDrivetrain extends TimedRobot {
 
 
   //multipliers for values
-  private double speedCap = .2;
-  private double rotateCap = .1; 
+  private double speedCap = .6;
+  private double rotateCap = .6; 
 
-  public void teleopPeriodic() {
-    m_robotDrive.driveCartesian(-m_stick.getY() * speedCap, m_stick.getX() * speedCap, m_stick.getZ() * rotateCap);
+  public void drive() {
+    m_robotDrive.driveCartesian(m_stick.getY() * speedCap, m_stick.getX() * speedCap, m_stick.getZ() * rotateCap);
    
     SmartDashboard.putNumber("stickX", m_stick.getX());
     SmartDashboard.putNumber("stickY", m_stick.getY());
