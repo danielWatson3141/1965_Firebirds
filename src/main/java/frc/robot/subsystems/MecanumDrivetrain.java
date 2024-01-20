@@ -31,11 +31,18 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     //public double gyroAngle = m_gyro.getAngle();
 
-    //private SlewRateLimiter steeringLimiter;
-    //private SlewRateLimiter throttleLimiter;
+    private SlewRateLimiter steeringLimiter;
+    private SlewRateLimiter throttleLimiter;
 
-    //private double locationX = 0.2794;
-    //private double locationY = 0.3048;
+    SlewRateLimiter filter = new SlewRateLimiter(0.5);
+    steeringLimiter = new SlewRateLimiter(2.5);
+    throttleLimiter = new SlewRateLimiter(2.0);
+    
+
+
+
+    // private double locationX = 0.2794;
+    // private double locationY = 0.3048;
 
     Joystick m_stick;
 
