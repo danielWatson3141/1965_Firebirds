@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
-
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,6 +38,7 @@ public class RobotContainer {
     Joystick m_stick = new Joystick(0); 
 
     private final MecanumDrivetrain drivetrain = new MecanumDrivetrain(m_stick);
+    private final Shooter m_shooter = new Shooter();
     //private final Lifter lifter = new Lifter(driverController);
     //private final PneuLifter pneulifter = new PneuLifter(driverController);
     //private final Claw claw = new Claw(driverController);
