@@ -9,13 +9,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 
 
 public class Shooter extends SubsystemBase {
 
-    final long shooterTimer = 2000;
+    final long shooterTimerMs = 2000;
     final double shooterSpeed = 0.5;
 
     final int shooterState__WaitSpinup = 1;
@@ -29,6 +32,8 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonSRX shooterMotor2;
     private WPI_TalonSRX canMotor;
 
+    private Command m_shooterSequence;
+
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
     
@@ -38,13 +43,22 @@ public class Shooter extends SubsystemBase {
     
         shooterState = shooterState__WaitSpinup;
         this.shooterInit();
+
+        //yo Dan, do you think this command sequences will work??? Asking for your expertice
+        m_shooterSequence = Commands.sequence(
+            new InstantCommand(() -> shooterInit()),
+            Commands.waitSeconds(shooterTimerMs/1000),
+            new InstantCommand(() -> startCan()),
+            Commands.waitSeconds(shooterTimerMs/1000),
+            new InstantCommand(() -> shooterStop())
+        );
     }
 
     // What does this do?
     // This determines if the requested time has elapsed
     public boolean CheckTimer(long timerValue) {
         long elapsedTime = System.currentTimeMillis() - timeWhenPressed;
-        return(elapsedTime >= shooterTimer);
+        return(elapsedTime >= shooterTimerMs);
     }
     
     public void StartTimer() { 
@@ -72,14 +86,16 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         switch (shooterState) {
             case shooterState__WaitSpinup:
-                if (this.CheckTimer(shooterTimer)) {
+                if (this.CheckTimer(shooterTimerMs
+)) {
                     Logging.log("Shooter:periodic", "Initial timer expires");
                     this.startCan();
                     shooterState = shooterState__WaitCan;
                 }
                 break;
             case shooterState__WaitCan:
-                if (this.CheckTimer(shooterTimer)) { 
+                if (this.CheckTimer(shooterTimerMs
+)) { 
                     Logging.log("Shooter:periodic", "Final timer expires - all done");
                     this.shooterStop();
                     shooterState = shooterState__Done;
