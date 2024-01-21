@@ -86,16 +86,14 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         switch (shooterState) {
             case shooterState__WaitSpinup:
-                if (this.CheckTimer(shooterTimerMs
-)) {
+                if (this.CheckTimer(shooterTimerMs)) {
                     Logging.log("Shooter:periodic", "Initial timer expires");
                     this.startCan();
                     shooterState = shooterState__WaitCan;
                 }
                 break;
             case shooterState__WaitCan:
-                if (this.CheckTimer(shooterTimerMs
-)) { 
+                if (this.CheckTimer(shooterTimerMs)) { 
                     Logging.log("Shooter:periodic", "Final timer expires - all done");
                     this.shooterStop();
                     shooterState = shooterState__Done;
