@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,10 +39,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     Joystick m_stick;
 
-    WPI_TalonSRX m_frontLeft;
-    WPI_TalonSRX m_rearLeft;
-    WPI_TalonSRX m_frontRight;
-    WPI_TalonSRX m_rearRight;
+    Spark m_frontLeft;
+    Spark m_rearLeft;
+    Spark m_frontRight;
+    Spark m_rearRight;
 
     MecanumDrive m_robotDrive;
 
@@ -64,10 +66,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     double backRight = wheelSpeeds.rearRightMetersPerSecond;  */
 
     public MecanumDrivetrain(Joystick input_stick){
-      m_frontLeft = new WPI_TalonSRX(4);
-      m_rearLeft = new WPI_TalonSRX(6);
-      m_frontRight = new WPI_TalonSRX(3);
-      m_rearRight = new WPI_TalonSRX(5);
+      m_frontLeft = new Spark(4);
+      m_rearLeft = new Spark(6);
+      m_frontRight = new Spark(3);
+      m_rearRight = new Spark(5);
 
       m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
@@ -80,27 +82,6 @@ public class MecanumDrivetrain extends SubsystemBase {
       steeringLimiter = new SlewRateLimiter(2.5);
       throttleLimiter = new SlewRateLimiter(2.0);
     }
-
-    private boolean BRAKE_ON = true;
-    private boolean BRAKE_OFF = !BRAKE_ON;
-    boolean brakeState;
-    
-    public void brakeToggle() {
-        brakeState = !brakeState;
-    
-        if (brakeState == BRAKE_OFF) {
-          m_frontLeft.setNeutralMode(NeutralMode.Coast);
-          m_rearLeft.setNeutralMode(NeutralMode.Coast);
-          m_frontRight.setNeutralMode(NeutralMode.Coast);
-          m_rearRight.setNeutralMode(NeutralMode.Coast);
-        } else {
-          m_frontLeft.setNeutralMode(NeutralMode.Brake);
-          m_rearLeft.setNeutralMode(NeutralMode.Brake);
-          m_frontRight.setNeutralMode(NeutralMode.Brake);
-          m_rearRight.setNeutralMode(NeutralMode.Brake);
-        }
-      }
-
 
   //multipliers for values
   private double speedCap = .6;
