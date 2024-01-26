@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -10,19 +7,16 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.ejml.simple.SimpleMatrix;
+
 
 
 public class MecanumDrivetrain extends SubsystemBase {
@@ -31,8 +25,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     //public double gyroAngle = m_gyro.getAngle();
 
-    private SlewRateLimiter steeringLimiter;
-    private SlewRateLimiter throttleLimiter;
+    private SlewRateLimiter rotationLimiter;
+    private SlewRateLimiter throttleLimiterX;
+    private SlewRateLimiter throttleLimiterY;
 
     // private double locationX = 0.2794;
     // private double locationY = 0.3048;
@@ -43,6 +38,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     Spark m_rearLeft;
     Spark m_frontRight;
     Spark m_rearRight;
+
+    private double rotationRate = 0.3;
+    private double throttleRate = 0.2;
+
 
     MecanumDrive m_robotDrive;
 
@@ -65,6 +64,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     double backLeft = wheelSpeeds.rearLeftMetersPerSecond;
     double backRight = wheelSpeeds.rearRightMetersPerSecond;  */
 
+    
     public MecanumDrivetrain(Joystick input_stick){
       m_frontLeft = new Spark(4);
       m_rearLeft = new Spark(6);
@@ -78,9 +78,9 @@ public class MecanumDrivetrain extends SubsystemBase {
       m_frontRight.setInverted(true);
       m_rearRight.setInverted(true);
 
-      //SlewRateLimiter filter = new SlewRateLimiter(0.5);
-      steeringLimiter = new SlewRateLimiter(2.5);
-      throttleLimiter = new SlewRateLimiter(2.0);
+      rotationLimiter = new SlewRateLimiter(rotationRate);
+      throttleLimiterX = new SlewRateLimiter(throttleRate);
+      throttleLimiterY = new SlewRateLimiter(throttleRate);
     }
 
   //multipliers for values
@@ -88,7 +88,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rotateCap = .6; 
 
   public void drive() {
-    m_robotDrive.driveCartesian(m_stick.getY() * speedCap, m_stick.getX() * speedCap, m_stick.getZ() * rotateCap);
+    m_robotDrive.driveCartesian(throttleLimiterY.calculate(m_stick.getY() * speedCap), throttleLimiterX.calculate(m_stick.getX() * speedCap), rotationLimiter.calculate(m_stick.getZ() * rotateCap));
    
     SmartDashboard.putNumber("stickX", m_stick.getX());
     SmartDashboard.putNumber("stickY", m_stick.getY());
