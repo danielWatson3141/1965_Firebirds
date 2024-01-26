@@ -11,13 +11,16 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class Lifter extends SubsystemBase{
 
-    DoubleSolenoid lifterArm = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-    
+    private DoubleSolenoid lifterArm;
+
+    public Lifter() {
+        lifterArm = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    }
+
     public void toggleLifter(){
         lifterArm.toggle();
-        lifterArm.get();
 
-        SmartDashboard.putBoolean("armState", lifterArm.get()==Value.kForward);
+        SmartDashboard.putBoolean("armUp", lifterArm.get()==Value.kForward);
 
     }
 
