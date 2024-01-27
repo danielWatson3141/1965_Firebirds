@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -40,13 +44,13 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   Rotation2d gyroAngle;
 
-  Spark m_frontLeft;
-  Spark m_rearLeft;
-  Spark m_frontRight;
-  Spark m_rearRight;
+  CANSparkMax m_frontLeft;
+  CANSparkMax m_rearLeft;
+  CANSparkMax m_frontRight;
+  CANSparkMax m_rearRight;
 
-  private double rotationRate = 0.3;
-  private double throttleRate = 0.2;
+  private double rotationRate = 1;
+  private double throttleRate = 1;
   private long driveAutoWait = 3000;
 
   MecanumDrive m_robotDrive;
@@ -76,36 +80,36 @@ public class MecanumDrivetrain extends SubsystemBase {
    * double backRight = wheelSpeeds.rearRightMetersPerSecond;
    */
 
-  public MecanumDrivetrain(Joystick input_stick){
-      m_frontLeft = new Spark(4);
-      m_rearLeft = new Spark(6);
-      m_frontRight = new Spark(3);
-      m_rearRight = new Spark(5);
+  public MecanumDrivetrain(Joystick input_stick) {
+    m_frontLeft = new CANSparkMax(1, MotorType.kBrushless);
+    m_rearLeft =  new CANSparkMax(2, MotorType.kBrushless);
+    m_frontRight =  new CANSparkMax(3, MotorType.kBrushless);
+    m_rearRight =  new CANSparkMax(4, MotorType.kBrushless);
 
-      m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
+    m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
-      m_stick = input_stick; 
+    m_stick = input_stick;
 
-      m_frontRight.setInverted(true);
-      m_rearRight.setInverted(true);
+    m_frontRight.setInverted(true);
+    m_rearRight.setInverted(true);
 
-      rotationLimiter = new SlewRateLimiter(rotationRate);
-      throttleLimiterX = new SlewRateLimiter(throttleRate);
-      throttleLimiterY = new SlewRateLimiter(throttleRate);
-    }
+    rotationLimiter = new SlewRateLimiter(rotationRate);
+    throttleLimiterX = new SlewRateLimiter(throttleRate);
+    throttleLimiterY = new SlewRateLimiter(throttleRate);
+  }
 
-  //multipliers for values
+  // multipliers for values
   final double SPEED_CAP = .6;
   private double driveSpeed;
 
   public void setSpeed() {
-    //get percentage from the 4th axis and converts it from 0% - 100%
-    double throttle_value = (-m_stick.getRawAxis(3) +1)/2;
-    //sets the sped based on the cap and percentage
+    // get percentage from the 4th axis and converts it from 0% - 100%
+    double throttle_value = (-m_stick.getRawAxis(3) + 1) / 2;
+    // sets the sped based on the cap and percentage
     driveSpeed = SPEED_CAP * throttle_value;
-    //documents the current percentage of the motors for driver
+    // documents the current percentage of the motors for driver
     SmartDashboard.putNumber("Drive %", throttle_value * 100);
-}
+  }
 
   public Rotation2d gyroAngle() {
     return m_gyro.getRotation2d();
@@ -118,14 +122,14 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   double autoSpeed = 0.5;
 
-  public void driveAutoGo(){
+  public void driveAutoGo() {
     m_frontLeft.set(autoSpeed);
     m_rearLeft.set(autoSpeed);
     m_frontRight.set(autoSpeed);
     m_rearRight.set(autoSpeed);
   }
 
-  public void driveAutoStop(){
+  public void driveAutoStop() {
     m_frontLeft.set(0);
     m_rearLeft.set(0);
     m_frontRight.set(0);
@@ -133,24 +137,32 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   }
 
-
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
-      new InstantCommand(() -> driveAutoGo()), 
-      Commands.waitSeconds(driveAutoWait),
-      new InstantCommand(() -> driveAutoGo())
-  ); 
+        new InstantCommand(() -> driveAutoGo()),
+        Commands.waitSeconds(driveAutoWait),
+        new InstantCommand(() -> driveAutoStop()));
 
     r_command.addRequirements(this);
     return r_command;
   }
 
   public void drive() {
+
+    double in_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
+    double in_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
+    double in_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
+    SmartDashboard.putNumber("in_x", in_x);
+    SmartDashboard.putNumber("in_y", in_y);
+    SmartDashboard.putNumber("in_z", in_z);
+
+
+    //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z on purpose.
     m_robotDrive.driveCartesian(
-        throttleLimiterX.calculate(m_stick.getX()) * driveSpeed,
-        throttleLimiterY.calculate(m_stick.getY()) * driveSpeed,
-        rotationLimiter.calculate(m_stick.getZ()) * driveSpeed,
-      m_gyro.getRotation2d());
+        in_y,
+        in_x,
+        in_z,
+        m_gyro.getRotation2d());
   }
 
   @Override
@@ -158,6 +170,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickX", m_stick.getX());
     SmartDashboard.putNumber("stickY", m_stick.getY());
     SmartDashboard.putNumber("stickZ", m_stick.getZ());
-      setSpeed();
+    setSpeed();
+    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
   }
 }
