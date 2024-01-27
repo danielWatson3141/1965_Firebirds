@@ -153,4 +153,10 @@ public class RobotContainer {
         return m_drivetrain.driveAutoCommand();
     }
 
+    public Command getTestCommand () {
+        
+      
+        return m_drivetrain.driveAutoCommand();
+    }
+
 }
