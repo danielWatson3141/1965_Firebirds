@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 
@@ -44,6 +47,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   private double rotationRate = 0.3;
   private double throttleRate = 0.2;
+  private long driveAutoWait = 3000;
 
   MecanumDrive m_robotDrive;
 
@@ -101,6 +105,35 @@ public class MecanumDrivetrain extends SubsystemBase {
   public void gyroReset() {
     m_gyro.reset();
     Logging.log(getSubsystem(), "reset gyroscope");
+  }
+
+  double autoSpeed = 0.5;
+
+  public void driveAutoGo(){
+    m_frontLeft.set(autoSpeed);
+    m_rearLeft.set(autoSpeed);
+    m_frontRight.set(autoSpeed);
+    m_rearRight.set(autoSpeed);
+  }
+
+  public void driveAutoStop(){
+    m_frontLeft.set(0);
+    m_rearLeft.set(0);
+    m_frontRight.set(0);
+    m_rearRight.set(0);
+
+  }
+
+
+  public Command driveAutoCommand() {
+    Command r_command = Commands.sequence(
+      new InstantCommand(() -> driveAutoGo()), 
+      Commands.waitSeconds(driveAutoWait),
+      new InstantCommand(() -> driveAutoGo())
+  ); 
+
+    r_command.addRequirements(this);
+    return r_command;
   }
 
   public void drive() {
