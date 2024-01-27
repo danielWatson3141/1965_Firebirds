@@ -118,6 +118,10 @@ public class RobotContainer {
         );
     }
 
+    public void configureTestButtonBindings() {
+        tenButton.onTrue(getTestCommand());
+        triggerButton.whileTrue(getTestCommand());
+    }
     boolean frontCamera = true;
 
     public void switchCamera() {
@@ -154,8 +158,8 @@ public class RobotContainer {
     }
 
     public Command getTestCommand () {
-        
-      
+     
+
         return m_drivetrain.driveAutoCommand();
     }
 
