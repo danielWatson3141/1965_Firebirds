@@ -100,11 +100,11 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public void setSpeed() {
     //get percentage from the 4th axis and converts it from 0% - 100%
-    double percentage = (m_stick.getAxisType(4) +1)/2;
+    double throttle_value = (-m_stick.getRawAxis(3) +1)/2;
     //sets the sped based on the cap and percentage
-    driveSpeed = SPEED_CAP * percentage;
+    driveSpeed = SPEED_CAP * throttle_value;
     //documents the current percentage of the motors for driver
-    SmartDashboard.putNumber("Shooter Speed Percentage", percentage * 100);
+    SmartDashboard.putNumber("Drive %", throttle_value * 100);
 }
 
   public Rotation2d gyroAngle() {
@@ -151,14 +151,13 @@ public class MecanumDrivetrain extends SubsystemBase {
         throttleLimiterY.calculate(m_stick.getY()) * driveSpeed,
         rotationLimiter.calculate(m_stick.getZ()) * driveSpeed,
       m_gyro.getRotation2d());
-
-    SmartDashboard.putNumber("stickX", m_stick.getX());
-    SmartDashboard.putNumber("stickY", m_stick.getY());
-    SmartDashboard.putNumber("stickZ", m_stick.getZ());
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("stickX", m_stick.getX());
+    SmartDashboard.putNumber("stickY", m_stick.getY());
+    SmartDashboard.putNumber("stickZ", m_stick.getZ());
       setSpeed();
   }
 }
