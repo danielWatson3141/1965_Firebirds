@@ -88,7 +88,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rotateCap = .6; 
 
   public void drive() {
-    m_robotDrive.driveCartesian(throttleLimiterY.calculate(m_stick.getY() * speedCap), throttleLimiterX.calculate(m_stick.getX() * speedCap), rotationLimiter.calculate(m_stick.getZ() * rotateCap));
+    m_robotDrive.driveCartesian(
+      throttleLimiterX.calculate(m_stick.getX() * speedCap),
+      throttleLimiterY.calculate(m_stick.getY() * speedCap),
+      rotationLimiter.calculate(m_stick.getZ() * rotateCap)
+      );
    
     SmartDashboard.putNumber("stickX", m_stick.getX());
     SmartDashboard.putNumber("stickY", m_stick.getY());
