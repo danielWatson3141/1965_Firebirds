@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.Shooter;
@@ -38,18 +39,12 @@ public class RobotContainer {
 
     Joystick m_stick = new Joystick(0); 
 
-    private final MecanumDrivetrain drivetrain = new MecanumDrivetrain(m_stick);
+    private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     private final Shooter m_shooter = new Shooter();
-    //private final Lifter lifter = new Lifter(driverController);
-    //private final PneuLifter pneulifter = new PneuLifter(driverController);
-    //private final Claw claw = new Claw(driverController);
-
-    // private Vision visionSystem = new Vision();
-
-    //private JoystickButton coPilotBButton = new JoystickButton(coPilotController, XboxController.Button.kB.value);
-
+    private final Intake m_intake = new Intake();
+   
     private JoystickButton triggerButton = new JoystickButton(driverController, 1);
-    private JoystickButton thumbButton = new JoystickButton(driverController, 2);
+    private JoystickButton sideButton = new JoystickButton(driverController, 2);
     private JoystickButton topRightButton = new JoystickButton(driverController, 6);
     private JoystickButton bottomRightButton = new JoystickButton(driverController, 4);
     private JoystickButton topLeftButton = new JoystickButton(driverController, 5);
@@ -83,10 +78,10 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        drivetrain.setDefaultCommand(
+        m_drivetrain.setDefaultCommand(
                 new RunCommand(
-                        () -> drivetrain.drive(),
-                        drivetrain));
+                        () -> m_drivetrain.drive(),
+                        m_drivetrain));
 
         camera1 = CameraServer.startAutomaticCapture(0);
         camera1.setResolution(300, 300);
@@ -97,24 +92,6 @@ public class RobotContainer {
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
-
-        // hold to open claw command on shuffleboard
-        // individual open/shut commands on shuffleboard
-        // SmartDashboard.putData("Unfurl Claw", new InstantCommand(() ->
-        // claw.clawOpen(), claw));
-        // SmartDashboard.putData("UnUnfurl Claw", new InstantCommand(() ->
-        // claw.clawShut(), claw));
-
-        // Send commands to dashboard
-        // These will be displayed on the commands panel Ex from last year:
-        // SmartDashboard.putData("Erect", new InstantCommand(() -> arm.erectHook(),
-        // arm));
-        // SmartDashboard.putData("Retract", new InstantCommand(() -> arm.retractHook(),
-        // arm));
-        // SmartDashboard.putData("Stop", new InstantCommand(() -> arm.stopHook(),
-        // arm));
-        // SmartDashboard.putData("Switch",new InstantCommand(() -> switchCamera(),
-        // arm));
 
     }
 
@@ -132,7 +109,13 @@ public class RobotContainer {
         triggerButton.onTrue(        
             m_shooter.getShootCommand()
         );
+        sideButton.onTrue(
+            m_intake.getIntakeCommand()
+        );
 
+        sevenButton.onTrue(
+            new InstantCommand(() -> m_drivetrain.gyroReset())
+        );
     }
 
     boolean frontCamera = true;
