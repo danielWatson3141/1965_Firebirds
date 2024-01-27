@@ -94,9 +94,18 @@ public class MecanumDrivetrain extends SubsystemBase {
       throttleLimiterY = new SlewRateLimiter(throttleRate);
     }
 
-  // multipliers for values
-  private double speedCap = .6;
-  private double rotateCap = .6;
+  //multipliers for values
+  final double SPEED_CAP = .6;
+  private double driveSpeed;
+
+  public void setSpeed() {
+    //get percentage from the 4th axis and converts it from 0% - 100%
+    double percentage = (m_stick.getAxisType(4) +1)/2;
+    //sets the sped based on the cap and percentage
+    driveSpeed = SPEED_CAP * percentage;
+    //documents the current percentage of the motors for driver
+    SmartDashboard.putNumber("Shooter Speed Percentage", percentage * 100);
+}
 
   public Rotation2d gyroAngle() {
     return m_gyro.getRotation2d();
@@ -138,13 +147,18 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public void drive() {
     m_robotDrive.driveCartesian(
-        throttleLimiterX.calculate(m_stick.getX() * speedCap),
-        throttleLimiterY.calculate(m_stick.getY() * speedCap),
-        rotationLimiter.calculate(m_stick.getZ() * rotateCap),
-        m_gyro.getRotation2d());
+        throttleLimiterX.calculate(m_stick.getX()) * driveSpeed,
+        throttleLimiterY.calculate(m_stick.getY()) * driveSpeed,
+        rotationLimiter.calculate(m_stick.getZ()) * driveSpeed,
+      m_gyro.getRotation2d());
 
     SmartDashboard.putNumber("stickX", m_stick.getX());
     SmartDashboard.putNumber("stickY", m_stick.getY());
     SmartDashboard.putNumber("stickZ", m_stick.getZ());
+  }
+
+  @Override
+  public void periodic() {
+      setSpeed();
   }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,8 +18,8 @@ import frc.robot.Logging;
 
 public class Shooter extends SubsystemBase {
 
-    final long shooterTimerMs = 2000;
-    final double shooterSpeed = 0.5;
+    final long SHOOTER_TIMER_MS = 2000;
+    private double shooterSpeed = .5;
 
     private WPI_TalonSRX shooterMotor1;
     private WPI_TalonSRX shooterMotor2;
@@ -61,15 +62,32 @@ public class Shooter extends SubsystemBase {
                 //Starts up the shooter motors
                 new InstantCommand(() -> shooterInit()),
                 //waits for variable miliseconds
-                Commands.waitSeconds(shooterTimerMs/1000),
+                Commands.waitSeconds(SHOOTER_TIMER_MS/1000),
                 //Starts can motor
                 new InstantCommand(() -> startCan()),
                 //wait for variable miliseconds
-                Commands.waitSeconds(shooterTimerMs/1000),
+                Commands.waitSeconds(SHOOTER_TIMER_MS/1000),
                 //stop all motors
                 new InstantCommand(() -> shooterStop())
             );
         r_command.addRequirements(this);
         return r_command;
     }
+
+    /*
+        VERY IMPORTANT (\0_0)\ 
+        This function works by calling the function and putting the desired speed into the requirements.
+        It will not work if you do "shooterMotorSet()"
+        It HAS to have a value like "shooterMotorSet(.2)"
+    */
+    public void shooterMotorSet(double setSpeed) {
+        shooterSpeed = setSpeed;
+        double speedPercentage = shooterSpeed * 100;
+
+        String speed = "speed is at" + speedPercentage + " percent";
+        
+        Logging.log("Shooter:shooterMotorSet", speed);
+        SmartDashboard.putNumber("Shooter %", speedPercentage);
+    }
+
 }
