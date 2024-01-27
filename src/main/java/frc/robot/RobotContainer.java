@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -127,25 +128,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
-        // rb and lb
-        // rbButton.onTrue(
-        //         new InstantCommand(() -> lifter.moveArmUp(), lifter));
-        // lbButton.onTrue(
-        //         new InstantCommand(() -> lifter.moveArmDown(), lifter));
-        // X Button
-        // Button.onTrue(
-        // new InstantCommand(() -> switchCamera()));
 
-        // y Button
-
-        // a Button
-        // aButton.onTrue(
-        //         new InstantCommand(() -> claw.clawToggle()));
-        //yButton.onTrue(
-                //new InstantCommand(() -> drivetrain.brakeToggle()));
-
-       // xButton.onTrue(
-               // new InstantCommand(() -> pneulifter.toggleLifter()));
+        triggerButton.onTrue(        
+            m_shooter.getShootCommand()
+        );
 
     }
 
