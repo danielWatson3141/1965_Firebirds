@@ -150,7 +150,13 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
         //TODO: Put some autonomous code in here
-        return null;
+        return m_drivetrain.driveAutoCommand();
+    }
+
+    public Command getTestCommand () {
+        
+      
+        return m_drivetrain.driveAutoCommand();
     }
 
 }
