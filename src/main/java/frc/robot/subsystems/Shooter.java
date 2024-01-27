@@ -77,8 +77,8 @@ public class Shooter extends SubsystemBase {
     /*
         VERY IMPORTANT (\0_0)\ 
         This function works by calling the function and putting the desired speed into the requirements.
-        It will not work if you do "shooterMotorSet()"
-        It HAS to have a value like "shooterMotorSet(.2)"
+        It will not work if you do "motorSet()"
+        It HAS to have a value like "motorSet(.2)"
     */
     public void shooterMotorSet(double setSpeed) {
         shooterSpeed = setSpeed;
