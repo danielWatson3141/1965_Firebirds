@@ -140,6 +140,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     double in_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
     double in_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
     double in_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
+
     SmartDashboard.putNumber("in_x", in_x);
     SmartDashboard.putNumber("in_y", in_y);
     SmartDashboard.putNumber("in_z", in_z);
