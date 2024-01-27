@@ -88,8 +88,6 @@ public class MecanumDrivetrain extends SubsystemBase {
       rotationLimiter = new SlewRateLimiter(rotationRate);
       throttleLimiterX = new SlewRateLimiter(throttleRate);
       throttleLimiterY = new SlewRateLimiter(throttleRate);
-
-      ADXRS450_Gyro m_gyro = 
     }
 
   // multipliers for values
