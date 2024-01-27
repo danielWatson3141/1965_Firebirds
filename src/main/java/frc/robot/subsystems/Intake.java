@@ -14,9 +14,9 @@ import frc.robot.Logging;
 
 public class Intake extends SubsystemBase {
 
-    private WPI_TalonSRX frontRoller;
-    private WPI_TalonSRX rearRoller;
-    private WPI_TalonSRX indexMotor;
+    private WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
+    private WPI_TalonSRX rearRoller =  new WPI_TalonSRX(69);
+    private WPI_TalonSRX indexMotor = new WPI_TalonSRX(69);
 
     private double motorSpeed;
 
@@ -24,12 +24,6 @@ public class Intake extends SubsystemBase {
     private boolean sensor2;
 
     public Intake() {
-
-        // TODO: look up how to add motorcontrollergroups now its been deprecated
-        WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
-        WPI_TalonSRX rearRoller = new WPI_TalonSRX(69);
-        WPI_TalonSRX indexMotor = new WPI_TalonSRX(69);
-
         motorSpeed = 0.7;
         sensor1 = false;
         sensor2 = false;
