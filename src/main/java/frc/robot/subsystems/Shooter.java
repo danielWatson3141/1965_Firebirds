@@ -20,13 +20,6 @@ public class Shooter extends SubsystemBase {
     final long shooterTimerMs = 2000;
     final double shooterSpeed = 0.5;
 
-    final int shooterState__WaitSpinup = 1;
-    final int shooterState__WaitCan    = 2;
-    final int shooterState__Done       = 3;
-    int shooterState                   = 0;
-
-    private long timeWhenPressed;
-
     private WPI_TalonSRX shooterMotor1;
     private WPI_TalonSRX shooterMotor2;
     private WPI_TalonSRX canMotor;
@@ -34,22 +27,24 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
     
+        //sets motors to port number
         shooterMotor1 = new WPI_TalonSRX(9);
         shooterMotor2 = new WPI_TalonSRX(8);
         canMotor = new WPI_TalonSRX(7);
-    
-        shooterState = shooterState__WaitSpinup;
     }
     
+    //sets shooting motor's voltage to the variable
      public void shooterInit() {
         shooterMotor1.set(shooterSpeed);
         shooterMotor2.set(shooterSpeed);
     }
-
+        
+    //sets the can motor's votage to the variable
     public void startCan() {
         canMotor.set(shooterSpeed);
     }
 
+    //stops all motors
     public void shooterStop() {
         shooterMotor1.set(0);
         shooterMotor2.set(0);
@@ -63,10 +58,15 @@ public class Shooter extends SubsystemBase {
     public Command getShootCommand(){
         Command r_command = 
         Commands.sequence(
+                //Starts up the shooter motors
                 new InstantCommand(() -> shooterInit()),
+                //waits for variable miliseconds
                 Commands.waitSeconds(shooterTimerMs/1000),
+                //Starts can motor
                 new InstantCommand(() -> startCan()),
+                //wait for variable miliseconds
                 Commands.waitSeconds(shooterTimerMs/1000),
+                //stop all motors
                 new InstantCommand(() -> shooterStop())
             );
         r_command.addRequirements(this);
