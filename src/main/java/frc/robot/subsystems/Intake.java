@@ -1,22 +1,18 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Logging;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    private WPI_TalonSRX frontRoller;
-    private WPI_TalonSRX rearRoller;
-    private WPI_TalonSRX indexMotor;
+    private WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
+    private WPI_TalonSRX rearRoller =  new WPI_TalonSRX(69);
+    private WPI_TalonSRX indexMotor = new WPI_TalonSRX(69);
 
     private double motorSpeed;
 
@@ -24,12 +20,6 @@ public class Intake extends SubsystemBase {
     private boolean sensor2;
 
     public Intake() {
-
-        // TODO: look up how to add motorcontrollergroups now its been deprecated
-        WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
-        WPI_TalonSRX rearRoller = new WPI_TalonSRX(69);
-        WPI_TalonSRX indexMotor = new WPI_TalonSRX(69);
-
         motorSpeed = 0.7;
         sensor1 = false;
         sensor2 = false;
