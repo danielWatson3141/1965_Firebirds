@@ -34,6 +34,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterY;
 
   private double initialRotationValue;
+  private double deadzone;
   // private double locationX = 0.2794;
   // private double locationY = 0.3048;
 
@@ -95,6 +96,7 @@ public class MecanumDrivetrain extends SubsystemBase {
       throttleLimiterY = new SlewRateLimiter(throttleRate);
 
       initialRotationValue = 0;
+      deadzone = 0.1;
 
     }
 
@@ -112,7 +114,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 }
 
 public void setRotationValue() {
- if (m_stick.getZ() < .1 && m_stick.getZ() > -.1){
+ if (m_stick.getZ() < deadzone && m_stick.getZ() > -deadzone){
    initialRotationValue = 0;
  }
  else {
