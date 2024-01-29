@@ -33,6 +33,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
 
+  private double initialRotationValue;
   // private double locationX = 0.2794;
   // private double locationY = 0.3048;
 
@@ -92,6 +93,9 @@ public class MecanumDrivetrain extends SubsystemBase {
       rotationLimiter = new SlewRateLimiter(rotationRate);
       throttleLimiterX = new SlewRateLimiter(throttleRate);
       throttleLimiterY = new SlewRateLimiter(throttleRate);
+
+      initialRotationValue = 0;
+
     }
 
   //multipliers for values
@@ -105,6 +109,15 @@ public class MecanumDrivetrain extends SubsystemBase {
     driveSpeed = SPEED_CAP * throttle_value;
     //documents the current percentage of the motors for driver
     SmartDashboard.putNumber("Drive %", throttle_value * 100);
+}
+
+public void setRotationValue() {
+ if (m_stick.getZ() < .1 && m_stick.getZ() > -.1){
+   initialRotationValue = 0;
+ }
+ else {
+  initialRotationValue = m_stick.getZ();
+ }
 }
 
   public Rotation2d gyroAngle() {
@@ -149,7 +162,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_robotDrive.driveCartesian(
         throttleLimiterX.calculate(m_stick.getX()) * driveSpeed,
         throttleLimiterY.calculate(m_stick.getY()) * driveSpeed,
-        rotationLimiter.calculate(m_stick.getZ()) * driveSpeed,
+        rotationLimiter.calculate(initialRotationValue) * driveSpeed,
       m_gyro.getRotation2d());
   }
 
@@ -159,5 +172,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickY", m_stick.getY());
     SmartDashboard.putNumber("stickZ", m_stick.getZ());
       setSpeed();
+    
   }
 }
