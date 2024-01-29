@@ -32,37 +32,34 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private XboxController driverController = new XboxController(0);
-    private XboxController coPilotController = new XboxController(1);
-
-    Joystick m_stick = new Joystick(0); 
+    private Joystick m_stick = new Joystick(0);
 
     private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
    
-    private JoystickButton triggerButton = new JoystickButton(driverController, 1);
-    private JoystickButton sideButton = new JoystickButton(driverController, 2);
-    private JoystickButton topRightButton = new JoystickButton(driverController, 6);
-    private JoystickButton bottomRightButton = new JoystickButton(driverController, 4);
-    private JoystickButton topLeftButton = new JoystickButton(driverController, 5);
-    private JoystickButton bottomLeftButton = new JoystickButton(driverController, 3);
+    private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
+    private JoystickButton sideButton = new JoystickButton(m_stick, 2);
+    private JoystickButton topRightButton = new JoystickButton(m_stick, 6);
+    private JoystickButton bottomRightButton = new JoystickButton(m_stick, 4);
+    private JoystickButton topLeftButton = new JoystickButton(m_stick, 5);
+    private JoystickButton bottomLeftButton = new JoystickButton(m_stick, 3);
 //10,12 uncomfort 8,11 can be bad dpepnds on grip : 9,7 easiest 
 //most comfortable buttons
-    private JoystickButton nineButton = new JoystickButton(driverController, 9);
-    private JoystickButton sevenButton = new JoystickButton(driverController, 7);
+    private JoystickButton nineButton = new JoystickButton(m_stick, 9);
+    private JoystickButton sevenButton = new JoystickButton(m_stick, 7);
 //average comfortable buttons
-    private JoystickButton eightButton = new JoystickButton(driverController, 8);
-    private JoystickButton elevenButton = new JoystickButton(driverController, 11);
+    private JoystickButton eightButton = new JoystickButton(m_stick, 8);
+    private JoystickButton elevenButton = new JoystickButton(m_stick, 11);
 //least comfortable buttons
-    private JoystickButton tenButton = new JoystickButton(driverController, 10);
-    private JoystickButton twelveButton = new JoystickButton(driverController, 12);
+    private JoystickButton tenButton = new JoystickButton(m_stick, 10);
+    private JoystickButton twelveButton = new JoystickButton(m_stick, 12);
 //topJoy
-    //private JoystickButton topStickButton = new JoystickButton(driverController, );
+    //private JoystickButton topStickButton = new JoystickButton(m_stick, );
 //joystick tbd...
-    //private JoystickButton leftStickButton = new JoystickButton(driverController, );
-    //private JoystickButton rightStickButton = new JoystickButton(driverController,);
+    //private JoystickButton leftStickButton = new JoystickButton(m_stick, );
+    //private JoystickButton rightStickButton = new JoystickButton(m_stick,);
 
     UsbCamera camera1;
     UsbCamera camera2;
@@ -98,7 +95,7 @@ public class RobotContainer {
      * Use this method to define your button->command mappings. Buttons can be
      * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * edu.wpi.first.wpilibj.m_stick} or {@link XboxController}), and then passing
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
