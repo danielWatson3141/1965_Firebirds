@@ -53,6 +53,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   MecanumDrive m_robotDrive;
 
+
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
    * m_stick.getX(), 0);
@@ -97,6 +98,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
       initialRotationValue = 0;
       deadzone = 0.1;
+
 
     }
 
@@ -148,7 +150,6 @@ public void setRotationValue() {
 
   }
 
-
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
       new InstantCommand(() -> driveAutoGo()), 
@@ -159,6 +160,14 @@ public void setRotationValue() {
     r_command.addRequirements(this);
     return r_command;
   }
+
+  public void setDirectionPOV(double speedA, double speedB){
+    m_frontLeft.set(speedA);
+    m_rearLeft.set(speedB);
+    m_frontRight.set(speedB);
+    m_rearRight.set(speedA);
+  }
+
 
   public void drive() {
     m_robotDrive.driveCartesian(

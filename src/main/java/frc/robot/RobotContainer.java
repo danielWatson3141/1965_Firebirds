@@ -66,6 +66,9 @@ public class RobotContainer {
     NetworkTableEntry cameraSelection;
     NetworkTableEntry tx, ty, ta;
 
+    double POVvalue;
+    double POVspeed;
+
     // The container for the robot. Contains subsystems, OI devices, and commands.
 
     // The container for the robot. Contains subsystems, OI devices, and commands.
@@ -73,6 +76,9 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
+
+        POVvalue = m_stick.getPOV();
+        POVspeed = 0.5;
 
         m_drivetrain.setDefaultCommand(
                 new RunCommand(
@@ -112,6 +118,39 @@ public class RobotContainer {
         sevenButton.onTrue(
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
+
+        //forwards
+        if (POVvalue == 0) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(POVspeed, POVspeed));
+        }
+        //up right
+        if (POVvalue == 45) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(0, POVspeed));
+        }
+        //right
+        if (POVvalue == 90) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(-POVspeed, POVspeed));
+        }
+        //down right
+        if (POVvalue == 135) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(-POVspeed, 0));
+        }
+        //backwards
+        if (POVvalue == 180) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(-POVspeed, -POVspeed));
+        }
+        //down left
+        if (POVvalue == 225) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(0, -POVspeed));
+        }
+        //left
+        if (POVvalue == 270) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(POVspeed, -POVspeed));
+        }   
+        //up left
+        if (POVvalue == 315) {
+            new InstantCommand(() -> m_drivetrain.setDirectionPOV(0, POVspeed));
+        }
     }
 
     public void configureTestButtonBindings() {
