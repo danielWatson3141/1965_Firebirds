@@ -104,7 +104,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   //multipliers for values
   final double SPEED_CAP = .6;
-  private double driveSpeed;
+  public double driveSpeed;
 
   public void setSpeed() {
     //get percentage from the 4th axis and converts it from 0% - 100%

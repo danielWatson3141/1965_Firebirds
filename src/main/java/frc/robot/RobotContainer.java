@@ -78,7 +78,7 @@ public class RobotContainer {
         configureButtonBindings();
 
         POVvalue = m_stick.getPOV();
-        POVspeed = 0.5;
+        POVspeed = m_drivetrain.driveSpeed;
 
         m_drivetrain.setDefaultCommand(
                 new RunCommand(
