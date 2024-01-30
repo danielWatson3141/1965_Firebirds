@@ -77,13 +77,13 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        POVvalue = m_stick.getPOV();
         POVspeed = m_drivetrain.driveSpeed;
-
-        m_drivetrain.setDefaultCommand(
-                new RunCommand(
-                        () -> m_drivetrain.drive(),
-                        m_drivetrain));
+        
+        if (POVvalue == -1) {
+            m_drivetrain.setDefaultCommand(
+                    new RunCommand(() -> m_drivetrain.drive(),
+                            m_drivetrain));
+        }
 
         //camera1 = CameraServer.startAutomaticCapture(0);
         //camera1.setResolution(300, 300);
@@ -190,6 +190,10 @@ public class RobotContainer {
      */
 
     long DRIVE_TIME = 5;
+
+    public void periodic(){
+        POVvalue = m_stick.getPOV();
+    }
 
     public Command getAutonomousCommand() {
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
