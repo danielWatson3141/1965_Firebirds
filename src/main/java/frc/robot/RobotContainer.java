@@ -158,6 +158,8 @@ public class RobotContainer {
 
     public void periodic(){
         POVvalue = m_stick.getPOV();
+        SmartDashboard.putNumber("number", 1);
+        SmartDashboard.getNumber("number", 0);
     }
 
     public Command getAutonomousCommand() {

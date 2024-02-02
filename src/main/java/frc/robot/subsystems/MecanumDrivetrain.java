@@ -43,8 +43,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   CANSparkMax m_frontRight;
   CANSparkMax m_rearRight;
 
-  private double rotationRate = 0.2;
-  private double throttleRate = 0.1;
+  private double rotationRate = 0.5;
+  private double throttleRate = 0.5;
   private long driveAutoWait = 3000;
 
   private double drive_x;
