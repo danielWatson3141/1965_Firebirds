@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -42,8 +43,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   CANSparkMax m_frontRight;
   CANSparkMax m_rearRight;
 
-  private double rotationRate = 0.3;
-  private double throttleRate = 0.2;
+  private double rotationRate = 0.2;
+  private double throttleRate = 0.1;
   private long driveAutoWait = 3000;
 
   private double drive_x;
@@ -82,6 +83,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_rearLeft =  new CANSparkMax(2, MotorType.kBrushless);
     m_frontRight =  new CANSparkMax(3, MotorType.kBrushless);
     m_rearRight =  new CANSparkMax(4, MotorType.kBrushless);
+
+    m_frontLeft.setIdleMode(IdleMode.kBrake);
+    m_rearLeft.setIdleMode(IdleMode.kBrake);
+    m_frontRight.setIdleMode(IdleMode.kBrake);
+    m_rearRight.setIdleMode(IdleMode.kBrake);
 
     m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
