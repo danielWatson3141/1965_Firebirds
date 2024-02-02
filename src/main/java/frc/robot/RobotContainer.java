@@ -78,13 +78,10 @@ public class RobotContainer {
         configureButtonBindings();
 
         POVspeed = m_drivetrain.driveSpeed;
-        
-        if (POVvalue == -1) {
-            m_drivetrain.setDefaultCommand(
-                    new RunCommand(() -> m_drivetrain.drive(),
-                            m_drivetrain));
-        }
 
+        m_drivetrain.setDefaultCommand(
+                new RunCommand(() -> m_drivetrain.drive(),
+                        m_drivetrain));
         //camera1 = CameraServer.startAutomaticCapture(0);
         //camera1.setResolution(300, 300);
         //camera2 = CameraServer.startAutomaticCapture(1);

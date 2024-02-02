@@ -1,22 +1,15 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
-import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,14 +38,18 @@ public class MecanumDrivetrain extends SubsystemBase {
   Rotation2d gyroAngle;
   Rotation2d POVvalue;
 
-  Spark m_frontLeft;
-  Spark m_rearLeft;
-  Spark m_frontRight;
-  Spark m_rearRight;
+  CANSparkMax m_frontLeft;
+  CANSparkMax m_rearLeft;
+  CANSparkMax m_frontRight;
+  CANSparkMax m_rearRight;
 
-  private double rotationRate = 0.3;
-  private double throttleRate = 0.2;
+  private double rotationRate = 0.2;
+  private double throttleRate = 0.1;
   private long driveAutoWait = 3000;
+
+  private double drive_x;
+  private double drive_y;
+  private double drive_z;
 
   MecanumDrive m_robotDrive;
 
@@ -82,10 +79,15 @@ public class MecanumDrivetrain extends SubsystemBase {
    */
 
   public MecanumDrivetrain(Joystick input_stick) {
-    m_frontLeft = new Spark(4);
-    m_rearLeft = new Spark(6);
-    m_frontRight = new Spark(3);
-    m_rearRight = new Spark(5);
+    m_frontLeft = new CANSparkMax(1, MotorType.kBrushless);
+    m_rearLeft =  new CANSparkMax(2, MotorType.kBrushless);
+    m_frontRight =  new CANSparkMax(3, MotorType.kBrushless);
+    m_rearRight =  new CANSparkMax(4, MotorType.kBrushless);
+
+    m_frontLeft.setIdleMode(IdleMode.kBrake);
+    m_rearLeft.setIdleMode(IdleMode.kBrake);
+    m_frontRight.setIdleMode(IdleMode.kBrake);
+    m_rearRight.setIdleMode(IdleMode.kBrake);
 
     m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
@@ -154,7 +156,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     Command r_command = Commands.sequence(
         new InstantCommand(() -> driveAutoGo()),
         Commands.waitSeconds(driveAutoWait),
-        new InstantCommand(() -> driveAutoGo()));
+        new InstantCommand(() -> driveAutoStop()));
 
     r_command.addRequirements(this);
     return r_command;
@@ -165,20 +167,25 @@ public class MecanumDrivetrain extends SubsystemBase {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
     } else {
+      drive_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
+      drive_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
+      drive_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
+
+      //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
       m_robotDrive.driveCartesian(
-          throttleLimiterX.calculate(m_stick.getX()) * driveSpeed,
-          throttleLimiterY.calculate(m_stick.getY()) * driveSpeed,
-          rotationLimiter.calculate(initialRotationValue) * driveSpeed,
-          m_gyro.getRotation2d());
+        drive_y,
+        drive_x,
+        drive_z,
+        m_gyro.getRotation2d().times(-1));
     }
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("stickX", m_stick.getX());
-    SmartDashboard.putNumber("stickY", m_stick.getY());
-    SmartDashboard.putNumber("stickZ", m_stick.getZ());
+    SmartDashboard.putNumber("stickX", drive_x);
+    SmartDashboard.putNumber("stickY", drive_z);
+    SmartDashboard.putNumber("stickZ", drive_z);
     setSpeed();
-
+    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
   }
 }
