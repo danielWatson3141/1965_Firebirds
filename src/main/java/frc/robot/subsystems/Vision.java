@@ -56,7 +56,7 @@ public class Vision extends SubsystemBase {
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
         detector = new AprilTagDetector();
         //adds a new apriltagdetector
-        detector.addFamily("tag16h5", 1);
+        detector.addFamily("36h11", 1);
         //adds the tag family being used in this year's competition
 
         source = new Mat();
