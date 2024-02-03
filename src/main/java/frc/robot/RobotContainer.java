@@ -21,6 +21,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.DashboardVars;
 
 /**
@@ -40,6 +41,7 @@ public class RobotContainer {
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
+    //private final Vision m_vision = new Vision();
     private final DashboardVars m_dashboard = new DashboardVars();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
@@ -126,6 +128,10 @@ public class RobotContainer {
         twelveButton.onTrue(
             m_shooter.testShootStopCommand()
         );
+
+        //topRightButton.onTrue(
+        //    new InstantCommand(() -> m_vision.switchCamera())
+        //);
     }
 
 
