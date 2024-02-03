@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
         shooterMotor2 = new WPI_TalonSRX(4);
         canMotor = new WPI_TalonSRX(7);
  
-        SmartDashboard.putNumber("Speed Slider", 0);
+        SmartDashboard.putNumber("Speed Slider", .22);
     }
     
     //sets shooting motor's voltage to the variable
