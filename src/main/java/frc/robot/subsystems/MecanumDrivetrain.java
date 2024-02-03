@@ -135,28 +135,18 @@ public class MecanumDrivetrain extends SubsystemBase {
     Logging.log(getSubsystem(), "reset gyroscope");
   }
 
-  double autoSpeed = 0.5;
-
-  public void driveAutoGo() {
+  public void driveAuto(double autoSpeed) {
     m_frontLeft.set(autoSpeed);
     m_rearLeft.set(autoSpeed);
     m_frontRight.set(autoSpeed);
     m_rearRight.set(autoSpeed);
   }
 
-  public void driveAutoStop() {
-    m_frontLeft.set(0);
-    m_rearLeft.set(0);
-    m_frontRight.set(0);
-    m_rearRight.set(0);
-
-  }
-
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
-        new InstantCommand(() -> driveAutoGo()),
+        new InstantCommand(() -> driveAuto(0.3)),
         Commands.waitSeconds(driveAutoWait),
-        new InstantCommand(() -> driveAutoStop()));
+        new InstantCommand(() -> driveAuto(0)));
 
     r_command.addRequirements(this);
     return r_command;
