@@ -25,8 +25,8 @@ public class Shooter extends SubsystemBase {
         Logging.log("Shooter:Shooter", "Constuctor");
 
         // sets motors to port number
-        shooterMotor1 = new WPI_TalonSRX(3);
-        shooterMotor2 = new WPI_TalonSRX(4);
+        shooterMotor1 = new WPI_TalonSRX(8);
+        shooterMotor2 = new WPI_TalonSRX(6);
         canMotor = new WPI_TalonSRX(7);
 
         if (Robot.iron_man) {
