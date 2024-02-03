@@ -144,7 +144,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
-        new InstantCommand(() -> driveAuto(0.5)),
+        new InstantCommand(() -> driveAuto(0.3)),
         Commands.waitSeconds(driveAutoWait),
         new InstantCommand(() -> driveAuto(0)));
 
