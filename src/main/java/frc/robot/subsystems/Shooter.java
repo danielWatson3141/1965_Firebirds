@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
+import frc.robot.Robot;
 
 public class Shooter extends SubsystemBase {
 
@@ -17,7 +18,6 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonSRX shooterMotor2;
     private WPI_TalonSRX canMotor;
 
-    private boolean iron_man = true;
     private double shooterTimerTest = 2;
     private double shooterSpeedTest = .22;
 
@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
         shooterMotor2 = new WPI_TalonSRX(4);
         canMotor = new WPI_TalonSRX(7);
 
-        if (iron_man) {
+        if (Robot.iron_man) {
             SmartDashboard.putNumber("Shooter Speed Slider", shooterSpeedTest);
             SmartDashboard.putNumber("Shooter Timer Slider", shooterTimerTest);
         }
@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (iron_man) {
+        if (Robot.iron_man) {
             shooterSpeedTest = SmartDashboard.getNumber("Shooter Speed Slider", 0);
             shooterTimerTest = SmartDashboard.getNumber("Shooter Timer Slider", 0);
         }
