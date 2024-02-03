@@ -156,12 +156,6 @@ public class RobotContainer {
 
     long DRIVE_TIME = 5;
 
-    public void periodic(){
-        POVvalue = m_stick.getPOV();
-        SmartDashboard.putNumber("number", 1);
-        SmartDashboard.getNumber("number", 0);
-    }
-
     public Command getAutonomousCommand() {
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
         //TODO: Put some autonomous code in here

@@ -53,6 +53,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   MecanumDrive m_robotDrive;
 
+  public double testNum;
+
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
    * m_stick.getX(), 0);
@@ -103,6 +105,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     initialRotationValue = 0;
     deadzone = 0.1;
 
+    SmartDashboard.putNumber("number", 1);
   }
 
   // multipliers for values
@@ -177,5 +180,9 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickZ", drive_z);
     setSpeed();
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
+
+    testNum = (SmartDashboard.getNumber("number", 0));
+    int testNumInt = (int)(testNum*100);
+    SmartDashboard.putNumber("theActualTest", ((double)testNumInt)/100.0);
   }
 }
