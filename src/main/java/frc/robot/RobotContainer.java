@@ -118,6 +118,14 @@ public class RobotContainer {
         sevenButton.onTrue(
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
+
+        elevenButton.onTrue(
+            m_shooter.testShootRunCommand()
+        );
+
+        twelveButton.onTrue(
+            m_shooter.testShootStopCommand()
+        );
     }
 
 

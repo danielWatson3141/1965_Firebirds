@@ -19,17 +19,22 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonSRX shooterMotor2;
     private WPI_TalonSRX canMotor;
 
+    public double shooterSpeedTest;
+
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
     
         //sets motors to port number
-        shooterMotor1 = new WPI_TalonSRX(9);
-        shooterMotor2 = new WPI_TalonSRX(8);
+        shooterMotor1 = new WPI_TalonSRX(3);
+        shooterMotor2 = new WPI_TalonSRX(4);
         canMotor = new WPI_TalonSRX(7);
+ 
+        SmartDashboard.putNumber("Speed Slider", 0);
     }
     
     //sets shooting motor's voltage to the variable
-     public void shooterInit() {
+     public void shooterSpinup() {
+        Logging.log(getSubsystem(), "Shooter Speed is " + shooterSpeed);
         shooterMotor1.set(shooterSpeed);
         shooterMotor2.set(shooterSpeed);
     }
@@ -46,15 +51,11 @@ public class Shooter extends SubsystemBase {
         canMotor.set(0);
     }
 
-    public void periodic() {
-        
-    }
-
     public Command getShootCommand(){
         Command r_command = 
         Commands.sequence(
                 //Starts up the shooter motors
-                new InstantCommand(() -> shooterInit()),
+                new InstantCommand(() -> shooterSpinup()),
                 //waits for variable miliseconds
                 Commands.waitSeconds(SHOOTER_TIMER_MS/1000),
                 //Starts can motor
@@ -68,6 +69,19 @@ public class Shooter extends SubsystemBase {
         return r_command;
     }
 
+    public Command testShootRunCommand(){
+        Command r_command = 
+            new InstantCommand(() -> shooterSpinup());
+        r_command.addRequirements(this);
+        return r_command;
+    }
+
+      public Command testShootStopCommand(){
+        Command r_command = 
+            new InstantCommand(() -> shooterStop());
+        r_command.addRequirements(this);
+        return r_command;
+    }
     /*
         VERY IMPORTANT (\0_0)\ 
         This function works by calling the function and putting the desired speed into the requirements.
@@ -78,10 +92,13 @@ public class Shooter extends SubsystemBase {
         shooterSpeed = setSpeed;
         double speedPercentage = shooterSpeed * 100;
 
-        String speed = "speed is at" + speedPercentage + " percent";
+        String speed = "speed is at " + speedPercentage + " percent";
         
-        Logging.log("Shooter:shooterMotorSet", speed);
         SmartDashboard.putNumber("Shooter %", speedPercentage);
     }
 
+    @Override
+    public void periodic() {
+        shooterMotorSet(SmartDashboard.getNumber("Speed Slider", 0));
+    }
 }
