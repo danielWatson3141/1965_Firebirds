@@ -51,9 +51,9 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double drive_y;
   private double drive_z;
 
-  MecanumDrive m_robotDrive;
+  public boolean feildOriantation;
 
-  public double testNum;
+  MecanumDrive m_robotDrive;
 
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
@@ -105,7 +105,8 @@ public class MecanumDrivetrain extends SubsystemBase {
     initialRotationValue = 0;
     deadzone = 0.1;
 
-    SmartDashboard.putNumber("number", 1);
+    SmartDashboard.putBoolean("Feild/Robot", true);
+    SmartDashboard.putNumber("Throttle max%", 100);
   }
 
   // multipliers for values
@@ -114,7 +115,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public void setSpeed() {
     // get percentage from the 4th axis and converts it from 0% - 100%
-    double throttle_value = (-m_stick.getRawAxis(3) + 1) / 2;
+    double throttle_value = ((-m_stick.getRawAxis(3) + 1) / 2) * (SmartDashboard.getNumber("Throttle max%", 100) / 100);
     // sets the sped based on the cap and percentage
     driveSpeed = SPEED_CAP * throttle_value;
     // documents the current percentage of the motors for driver
@@ -180,9 +181,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickZ", drive_z);
     setSpeed();
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
-
-    testNum = (SmartDashboard.getNumber("number", 0));
-    int testNumInt = (int)(testNum*100);
-    SmartDashboard.putNumber("theActualTest", ((double)testNumInt)/100.0);
+    feildOriantation = SmartDashboard.getBoolean("Feild/Robot", true);
   }
 }

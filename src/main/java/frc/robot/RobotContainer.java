@@ -16,13 +16,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.DashboardVars;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.DashboardVars;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -41,8 +38,6 @@ public class RobotContainer {
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
-    //private final Vision m_vision = new Vision();
-    private final DashboardVars m_dashboard = new DashboardVars();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
     private JoystickButton sideButton = new JoystickButton(m_stick, 2);
@@ -128,10 +123,6 @@ public class RobotContainer {
         twelveButton.onTrue(
             m_shooter.testShootStopCommand()
         );
-
-        //topRightButton.onTrue(
-        //    new InstantCommand(() -> m_vision.switchCamera())
-        //);
     }
 
 

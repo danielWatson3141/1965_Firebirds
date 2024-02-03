@@ -12,7 +12,8 @@ import frc.robot.Logging;
 
 public class Shooter extends SubsystemBase {
 
-    final long SHOOTER_TIMER_MS = 2000;
+    final long SHOOTER_TIMER_SEC = 2;
+    public double shooterTimerTest;
     private double shooterSpeed = .5;
 
     private WPI_TalonSRX shooterMotor1;
@@ -29,7 +30,8 @@ public class Shooter extends SubsystemBase {
         shooterMotor2 = new WPI_TalonSRX(4);
         canMotor = new WPI_TalonSRX(7);
  
-        SmartDashboard.putNumber("Speed Slider", .22);
+        SmartDashboard.putNumber("Shooter Speed Slider", .22);
+        SmartDashboard.putNumber("Shooter Timer Slider", 2);
     }
     
     //sets shooting motor's voltage to the variable
@@ -57,11 +59,11 @@ public class Shooter extends SubsystemBase {
                 //Starts up the shooter motors
                 new InstantCommand(() -> shooterSpinup()),
                 //waits for variable miliseconds
-                Commands.waitSeconds(SHOOTER_TIMER_MS/1000),
+                Commands.waitSeconds(SHOOTER_TIMER_SEC),
                 //Starts can motor
                 new InstantCommand(() -> startCan()),
                 //wait for variable miliseconds
-                Commands.waitSeconds(SHOOTER_TIMER_MS/1000),
+                Commands.waitSeconds(SHOOTER_TIMER_SEC),
                 //stop all motors
                 new InstantCommand(() -> shooterStop())
             );
@@ -99,6 +101,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        shooterMotorSet(SmartDashboard.getNumber("Speed Slider", 0));
+        shooterSpeedTest = SmartDashboard.getNumber("Shooter Speed Slider", 0);
+        shooterTimerTest = SmartDashboard.getNumber("Shooter Timer Slider", 2);
     }
 }

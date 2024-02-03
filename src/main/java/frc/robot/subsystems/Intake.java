@@ -19,11 +19,14 @@ public class Intake extends SubsystemBase {
     private boolean sensor1;
     private boolean sensor2;
 
+    public double intakeTimeoutSeconds;
+
     public Intake() {
         motorSpeed = 0.7;
         sensor1 = false;
         sensor2 = false;
 
+        SmartDashboard.putNumber("intakeTimeoutSlider", 5);
     }
 
     //runs the roller motors
@@ -78,7 +81,7 @@ public class Intake extends SubsystemBase {
 
     //useless rn
     public void periodic() {
-
+        intakeTimeoutSeconds = SmartDashboard.getNumber("intakeTimeoutSlider", 5);
     }
 
     /*creates the command; creates a timeout window 5 seconds on the command. starts running the
@@ -90,10 +93,10 @@ public class Intake extends SubsystemBase {
     this subsytem can run while this is going on, and this whole sequence returns the command.
      */
     public Command getIntakeCommand() {
-        Command r_command = new InstantCommand(() -> runRoller()).withTimeout(5).until(this::sensor1State).andThen(
+        Command r_command = new InstantCommand(() -> runRoller()).withTimeout(intakeTimeoutSeconds).until(this::sensor1State).andThen(
 
                 new ConditionalCommand(
-                        new InstantCommand(() -> runIndex()).withTimeout(5).until(this::sensor2State).andThen(
+                        new InstantCommand(() -> runIndex()).withTimeout(intakeTimeoutSeconds).until(this::sensor2State).andThen(
                                 new ConditionalCommand(
                                         new InstantCommand(() -> noteLoaded()),
                                         new InstantCommand(() -> stopIndex()),
