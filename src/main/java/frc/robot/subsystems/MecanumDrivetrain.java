@@ -103,7 +103,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     throttleLimiterY = new SlewRateLimiter(throttleRate);
 
     initialRotationValue = 0;
-    deadzone = 0.1;
+    deadzone = 0.069;
 
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);

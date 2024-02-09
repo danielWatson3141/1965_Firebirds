@@ -14,7 +14,7 @@ public class DualSlew extends SlewRateLimiter {
 
     DualSlew(double positiveRateLimit, double negativeRateLimit, double initialValue) {
         super(positiveRateLimit, negativeRateLimit, initialValue);
-        m_dir = initialValue == 0 ? Dir.ZERO : initialValue > 0 ? Dir.POS : Dir.NEG;
+        m_dir = initialValue == 0 ? Dir.STOP : initialValue > 0 ? Dir.POS : Dir.NEG;
         m_mag = Math.abs(initialValue);
     }
     
@@ -22,7 +22,7 @@ public class DualSlew extends SlewRateLimiter {
     @Override
     public double calculate(double input) {
         // Determine the direction based on the input
-        Dir i_dir = (input == 0) ? Dir.ZERO : (input > 0) ? Dir.POS : Dir.NEG;
+        Dir i_dir = (input == 0) ? Dir.STOP : (input > 0) ? Dir.POS : Dir.NEG;
             
         // Calculate the absolute value of the input
         double i_mag = Math.abs(input);
