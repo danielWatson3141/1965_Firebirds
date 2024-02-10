@@ -53,6 +53,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint;
   private double rSetpointTracker;
   private double rError;
+  private double KpSlider = 1;
   PIDController rotationPID = new PIDController(3, 0, 0);
 
   private double rotationRate = 0.5;
@@ -68,6 +69,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   MecanumDrive m_robotDrive;
 
   public double setPoint;
+
+
 
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
@@ -122,6 +125,9 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Throttle max%", 100);
 
     rotationPID.setTolerance(3);
+
+    //for testing
+    SmartDashboard.putNumber("Kp value", KpSlider);
   }
 
   // multipliers for values
@@ -184,7 +190,17 @@ public class MecanumDrivetrain extends SubsystemBase {
     } else {
       drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
       drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
-      drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+
+      if(m_stick.getRawButtonPressed(2)){
+        drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+      }
+      else {
+        drive_z = 0;
+      }
+
+      if (m_stick.getZ() == STICK_DEADZONE){
+        rSetpoint = m_gyro.getAngle();
+      }
 
       rSetpoint = (rSetpoint + drive_z) % 360;
       rError = (m_gyro.getAngle() - rSetpoint); //* (1/180);
@@ -219,5 +235,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
     SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
     SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
-  }
+
+    //for testng
+    KpSlider = SmartDashboard.getNumber("Kp value", KpSlider);
+    SmartDashboard.putNumber("final Kp value", KpSlider);
+    rotationPID.setP(KpSlider);
+}
 }
