@@ -10,7 +10,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Logging;
 
 public class MecanumDrivetrain extends SubsystemBase {
@@ -27,7 +25,6 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   // public double gyroAngle = m_gyro.getAngle();
 
-  private SlewRateLimiter rotationLimiter;
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
 
@@ -56,6 +53,14 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double KpSlider = 3;
   private PIDController rotationPID = new PIDController(1, 0, 0);
 
+  private double tXError = 0;
+  private double tYError = 0;
+  private double xTranslation = 0;
+  private double yTranslation = 0;
+  private final double SHOOT_DISTANCE = 0;
+  private PIDController translationPID = new PIDController(0.6, 0, 0);
+  
+
   private final double ROTATION_RATE = 0.5;
   private final double TRANSLATION_RATE = 1;
 
@@ -82,7 +87,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_frontRight.setInverted(true);
     m_rearRight.setInverted(true);
 
-    rotationLimiter = new SlewRateLimiter(ROTATION_RATE);
     throttleLimiterX = new SlewRateLimiter(TRANSLATION_RATE);
     throttleLimiterY = new SlewRateLimiter(TRANSLATION_RATE);
 
@@ -148,16 +152,14 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     gyroAngle();
 
-    double drive_x=0;
-    double drive_y=0;
-    double drive_z=0;
+    double drive_x = 0;
+    double drive_y = 0;
+    double drive_z = 0;
 
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
     } else {
-      drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
-      drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
 
       if(m_stick.getRawButton(2)){
         drive_z = (deadzone(m_stick.getZ()));
@@ -171,12 +173,33 @@ public class MecanumDrivetrain extends SubsystemBase {
       // }
 
       rSetpoint = (rSetpoint + drive_z) % 360;
+      tYError =  m_vision.myPosition.getTranslation().getY();
+      xTranslation = m_vision.myPosition.getTranslation().getX();
+      yTranslation = translationPID.calculate(tYError , SHOOT_DISTANCE);
+
+      if (Math.abs(xTranslation)<=1) {
+        tXError = xTranslation;
+      }
+      else {
+        tXError = (xTranslation < 0) ? -1 : 1;
+      }
 
       if(m_vision.myPosition != null && m_stick.getRawButton(3)){
         rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
+        drive_x = translationPID.calculate(tXError , 0); 
+
+        if (Math.abs(yTranslation) <= 1) {
+          drive_y = yTranslation;
+        }
+        else {
+          drive_y = (yTranslation < 0) ? -1 :1;
+        }
+
       }
       else {
         rError = (m_gyro.getAngle() - rSetpoint);
+        drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
+        drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
       }
 
       //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
