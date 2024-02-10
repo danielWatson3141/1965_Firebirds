@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
+import frc.robot.subsystems.PIDMecanum;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -34,7 +35,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Joystick m_stick = new Joystick(0);
 
-    private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
+    private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
@@ -112,9 +113,9 @@ public class RobotContainer {
             m_intake.getIntakeCommand()
         );
 
-        sevenButton.onTrue(
-            new InstantCommand(() -> m_drivetrain.gyroReset())
-        );
+        // sevenButton.onTrue(
+        //     new InstantCommand(() -> m_drivetrain.gyroReset())
+        // );
 
         elevenButton.onTrue(
             m_shooter.testShootRunCommand()
@@ -167,13 +168,13 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
         //TODO: Put some autonomous code in here
-        return m_drivetrain.driveAutoCommand();
+        return null;
     }
 
     public Command getTestCommand () {
      
 
-        return m_drivetrain.driveAutoCommand();
+        return null;
     }
 
 }
