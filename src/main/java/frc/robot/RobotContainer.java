@@ -97,8 +97,9 @@ public class RobotContainer {
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.getShootCommand()));
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
+        m_intake.intakeTab.add(new InstantCommand(() -> m_intake.getIntakeCommand()));
         SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
-        SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
+        // SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
         //SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
         //SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
         // SmartDashboard.putData("Speed Up Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
