@@ -17,15 +17,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
-import frc.robot.Robot;
 
 public class Shooter extends SubsystemBase {
 
-    private double shooterSpeed = .5;
-
     private WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
     private WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
-    private WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
+    private WPI_TalonSRX frontRoller = new WPI_TalonSRX(9);
     private WPI_TalonSRX midRoller = new WPI_TalonSRX(0);
     private DigitalInput top_limit_switch = new DigitalInput(25);
     private DigitalInput bottom_limit_switch = new DigitalInput(28);
@@ -36,34 +33,30 @@ public class Shooter extends SubsystemBase {
     private double m_midRollerSpeed = 0;
 
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab(getName());
-    public final ShuffleboardLayout shooterCommands = shooterTab.getLayout("commands", BuiltInLayouts.kList)
+    public final ShuffleboardLayout shooterCommands = shooterTab.getLayout("Commands", BuiltInLayouts.kList)
         .withSize(1, 2).withPosition(1, 0);
     public final ShuffleboardLayout shooterSliders = shooterTab.getLayout("Sliders", BuiltInLayouts.kList)
         .withSize(1, 2).withPosition(0, 0);
-    private GenericEntry testShooterSpeedSlider = shooterSliders.add("Speed Slider", shooterSpeedTest)
+    private final GenericEntry testShooterSpeedSlider = shooterSliders.add("Speed Slider", shooterSpeedTest)
         .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
         .getEntry();
-    private GenericEntry finalSpeedTest = shooterTab.add("final value", shooterSpeedTest)
+    private final GenericEntry finalSpeedTest = shooterTab.add("final value", shooterSpeedTest)
         .withSize(2, 1).withPosition(2, 0)
         .withWidget(BuiltInWidgets.kNumberBar).withProperties(Map.of("min", 0, "max", 1))
         .getEntry();
-    private GenericEntry testShooterTimer = shooterSliders.add("Timer Slider", shooterTimerTest)
+    private final GenericEntry testShooterTimer = shooterSliders.add("Timer Slider", shooterTimerTest)
         .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
         .getEntry();
-    private GenericEntry shooterSpeedPercent = shooterTab.add("Shooter Speed %", 0)
+    private final GenericEntry shooterSpeedPercent = shooterTab.add("Shooter Speed %", 0)
         .withSize(2, 1).withPosition(2, 1)
         .withWidget(BuiltInWidgets.kNumberBar).withProperties(Map.of("min", 0, "max", 100))
-    .getEntry();
+        .getEntry();
 
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
 
         // dont need to set shooterMotor2 becasue it will follow what shooterMotor1 does
         shooterMotor2.follow(shooterMotor1);
-
-        // sets motors to port number
-        shooterMotor1 = new WPI_TalonSRX(8);
-        shooterMotor2 = new WPI_TalonSRX(6);
     }
 
     public void frontRollerStart(double speed) {
@@ -73,7 +66,10 @@ public class Shooter extends SubsystemBase {
     public void midRollerStart(double speed) {
         midRoller.set(speed);
     }
-
+    public void frontStartFunc() {
+        Logging.log(getName()+":shooterStartFunc", "Speed = " + shooterSpeedTest);
+        frontRollerStart(shooterSpeedTest);
+    }
     public void shooterStart(double speed) {
         shooterMotor1.set(speed);
     }
@@ -88,10 +84,15 @@ public class Shooter extends SubsystemBase {
 
     public void shooterStop() {
         shooterMotor1.stopMotor();
+        setShooterMotor(0.0);
     }
 
     public boolean getTopLimitSwitch() {
         return top_limit_switch.get();
+    }
+
+    public boolean getBottomLimitSwitch() {
+        return bottom_limit_switch.get();
     }
 
     public void Startstate1() {
@@ -105,33 +106,30 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command getShootCommand() {
-        /*
         Command r_command = Commands.sequence(
                 // Starts up the shooter motors
-                new InstantCommand(() -> shooterSpinup()),
+                new InstantCommand(() -> frontStartFunc()),
                 // waits for variable miliseconds
                 Commands.waitSeconds(shooterTimerTest),
                 // Starts can motor
-                new InstantCommand(() -> startCan()),
+                // new InstantCommand(() -> startCan()),
                 // wait for variable miliseconds
                 Commands.waitSeconds(shooterTimerTest),
                 // stop all motors
                 new InstantCommand(() -> shooterStop()));
         r_command.addRequirements(this);
         return r_command;
-        */
-        return null;
     }
 
     public Command testShootRunCommand() {
-        //Command r_command = new InstantCommand(() -> shooterSpinup());
-        //r_command.addRequirements(this);
-        //return r_command;
-        return null;
+        Command r_command = new InstantCommand(() -> frontStartFunc());
+        r_command.addRequirements(this);
+        return r_command;
+        
     }
 
     public Command testShootStopCommand() {
-        Command r_command = new InstantCommand(() -> shooterStop());
+        Command r_command = new InstantCommand(() -> frontRollerStop());
         r_command.addRequirements(this);
         return r_command;
     }
@@ -143,14 +141,10 @@ public class Shooter extends SubsystemBase {
      * It will not work if you do "motorSet()"
      * It HAS to have a value like "motorSet(.2)"
      */
-    /*
-    public void shooterMotorSet(double setSpeed) {
-        shooterSpeed = setSpeed;
-        double speedPercentage = shooterSpeed * 100;
-
+    public void setShooterMotor(double speed) {
+        double speedPercentage = speed * 100;
         shooterSpeedPercent.setDouble(speedPercentage);
     }
-    */
 
     @Override
     public void periodic() {

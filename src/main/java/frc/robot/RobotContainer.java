@@ -132,13 +132,13 @@ public class RobotContainer {
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
 
-        // elevenButton.onTrue(
-        //     m_shooter.testShootRunCommand()
-        // );
+         elevenButton.onTrue(
+             m_shooter.testShootRunCommand()
+         );
 
-        // twelveButton.onTrue(
-        //     m_shooter.testShootStopCommand()
-        // );
+         twelveButton.onTrue(
+             m_shooter.testShootStopCommand()
+         );
     }
 
 
