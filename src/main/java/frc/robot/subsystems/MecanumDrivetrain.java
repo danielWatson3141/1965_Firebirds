@@ -30,7 +30,6 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
 
-  private double initialRotationValue;
   private final double STICK_DEADZONE = 0.08;
   private final double ROTATION_TOLERANCE = 3; //degrees
   // private double locationX = 0.2794;
@@ -50,9 +49,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   RelativeEncoder m_rearLeftEncoder = m_rearLeft.getEncoder();
   RelativeEncoder m_frontRightEncoder = m_frontRight.getEncoder();
   RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
-  private double rSetpoint;
-  private double rSetpointTracker;
-  private double rError;
+  private double rSetpoint = 0;
+  private double rError = 0;
   private double KpSlider = 3;
   PIDController rotationPID = new PIDController(3, 0, 0);
 
@@ -66,36 +64,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public boolean fieldRelative = true;
 
-  MecanumDrive m_robotDrive;
+  MecanumDrive m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
   public double setPoint;
 
-
-
-  /*
-   * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
-   * m_stick.getX(), 0);
-   * 
-   * Translation2d m_frontLeftLocation = new Translation2d(locationX, locationY);
-   * Translation2d m_frontRightLocation = new Translation2d(locationX,
-   * -locationY);
-   * Translation2d m_rearLeftLocation = new Translation2d(-locationX, locationY);
-   * Translation2d m_rearRightLocation = new Translation2d(-locationX,
-   * -locationY);
-   * 
-   * MecanumDriveKinematics m_kinematics = new
-   * MecanumDriveKinematics(m_frontLeftLocation, m_frontRightLocation,
-   * m_rearLeftLocation, m_rearRightLocation);
-   * 
-   * 
-   * ChassisSpeeds speeds = new ChassisSpeeds(1.0, 3.0, 1.5);
-   * MecanumDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
-   * 
-   * double frontLeft = wheelSpeeds.frontLeftMetersPerSecond;
-   * double frontRight = wheelSpeeds.frontRightMetersPerSecond;
-   * double backLeft = wheelSpeeds.rearLeftMetersPerSecond;
-   * double backRight = wheelSpeeds.rearRightMetersPerSecond;
-   */
 
   public MecanumDrivetrain(Joystick input_stick) {
 
@@ -103,8 +75,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_rearLeft.setIdleMode(IdleMode.kBrake);
     m_frontRight.setIdleMode(IdleMode.kBrake);
     m_rearRight.setIdleMode(IdleMode.kBrake);
-
-    m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
     m_stick = input_stick;
 
@@ -115,16 +85,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     throttleLimiterX = new SlewRateLimiter(throttleRate);
     throttleLimiterY = new SlewRateLimiter(throttleRate);
 
-    initialRotationValue = 0;
-
-    rSetpoint = 0;
-    rSetpointTracker = 0;
-    rError = 0;
-
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
 
-    rotationPID.setTolerance(3);
+    rotationPID.setTolerance(ROTATION_TOLERANCE);
 
     //for testing
     SmartDashboard.putNumber("Kp value", KpSlider);
@@ -182,7 +146,6 @@ public class MecanumDrivetrain extends SubsystemBase {
   public void drive() {
 
     gyroAngle();
-
 
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
