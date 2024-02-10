@@ -42,7 +42,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint;
   private double rSetpointTracker;
   private double rError;
-  PIDController rotationPID = new PIDController((1/180), 0, 0);
+  PIDController rotationPID = new PIDController(1, 0, 0);
 
   CANSparkMax m_frontLeft;
   CANSparkMax m_rearLeft;
@@ -173,7 +173,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     gyroAngle();
     rSetpoint = (rSetpointTracker + drive_z) % 360;
-    rError = m_gyro.getAngle() - rSetpoint;
+    rError = (m_gyro.getAngle() - rSetpoint) * (1/180);
 
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
