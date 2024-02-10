@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -54,6 +55,10 @@ public class MecanumDrivetrain extends SubsystemBase {
   public boolean feildOriantation;
 
   MecanumDrive m_robotDrive;
+
+  public final PIDController rotatPID = new PIDController(1, 0, 0);
+
+  public double setPoint;
 
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),

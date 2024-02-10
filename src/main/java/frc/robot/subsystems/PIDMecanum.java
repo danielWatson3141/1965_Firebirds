@@ -49,6 +49,12 @@ public class PIDMecanum extends SubsystemBase {
   private final PIDController m_backLeftPIDController = new PIDController(1, 0, 0);
   private final PIDController m_backRightPIDController = new PIDController(1, 0, 0);
 
+  //for testing
+    private PIDController testPIDController = new PIDController(1, 0, 0);
+    private double testKp = 1;
+    private double setPointSlider = 360;
+    private double testPos = 0;
+
   private final AnalogGyro m_gyro = new AnalogGyro(0);
 
   public double driveSpeed;
@@ -75,6 +81,10 @@ public class PIDMecanum extends SubsystemBase {
     // gearbox is constructed, you might have to invert the left side instead.
     m_frontRightMotor.setInverted(true);
     m_backRightMotor.setInverted(true);
+
+    //for testing
+    SmartDashboard.putNumber("testKp", testKp);
+    SmartDashboard.putNumber("setPointSlider", setPointSlider);
   }
 
   /**
@@ -170,5 +180,14 @@ public class PIDMecanum extends SubsystemBase {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(m_gyro.getRotation2d(), getCurrentDistances());
+  }
+
+  public void periodic() {
+    //for testing
+    setPointSlider = SmartDashboard.getNumber("setPointSlider", setPointSlider);
+    SmartDashboard.putNumber("calculated value", testPIDController.calculate(testPos, setPointSlider));
+    testPos =+ testPIDController.calculate(testPos, setPointSlider);
+    SmartDashboard.putNumber("testPos", testPos);
+    SmartDashboard.putNumber("setPointSlider", setPointSlider);
   }
 }
