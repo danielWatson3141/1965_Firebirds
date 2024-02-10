@@ -119,8 +119,13 @@ public class RobotContainer {
         triggerButton.onTrue(        
             m_shooter.getShootCommand()
         );
+
         sideButton.onTrue(
             m_intake.getIntakeCommand()
+        );
+
+        sevenButton.onTrue(
+            new InstantCommand(() -> m_lifter.toggleLifter())
         );
 
         eightButton.onTrue(
