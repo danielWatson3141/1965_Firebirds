@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -19,14 +21,23 @@ public class Intake extends SubsystemBase {
     private boolean sensor1;
     private boolean sensor2;
 
-    public double intakeTimeoutSeconds;
+    public double intakeTimeoutSeconds = 5;
+
+    public final ShuffleboardTab intakeTab = Shuffleboard.getTab(getName());
+    private GenericEntry intakeTimeoutEntry = intakeTab.add("Timeout Slider", intakeTimeoutSeconds)
+        .withSize(2, 1) 
+        .withPosition(0, 0)
+    .getEntry();
+    private GenericEntry noteLoadEntry = intakeTab.add("Note Load", false)
+        .withSize(1, 1)
+        .withPosition(0, 1)
+    .getEntry();
+
 
     public Intake() {
         motorSpeed = 0.7;
         sensor1 = false;
         sensor2 = false;
-
-        SmartDashboard.putNumber("intakeTimeoutSlider", 5);
     }
 
     //runs the roller motors
@@ -70,7 +81,7 @@ public class Intake extends SubsystemBase {
     //places a smartdashboard message up telling the driver the note is ready to shoot
     //kills the index motor
     public void noteLoaded() {
-        SmartDashboard.putBoolean("noteLoaded", sensor2 == true);
+        noteLoadEntry.setBoolean(sensor2 == true);
         stopIndex();
     }
 
@@ -81,7 +92,7 @@ public class Intake extends SubsystemBase {
 
     //useless rn
     public void periodic() {
-        intakeTimeoutSeconds = SmartDashboard.getNumber("intakeTimeoutSlider", 5);
+        intakeTimeoutSeconds = intakeTimeoutEntry.getDouble(intakeTimeoutSeconds);
     }
 
     /*creates the command; creates a timeout window 5 seconds on the command. starts running the

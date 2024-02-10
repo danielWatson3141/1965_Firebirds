@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -53,7 +54,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint = 0;
   private double rError = 0;
   private double KpSlider = 3;
-  PIDController rotationPID = new PIDController(3, 0, 0);
+  private PIDController rotationPID = new PIDController(1, 0, 0);
 
   private final double ROTATION_RATE = 0.5;
   private final double TRANSLATION_RATE = 1;
@@ -67,6 +68,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public double setPoint;
 
+  //private final Vision m_vision = new Vision();
 
   public MecanumDrivetrain(Joystick input_stick) {
 
@@ -169,7 +171,14 @@ public class MecanumDrivetrain extends SubsystemBase {
       // }
 
       rSetpoint = (rSetpoint + drive_z) % 360;
-      rError = (m_gyro.getAngle() - rSetpoint); //* (1/180);
+
+      // if(m_vision.myPosition != null && m_stick.getRawButton(3)){
+      //   rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
+      // }
+      // else {
+        rError = (m_gyro.getAngle() - rSetpoint);
+      // }
+
       //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
       m_robotDrive.driveCartesian(
         drive_y,
@@ -178,11 +187,11 @@ public class MecanumDrivetrain extends SubsystemBase {
         fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0)
         );
 
-    }
-
     SmartDashboard.putNumber("stickX", drive_x);
     SmartDashboard.putNumber("stickY", drive_y);
     SmartDashboard.putNumber("stickZ", drive_z);
+
+    }
 
   }
 
