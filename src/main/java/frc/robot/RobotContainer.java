@@ -95,8 +95,8 @@ public class RobotContainer {
         ta = table.getEntry("ta");
 
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.getShootCommand()));
-        m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
-        m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
+        // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
+        // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
         m_intake.intakeTab.add(new InstantCommand(() -> m_intake.getIntakeCommand()));
         SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
         // SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
@@ -116,9 +116,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
 
-        triggerButton.onTrue(        
-            m_shooter.getShootCommand()
-        );
+        // triggerButton.onTrue(        
+        //     m_shooter.getShootCommand()
+        // );
 
         sideButton.onTrue(
             m_intake.getIntakeCommand()
@@ -132,13 +132,13 @@ public class RobotContainer {
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
 
-        elevenButton.onTrue(
-            m_shooter.testShootRunCommand()
-        );
+        // elevenButton.onTrue(
+        //     m_shooter.testShootRunCommand()
+        // );
 
-        twelveButton.onTrue(
-            m_shooter.testShootStopCommand()
-        );
+        // twelveButton.onTrue(
+        //     m_shooter.testShootStopCommand()
+        // );
     }
 
 

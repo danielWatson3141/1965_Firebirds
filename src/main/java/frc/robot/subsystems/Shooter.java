@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -22,12 +23,17 @@ public class Shooter extends SubsystemBase {
 
     private double shooterSpeed = .5;
 
-    private WPI_TalonSRX shooterMotor1;
-    private WPI_TalonSRX shooterMotor2;
-    private WPI_TalonSRX canMotor;
+    private WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
+    private WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
+    private WPI_TalonSRX frontRoller = new WPI_TalonSRX(69);
+    private WPI_TalonSRX midRoller = new WPI_TalonSRX(0);
+    private DigitalInput top_limit_switch = new DigitalInput(25);
+    private DigitalInput bottom_limit_switch = new DigitalInput(28);
 
     private double shooterTimerTest = 2;
     private double shooterSpeedTest = .22;
+    private double m_frontRollerSpeed = 0;
+    private double m_midRollerSpeed = 0;
 
     public final ShuffleboardTab shooterTab = Shuffleboard.getTab(getName());
     public final ShuffleboardLayout shooterCommands = shooterTab.getLayout("commands", BuiltInLayouts.kList)
@@ -52,32 +58,54 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
 
+        // dont need to set shooterMotor2 becasue it will follow what shooterMotor1 does
+        shooterMotor2.follow(shooterMotor1);
+
         // sets motors to port number
         shooterMotor1 = new WPI_TalonSRX(8);
         shooterMotor2 = new WPI_TalonSRX(6);
-        canMotor = new WPI_TalonSRX(7);
     }
 
-    // sets shooting motor's voltage to the variable
-    public void shooterSpinup() {
-        Logging.log(getSubsystem(), "Shooter Speed is " + shooterSpeed);
-        shooterMotor1.set(shooterSpeed);
-        shooterMotor2.set(shooterSpeed);
+    public void frontRollerStart(double speed) {
+        frontRoller.set(speed);
     }
 
-    // sets the can motor's votage to the variable
-    public void startCan() {
-        canMotor.set(shooterSpeed);
+    public void midRollerStart(double speed) {
+        midRoller.set(speed);
     }
 
-    // stops all motors
+    public void shooterStart(double speed) {
+        shooterMotor1.set(speed);
+    }
+
+    public void frontRollerStop() {
+        frontRoller.stopMotor();
+    }
+
+    public void midRollerStop() {
+        midRoller.stopMotor();
+    }
+
     public void shooterStop() {
-        shooterMotor1.set(0);
-        shooterMotor2.set(0);
-        canMotor.set(0);
+        shooterMotor1.stopMotor();
+    }
+
+    public boolean getTopLimitSwitch() {
+        return top_limit_switch.get();
+    }
+
+    public void Startstate1() {
+        frontRollerStart(m_frontRollerSpeed);
+        midRollerStart(m_midRollerSpeed);
+    }
+
+    public void Stopstate1() {
+        frontRollerStop();
+        midRollerStop();
     }
 
     public Command getShootCommand() {
+        /*
         Command r_command = Commands.sequence(
                 // Starts up the shooter motors
                 new InstantCommand(() -> shooterSpinup()),
@@ -91,12 +119,15 @@ public class Shooter extends SubsystemBase {
                 new InstantCommand(() -> shooterStop()));
         r_command.addRequirements(this);
         return r_command;
+        */
+        return null;
     }
 
     public Command testShootRunCommand() {
-        Command r_command = new InstantCommand(() -> shooterSpinup());
-        r_command.addRequirements(this);
-        return r_command;
+        //Command r_command = new InstantCommand(() -> shooterSpinup());
+        //r_command.addRequirements(this);
+        //return r_command;
+        return null;
     }
 
     public Command testShootStopCommand() {
@@ -112,17 +143,22 @@ public class Shooter extends SubsystemBase {
      * It will not work if you do "motorSet()"
      * It HAS to have a value like "motorSet(.2)"
      */
+    /*
     public void shooterMotorSet(double setSpeed) {
         shooterSpeed = setSpeed;
         double speedPercentage = shooterSpeed * 100;
 
         shooterSpeedPercent.setDouble(speedPercentage);
     }
+    */
 
     @Override
     public void periodic() {
         finalSpeedTest.setDouble(testShooterSpeedSlider.getDouble(shooterSpeedTest));
         shooterSpeedTest = testShooterSpeedSlider.getDouble(shooterSpeedTest);
         shooterTimerTest = testShooterTimer.getDouble(shooterTimerTest);
+        m_frontRollerSpeed = SmartDashboard.getNumber("frontRollerSpeed", 5);
+        m_midRollerSpeed = SmartDashboard.getNumber("midRollerSpeed", 5);
     }
+
 }
