@@ -50,11 +50,7 @@ public class PIDMecanum extends SubsystemBase {
   private final PIDController m_backLeftPIDController = new PIDController(1, 0, 0);
   private final PIDController m_backRightPIDController = new PIDController(1, 0, 0);
 
-  //for testing
-    private PIDController testPIDController = new PIDController(1, 0, 0);
-    private double testKp = 1;
-    private double setPointSlider = 360;
-    private double testPos = 0;
+
 
   private final AnalogGyro m_gyro = new AnalogGyro(0);
 
@@ -89,9 +85,6 @@ public class PIDMecanum extends SubsystemBase {
     m_rearLeftEncoder.setPositionConversionFactor(VELOCITY_CONVERSION_FACTOR);
     m_frontRightEncoder.setVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
     m_rearRightEncoder.setVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
-    //for testing
-    SmartDashboard.putNumber("testKp", testKp);
-    SmartDashboard.putNumber("setPointSlider", setPointSlider);
   }
 
   /**
