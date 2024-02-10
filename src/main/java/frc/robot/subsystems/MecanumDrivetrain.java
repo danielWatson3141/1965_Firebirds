@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -48,6 +49,10 @@ public class MecanumDrivetrain extends SubsystemBase {
   RelativeEncoder m_rearLeftEncoder = m_rearLeft.getEncoder();
   RelativeEncoder m_frontRightEncoder = m_frontRight.getEncoder();
   RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
+  private double rSetpoint;
+  private double rSetpointTracker;
+  private double rError;
+  PIDController rotationPID = new PIDController(1, 0, 0);
 
   private double rotationRate = 0.5;
   private double throttleRate = 0.5;
@@ -57,9 +62,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double drive_y;
   private double drive_z;
 
-  public boolean feildOriantation;
+  public boolean fieldOrientation;
 
   MecanumDrive m_robotDrive;
+
+  public double setPoint;
 
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
@@ -107,6 +114,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     initialRotationValue = 0;
     deadzone = 0.069;
 
+    rSetpoint = 0;
+    rSetpointTracker = 0;
+    rError = 0;
+
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
   }
@@ -133,7 +144,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public Rotation2d gyroAngle() {
-    return m_gyro.getRotation2d();
+    gyroAngle = m_gyro.getRotation2d().times(-1);
+    return gyroAngle;
   }
 
   public void gyroReset() {
@@ -159,6 +171,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public void drive() {
+
+    gyroAngle();
+    rSetpoint = (rSetpointTracker + drive_z) % 360;
+    rError = (m_gyro.getAngle() - rSetpoint) * (1/180);
+
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
@@ -166,14 +183,16 @@ public class MecanumDrivetrain extends SubsystemBase {
       drive_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
       drive_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
       drive_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
-
       //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
       m_robotDrive.driveCartesian(
         drive_y,
         drive_x,
-        drive_z,
-        m_gyro.getRotation2d().times(-1));
+        rotationPID.calculate(rError, 0),
+        gyroAngle
+        );
+
     }
+
   }
 
   @Override
@@ -181,9 +200,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickX", drive_x);
     SmartDashboard.putNumber("stickY", drive_z);
     SmartDashboard.putNumber("stickZ", drive_z);
+
     setSpeed();
+
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
-    feildOriantation = SmartDashboard.getBoolean("Feild/Robot", true);
+    fieldOrientation = SmartDashboard.getBoolean("Feild/Robot", true);
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
