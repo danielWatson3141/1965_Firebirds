@@ -38,6 +38,9 @@ public class MecanumDrivetrain extends SubsystemBase {
   Rotation2d gyroAngle;
   Rotation2d POVvalue;
 
+  double rSetpoint;
+  double rSetpointTracker;
+
   CANSparkMax m_frontLeft;
   CANSparkMax m_rearLeft;
   CANSparkMax m_frontRight;
@@ -105,6 +108,9 @@ public class MecanumDrivetrain extends SubsystemBase {
     initialRotationValue = 0;
     deadzone = 0.069;
 
+    rSetpoint = 0;
+    rSetpointTracker = 0;
+
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
   }
@@ -131,7 +137,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public Rotation2d gyroAngle() {
-    return m_gyro.getRotation2d();
+    gyroAngle = m_gyro.getRotation2d().times(-1);
+    return gyroAngle;
   }
 
   public void gyroReset() {
@@ -164,14 +171,18 @@ public class MecanumDrivetrain extends SubsystemBase {
       drive_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
       drive_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
       drive_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
-
       //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
       m_robotDrive.driveCartesian(
         drive_y,
         drive_x,
         drive_z,
-        m_gyro.getRotation2d().times(-1));
+        gyroAngle()
+        );
+
+      rSetpoint = (rSetpointTracker + drive_z) % 360;
+
     }
+
   }
 
   @Override
