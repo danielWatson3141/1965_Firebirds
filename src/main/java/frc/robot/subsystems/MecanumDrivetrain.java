@@ -31,7 +31,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterY;
 
   private double initialRotationValue;
-  private double deadzone;
+  private final double STICK_DEADZONE = 0.08;
+  private final double ROTATION_TOLERANCE = 3; //degrees
   // private double locationX = 0.2794;
   // private double locationY = 0.3048;
 
@@ -52,7 +53,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint;
   private double rSetpointTracker;
   private double rError;
-  PIDController rotationPID = new PIDController(1, 0, 0);
+  PIDController rotationPID = new PIDController(3, 0, 0);
 
   private double rotationRate = 0.5;
   private double throttleRate = 0.5;
@@ -112,7 +113,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     throttleLimiterY = new SlewRateLimiter(throttleRate);
 
     initialRotationValue = 0;
-    deadzone = 0.069;
 
     rSetpoint = 0;
     rSetpointTracker = 0;
@@ -120,6 +120,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
+
+    rotationPID.setTolerance(3);
   }
 
   // multipliers for values
@@ -135,11 +137,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Drive %", throttle_value * 100);
   }
 
-  public void setRotationValue() {
-    if (m_stick.getZ() < deadzone && m_stick.getZ() > -deadzone) {
-      initialRotationValue = 0;
+  public double deadzone(double input) {
+    if (Math.abs(input) < STICK_DEADZONE) {
+      return 0;
     } else {
-      initialRotationValue = m_stick.getZ();
+      return input;
     }
   }
 
@@ -150,6 +152,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public void gyroReset() {
     m_gyro.reset();
+    rSetpoint = 0;
     Logging.log(getSubsystem(), "reset gyroscope");
   }
 
@@ -173,21 +176,23 @@ public class MecanumDrivetrain extends SubsystemBase {
   public void drive() {
 
     gyroAngle();
-    rSetpoint = (rSetpointTracker + drive_z) % 360;
-    rError = (m_gyro.getAngle() - rSetpoint) * (1/180);
+
 
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
     } else {
-      drive_x = throttleLimiterX.calculate(m_stick.getX()) * driveSpeed;
-      drive_y = throttleLimiterY.calculate(-m_stick.getY()) * driveSpeed;
-      drive_z = rotationLimiter.calculate(m_stick.getZ()) * driveSpeed;
+      drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
+      drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
+      drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+
+      rSetpoint = (rSetpoint + drive_z) % 360;
+      rError = (m_gyro.getAngle() - rSetpoint); //* (1/180);
       //Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z to driveCartesian on purpose.
       m_robotDrive.driveCartesian(
         drive_y,
         drive_x,
-        rotationPID.calculate(rError, 0),
+        rotationPID.calculate(rError, 0) / 180,
         gyroAngle
         );
 
@@ -198,16 +203,16 @@ public class MecanumDrivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("stickX", drive_x);
-    SmartDashboard.putNumber("stickY", drive_z);
+    SmartDashboard.putNumber("stickY", drive_y);
     SmartDashboard.putNumber("stickZ", drive_z);
 
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
-    SmartDashboard.putNumber("rotation setpoint", rError);
-    SmartDashboard.putNumber("rotation setpoint", rotationPID.calculate(rError, 0));
+    SmartDashboard.putNumber("rotation error", rError);
+    SmartDashboard.putNumber("rotation PID", rotationPID.calculate(rError, 0));
 
     setSpeed();
 
-    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
+    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() * -1);
     fieldOrientation = SmartDashboard.getBoolean("Feild/Robot", true);
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());

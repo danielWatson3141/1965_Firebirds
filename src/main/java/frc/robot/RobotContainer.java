@@ -119,9 +119,9 @@ public class RobotContainer {
             m_intake.getIntakeCommand()
         );
 
-        // sevenButton.onTrue(
-        //     new InstantCommand(() -> m_drivetrain.gyroReset())
-        // );
+        eightButton.onTrue(
+            new InstantCommand(() -> m_drivetrain.gyroReset())
+        );
 
         elevenButton.onTrue(
             m_shooter.testShootRunCommand()
