@@ -41,8 +41,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   private double rSetpoint;
   private double rSetpointTracker;
-  private PIDController rotationPID;
   private double rError;
+  PIDController rotationPID = new PIDController((1/180), 0, 0);
 
   CANSparkMax m_frontLeft;
   CANSparkMax m_rearLeft;
@@ -60,8 +60,6 @@ public class MecanumDrivetrain extends SubsystemBase {
   public boolean fieldOrientation;
 
   MecanumDrive m_robotDrive;
-
-  public final PIDController rotatPID = new PIDController(1, 0, 0);
 
   public double setPoint;
 
@@ -118,8 +116,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     rSetpoint = 0;
     rSetpointTracker = 0;
     rError = 0;
-
-    PIDController rotationPID = new PIDController((1/180), 0, 0);
 
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
