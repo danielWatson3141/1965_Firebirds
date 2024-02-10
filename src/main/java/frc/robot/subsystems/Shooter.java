@@ -1,7 +1,15 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -21,6 +29,26 @@ public class Shooter extends SubsystemBase {
     private double shooterTimerTest = 2;
     private double shooterSpeedTest = .22;
 
+    public final ShuffleboardTab shooterTab = Shuffleboard.getTab(getName());
+    public final ShuffleboardLayout shooterCommands = shooterTab.getLayout("commands", BuiltInLayouts.kList)
+        .withSize(1, 2).withPosition(1, 0);
+    public final ShuffleboardLayout shooterSliders = shooterTab.getLayout("Sliders", BuiltInLayouts.kList)
+        .withSize(1, 2).withPosition(0, 0);
+    private GenericEntry testShooterSpeedSlider = shooterSliders.add("Speed Slider", shooterSpeedTest)
+        .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
+        .getEntry();
+    private GenericEntry finalSpeedTest = shooterTab.add("final value", shooterSpeedTest)
+        .withSize(2, 1).withPosition(2, 0)
+        .withWidget(BuiltInWidgets.kNumberBar).withProperties(Map.of("min", 0, "max", 1))
+        .getEntry();
+    private GenericEntry testShooterTimer = shooterSliders.add("Timer Slider", shooterTimerTest)
+        .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1))
+        .getEntry();
+    private GenericEntry shooterSpeedPercent = shooterTab.add("Shooter Speed %", 0)
+        .withSize(2, 1).withPosition(2, 1)
+        .withWidget(BuiltInWidgets.kNumberBar).withProperties(Map.of("min", 0, "max", 100))
+    .getEntry();
+
     public Shooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
 
@@ -28,11 +56,6 @@ public class Shooter extends SubsystemBase {
         shooterMotor1 = new WPI_TalonSRX(8);
         shooterMotor2 = new WPI_TalonSRX(6);
         canMotor = new WPI_TalonSRX(7);
-
-        if (Robot.iron_man) {
-            SmartDashboard.putNumber("Shooter Speed Slider", shooterSpeedTest);
-            SmartDashboard.putNumber("Shooter Timer Slider", shooterTimerTest);
-        }
     }
 
     // sets shooting motor's voltage to the variable
@@ -93,14 +116,13 @@ public class Shooter extends SubsystemBase {
         shooterSpeed = setSpeed;
         double speedPercentage = shooterSpeed * 100;
 
-        SmartDashboard.putNumber("Shooter %", speedPercentage);
+        shooterSpeedPercent.setDouble(speedPercentage);
     }
 
     @Override
     public void periodic() {
-        if (Robot.iron_man) {
-            shooterSpeedTest = SmartDashboard.getNumber("Shooter Speed Slider", 0);
-            shooterTimerTest = SmartDashboard.getNumber("Shooter Timer Slider", 0);
-        }
+        finalSpeedTest.setDouble(testShooterSpeedSlider.getDouble(shooterSpeedTest));
+        shooterSpeedTest = testShooterSpeedSlider.getDouble(shooterSpeedTest);
+        shooterTimerTest = testShooterTimer.getDouble(shooterTimerTest);
     }
 }
