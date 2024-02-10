@@ -49,18 +49,17 @@ public class MecanumDrivetrain extends SubsystemBase {
   RelativeEncoder m_rearLeftEncoder = m_rearLeft.getEncoder();
   RelativeEncoder m_frontRightEncoder = m_frontRight.getEncoder();
   RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
+
   private double rSetpoint = 0;
   private double rError = 0;
   private double KpSlider = 3;
   PIDController rotationPID = new PIDController(3, 0, 0);
 
-  private double rotationRate = 0.5;
-  private double throttleRate = 1;
-  private long driveAutoWait = 3000;
+  private final double ROTATION_RATE = 0.5;
+  private final double TRANSLATION_RATE = 1;
 
-  private double drive_x;
-  private double drive_y;
-  private double drive_z;
+  private final long DRIVE_AUTO_WAIT = 500;//fast speed for initial testing
+  private final double DRIVE_AUTO_SPEED = 0.2;
 
   public boolean fieldRelative = true;
 
@@ -81,9 +80,9 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_frontRight.setInverted(true);
     m_rearRight.setInverted(true);
 
-    rotationLimiter = new SlewRateLimiter(rotationRate);
-    throttleLimiterX = new SlewRateLimiter(throttleRate);
-    throttleLimiterY = new SlewRateLimiter(throttleRate);
+    rotationLimiter = new SlewRateLimiter(ROTATION_RATE);
+    throttleLimiterX = new SlewRateLimiter(TRANSLATION_RATE);
+    throttleLimiterY = new SlewRateLimiter(TRANSLATION_RATE);
 
     SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
@@ -135,8 +134,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
-        new InstantCommand(() -> driveAuto(0.3)),
-        Commands.waitSeconds(driveAutoWait),
+        new InstantCommand(() -> driveAuto(DRIVE_AUTO_SPEED)),
+        Commands.waitSeconds(DRIVE_AUTO_WAIT),
         new InstantCommand(() -> driveAuto(0)));
 
     r_command.addRequirements(this);
@@ -146,6 +145,10 @@ public class MecanumDrivetrain extends SubsystemBase {
   public void drive() {
 
     gyroAngle();
+
+    double drive_x=0;
+    double drive_y=0;
+    double drive_z=0;
 
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
@@ -177,13 +180,14 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     }
 
+    SmartDashboard.putNumber("stickX", drive_x);
+    SmartDashboard.putNumber("stickY", drive_y);
+    SmartDashboard.putNumber("stickZ", drive_z);
+
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("stickX", drive_x);
-    SmartDashboard.putNumber("stickY", drive_y);
-    SmartDashboard.putNumber("stickZ", drive_z);
 
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
