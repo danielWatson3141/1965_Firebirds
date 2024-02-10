@@ -53,18 +53,18 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint;
   private double rSetpointTracker;
   private double rError;
-  private double KpSlider = 1;
+  private double KpSlider = 3;
   PIDController rotationPID = new PIDController(3, 0, 0);
 
   private double rotationRate = 0.5;
-  private double throttleRate = 0.5;
+  private double throttleRate = 1;
   private long driveAutoWait = 3000;
 
   private double drive_x;
   private double drive_y;
   private double drive_z;
 
-  public boolean fieldOrientation;
+  public boolean fieldRelative = true;
 
   MecanumDrive m_robotDrive;
 
@@ -191,16 +191,16 @@ public class MecanumDrivetrain extends SubsystemBase {
       drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
       drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
 
-      if(m_stick.getRawButtonPressed(2)){
-        drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+      if(m_stick.getRawButton(2)){
+        drive_z = (deadzone(m_stick.getZ()));
       }
       else {
         drive_z = 0;
       }
 
-      if (m_stick.getZ() == STICK_DEADZONE){
-        rSetpoint = m_gyro.getAngle();
-      }
+      // if (deadzone(drive_z) == 0){
+      //   rSetpoint = m_gyro.getAngle();
+      // }
 
       rSetpoint = (rSetpoint + drive_z) % 360;
       rError = (m_gyro.getAngle() - rSetpoint); //* (1/180);
@@ -209,7 +209,7 @@ public class MecanumDrivetrain extends SubsystemBase {
         drive_y,
         drive_x,
         rotationPID.calculate(rError, 0) / 180,
-        gyroAngle
+        fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0)
         );
 
     }
@@ -229,7 +229,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     setSpeed();
 
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() * -1);
-    fieldOrientation = SmartDashboard.getBoolean("Feild/Robot", true);
+    fieldRelative = SmartDashboard.getBoolean("Feild/Robot", true);
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
