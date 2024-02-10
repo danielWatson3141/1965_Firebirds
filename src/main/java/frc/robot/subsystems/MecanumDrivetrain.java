@@ -201,6 +201,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("stickY", drive_z);
     SmartDashboard.putNumber("stickZ", drive_z);
 
+    SmartDashboard.putNumber("rotation setpoint", rSetpoint);
+    SmartDashboard.putNumber("rotation setpoint", rError);
+    SmartDashboard.putNumber("rotation setpoint", rotationPID.calculate(rError, 0));
+
     setSpeed();
 
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
