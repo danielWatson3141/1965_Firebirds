@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -38,10 +39,15 @@ public class MecanumDrivetrain extends SubsystemBase {
   Rotation2d gyroAngle;
   Rotation2d POVvalue;
 
-  CANSparkMax m_frontLeft;
-  CANSparkMax m_rearLeft;
-  CANSparkMax m_frontRight;
-  CANSparkMax m_rearRight;
+  CANSparkMax m_frontLeft =  new CANSparkMax(1, MotorType.kBrushless);
+  CANSparkMax m_rearLeft = new CANSparkMax(2, MotorType.kBrushless);
+  CANSparkMax m_frontRight =  new CANSparkMax(3, MotorType.kBrushless);
+  CANSparkMax m_rearRight =  new CANSparkMax(4, MotorType.kBrushless);
+
+  RelativeEncoder m_frontLeftEncoder = m_frontLeft.getEncoder();
+  RelativeEncoder m_rearLeftEncoder = m_rearLeft.getEncoder();
+  RelativeEncoder m_frontRightEncoder = m_frontRight.getEncoder();
+  RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
 
   private double rotationRate = 0.5;
   private double throttleRate = 0.5;
@@ -81,10 +87,6 @@ public class MecanumDrivetrain extends SubsystemBase {
    */
 
   public MecanumDrivetrain(Joystick input_stick) {
-    m_frontLeft = new CANSparkMax(1, MotorType.kBrushless);
-    m_rearLeft =  new CANSparkMax(2, MotorType.kBrushless);
-    m_frontRight =  new CANSparkMax(3, MotorType.kBrushless);
-    m_rearRight =  new CANSparkMax(4, MotorType.kBrushless);
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
@@ -182,5 +184,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     setSpeed();
     SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
     feildOriantation = SmartDashboard.getBoolean("Feild/Robot", true);
+
+    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
+    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
   }
 }

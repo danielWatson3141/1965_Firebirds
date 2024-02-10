@@ -35,7 +35,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Joystick m_stick = new Joystick(0);
 
-    private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
+    private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
+    //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
     private final Shooter m_shooter = new Shooter();
     private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
@@ -93,6 +94,11 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
+                SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
+        SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
+        SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
+        SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
+        SmartDashboard.putData("Speed Up Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
     }
 
     /**
@@ -150,11 +156,6 @@ public class RobotContainer {
         // SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
         // SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
         // SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
-        SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
-        SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
-        SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
-        SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
-        SmartDashboard.putData("Speed Up Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
     }
 
     /**

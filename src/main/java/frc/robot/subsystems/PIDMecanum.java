@@ -36,8 +36,9 @@ public class PIDMecanum extends SubsystemBase {
 
   private final RelativeEncoder m_frontLeftEncoder = m_frontLeftMotor.getEncoder();
   private final RelativeEncoder m_frontRightEncoder = m_frontRightMotor.getEncoder();
-  private final RelativeEncoder m_backLeftEncoder = m_backLeftMotor.getEncoder();
-  private final RelativeEncoder m_backRightEncoder = m_backRightMotor.getEncoder();;
+  private final RelativeEncoder m_rearLeftEncoder = m_backLeftMotor.getEncoder();
+  private final RelativeEncoder m_rearRightEncoder = m_backRightMotor.getEncoder();
+
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.3, 0.26);
   private final Translation2d m_frontRightLocation = new Translation2d(0.3, -0.26);
@@ -65,6 +66,8 @@ public class PIDMecanum extends SubsystemBase {
 
   Joystick m_stick;
 
+  private final double VELOCITY_CONVERSION_FACTOR = 1/150;
+
   /** Constructs a MecanumDrive and resets the gyro. */
   public PIDMecanum(Joystick input_stick) {
 
@@ -75,6 +78,11 @@ public class PIDMecanum extends SubsystemBase {
     // gearbox is constructed, you might have to invert the left side instead.
     m_frontRightMotor.setInverted(true);
     m_backRightMotor.setInverted(true);
+
+    m_frontLeftEncoder.setVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+    m_rearLeftEncoder.setPositionConversionFactor(VELOCITY_CONVERSION_FACTOR);
+    m_frontRightEncoder.setVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
+    m_rearRightEncoder.setVelocityConversionFactor(VELOCITY_CONVERSION_FACTOR);
   }
 
   /**
@@ -86,8 +94,8 @@ public class PIDMecanum extends SubsystemBase {
     return new MecanumDriveWheelSpeeds(
         m_frontLeftEncoder.getVelocity(),
         m_frontRightEncoder.getVelocity(),
-        m_backLeftEncoder.getVelocity(),
-        m_backRightEncoder.getVelocity());
+        m_rearLeftEncoder.getVelocity(),
+        m_rearRightEncoder.getVelocity());
   }
 
   /**
@@ -99,8 +107,8 @@ public class PIDMecanum extends SubsystemBase {
     return new MecanumDriveWheelPositions(
         m_frontLeftEncoder.getPosition(),
         m_frontRightEncoder.getPosition(),
-        m_backLeftEncoder.getPosition(),
-        m_backRightEncoder.getPosition());
+        m_rearLeftEncoder.getPosition(),
+        m_rearRightEncoder.getPosition());
   }
 
   /**
@@ -122,10 +130,10 @@ public class PIDMecanum extends SubsystemBase {
             m_frontRightEncoder.getVelocity(), speeds.frontRightMetersPerSecond);
     final double backLeftOutput =
         m_backLeftPIDController.calculate(
-            m_backLeftEncoder.getVelocity(), speeds.rearLeftMetersPerSecond);
+            m_rearLeftEncoder.getVelocity(), speeds.rearLeftMetersPerSecond);
     final double backRightOutput =
         m_backRightPIDController.calculate(
-            m_backRightEncoder.getVelocity(), speeds.rearRightMetersPerSecond);
+            m_rearRightEncoder.getVelocity(), speeds.rearRightMetersPerSecond);
 
     m_frontLeftMotor.setVoltage(frontLeftOutput + frontLeftFeedforward);
     m_frontRightMotor.setVoltage(frontRightOutput + frontRightFeedforward);
@@ -153,7 +161,7 @@ public class PIDMecanum extends SubsystemBase {
     ySpeed = (-m_stick.getY()) * driveSpeed;
     rot = (m_stick.getZ()) * driveSpeed;
 
-    boolean fieldRelative = false;
+    boolean fieldRelative = SmartDashboard.getBoolean("Feild/Robot", true);;
 
     MecanumDriveWheelSpeeds mecanumDriveWheelSpeeds =
         m_kinematics.toWheelSpeeds(
@@ -170,5 +178,16 @@ public class PIDMecanum extends SubsystemBase {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(m_gyro.getRotation2d(), getCurrentDistances());
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees());
+
+    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
+    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
+ 
   }
 }
