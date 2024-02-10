@@ -61,6 +61,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   MecanumDrive m_robotDrive;
 
+  public final PIDController rotatPID = new PIDController(1, 0, 0);
+
+  public double setPoint;
+
   /*
    * ChassisSpeeds chassisSpeed = new ChassisSpeeds(m_stick.getY(),
    * m_stick.getX(), 0);
