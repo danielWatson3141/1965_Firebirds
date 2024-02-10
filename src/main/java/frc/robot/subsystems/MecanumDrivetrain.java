@@ -57,8 +57,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   private double rotationRate = 0.5;
   private double throttleRate = 0.5;
-  private long driveAutoWait = 3000;
-
+  private final long DRIVE_AUTO_WAIT = 500;//fast speed for initial testing
+  private final double DRIVE_AUTO_SPEED = 0.2;
   private double drive_x;
   private double drive_y;
   private double drive_z;
@@ -165,8 +165,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public Command driveAutoCommand() {
     Command r_command = Commands.sequence(
-        new InstantCommand(() -> driveAuto(0.3)),
-        Commands.waitSeconds(driveAutoWait),
+        new InstantCommand(() -> driveAuto(DRIVE_AUTO_SPEED)),
+        Commands.waitSeconds(DRIVE_AUTO_WAIT),
         new InstantCommand(() -> driveAuto(0)));
 
     r_command.addRequirements(this);

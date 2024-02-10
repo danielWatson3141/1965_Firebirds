@@ -167,9 +167,8 @@ public class RobotContainer {
     long DRIVE_TIME = 5;
 
     public Command getAutonomousCommand() {
+        return m_drivetrain.driveAutoCommand();
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
-        //TODO: Put some autonomous code in here
-        return null;
     }
 
     public Command getTestCommand () {
