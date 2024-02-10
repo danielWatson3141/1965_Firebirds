@@ -190,7 +190,17 @@ public class MecanumDrivetrain extends SubsystemBase {
     } else {
       drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
       drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
-      drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+
+      if(m_stick.getRawButtonPressed(2)){
+        drive_z = rotationLimiter.calculate(deadzone(m_stick.getZ())) * driveSpeed;
+      }
+      else {
+        drive_z = 0;
+      }
+
+      if (m_stick.getZ() == STICK_DEADZONE){
+        rSetpoint = m_gyro.getAngle();
+      }
 
       rSetpoint = (rSetpoint + drive_z) % 360;
       rError = (m_gyro.getAngle() - rSetpoint); //* (1/180);
