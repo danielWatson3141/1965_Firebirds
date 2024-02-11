@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -9,9 +12,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -75,6 +84,42 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   private final Vision m_vision = new Vision();
 
+  //Shuffleboard setting up, oh boy
+  public final ShuffleboardTab drivetrainTab = Shuffleboard.getTab(getName());
+  public final GenericEntry drivePercentEntry = drivetrainTab.add("drive %", 0)
+    .withSize(2, 2).withPosition(2, 3).withWidget(BuiltInWidgets.kDial).getEntry();
+  public final ShuffleboardLayout fieldRobotListLayout = drivetrainTab.getLayout("Field Robot", BuiltInLayouts.kList)
+    .withSize(2, 2).withPosition(0, 3).withProperties(Map.of("Label position", "HIDDEN"));
+  public GenericEntry fieldBooleanEntry;
+  public final ShuffleboardLayout slidersListLayout = drivetrainTab.getLayout("Sliders", BuiltInLayouts.kList)
+    .withSize(3, 3).withPosition(0, 0);
+  public GenericEntry throttleMaxSliderEntry;
+  public GenericEntry KpSliderEntry;
+  public final ShuffleboardLayout rotateSetpointListLayout = drivetrainTab.getLayout("Rotate Setpoint Values", BuiltInLayouts.kList)
+    .withSize(1, 2).withPosition(3, 0);
+  public final ShuffleboardLayout rotateSetpointGraphLayout = drivetrainTab.getLayout("Rotate Setpoint graph", BuiltInLayouts.kGrid)
+    .withSize(2, 2).withPosition(4, 0);
+  public GenericEntry rotateSetpointEntry;
+  public GenericEntry rotateErrorEntry;
+  public GenericEntry gyroAngleEntry;
+  public final ShuffleboardLayout wheelSpeedListLayout = drivetrainTab.getLayout("Wheel Speeds List", BuiltInLayouts.kList)
+    .withSize(2, 5).withPosition(8, 0);
+  public GenericEntry FLspeed;
+  public GenericEntry FRspeed;
+  public GenericEntry RLspeed;
+  public GenericEntry RRspeed;
+  public final ShuffleboardLayout axisGraphLayout = drivetrainTab.getLayout("axis graph", BuiltInLayouts.kGrid)
+    .withSize(2, 2).withPosition(6, 0);
+  public GenericEntry stickXEntry;
+  public GenericEntry stickYEntry;
+  public GenericEntry stickZEntry;
+  public final ShuffleboardLayout translationListLayout = drivetrainTab.getLayout("Translation values List", BuiltInLayouts.kList)
+    .withSize(2, 2).withPosition(6, 3);
+  public final ShuffleboardLayout translationGraphLayout = drivetrainTab.getLayout("Translation values graph", BuiltInLayouts.kGrid)
+    .withSize(2, 2).withPosition(4, 3);
+  public GenericEntry translationXEntry;
+  public GenericEntry translationYEntry;
+
   public MecanumDrivetrain(Joystick input_stick) {
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
@@ -97,6 +142,28 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     //for testing
     SmartDashboard.putNumber("Kp value", KpSlider);
+
+    //setting up more shuffleboard stuff
+    fieldBooleanEntry = fieldRobotListLayout.add("field or robot", fieldRelative).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    fieldBooleanEntry = fieldRobotListLayout.add("field or robot", fieldRelative).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+    throttleMaxSliderEntry = slidersListLayout.add("Max Throttle %", 100).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 100)).getEntry();
+    KpSliderEntry = slidersListLayout.add("Kp value", KpSlider).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 5)).getEntry();
+    rotateSetpointEntry = rotateSetpointListLayout.add("setpoint", rSetpoint).getEntry();
+    rotateSetpointEntry = rotateSetpointGraphLayout.add("setpoint", rSetpoint).getEntry();
+    rotateErrorEntry = rotateSetpointListLayout.add("error", rError).getEntry();
+    rotateErrorEntry = rotateSetpointGraphLayout.add("error", rError).getEntry();
+    gyroAngleEntry = rotateSetpointListLayout.add("gyro angle", gyroAngle).getEntry();
+    FLspeed = wheelSpeedListLayout.add("Front Left Wheel", 0).getEntry();
+    FRspeed = wheelSpeedListLayout.add("Front Right Wheel", 0).getEntry();
+    RLspeed = wheelSpeedListLayout.add("Rear Left Wheel", 0).getEntry();
+    RRspeed = wheelSpeedListLayout.add("Rear Right Wheel", 0).getEntry();
+    stickXEntry = axisGraphLayout.add("X axis", 0).getEntry();
+    stickYEntry = axisGraphLayout.add("Y axis", 0).getEntry();
+    stickZEntry = axisGraphLayout.add("Z axis", 0).getEntry();
+    translationXEntry = translationListLayout.add("X translation", xTranslation).getEntry();
+    translationXEntry = translationGraphLayout.add("X translation", xTranslation).getEntry();
+    translationYEntry = translationListLayout.add("Y translation", tYError).getEntry();
+    translationYEntry = translationGraphLayout.add("Y translation", tYError).getEntry();
   }
 
   // multipliers for values
@@ -109,7 +176,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     // sets the sped based on the cap and percentage
     driveSpeed = SPEED_CAP * throttle_value;
     // documents the current percentage of the motors for driver
-    SmartDashboard.putNumber("Drive %", throttle_value * 100);
+    drivePercentEntry.setDouble(throttle_value * 100);
   }
 
   public double deadzone(double input) {
@@ -210,9 +277,12 @@ public class MecanumDrivetrain extends SubsystemBase {
         fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0)
         );
 
-    SmartDashboard.putNumber("stickX", drive_x);
-    SmartDashboard.putNumber("stickY", drive_y);
-    SmartDashboard.putNumber("stickZ", drive_z);
+    // SmartDashboard.putNumber("stickX", drive_x);
+    // SmartDashboard.putNumber("stickY", drive_y);
+    // SmartDashboard.putNumber("stickZ", drive_z);
+    stickXEntry.setDouble(drive_x);
+    stickYEntry.setDouble(drive_y);
+    stickZEntry.setDouble(drive_z);
 
     }
 
@@ -223,21 +293,26 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
-    SmartDashboard.putNumber("rotation PID", rotationPID.calculate(rError, 0));
+    rotateSetpointEntry.setDouble(rSetpoint);
+    rotateErrorEntry.setDouble(rError);
 
     setSpeed();
 
-    SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() * -1);
-    fieldRelative = SmartDashboard.getBoolean("Feild/Robot", true);
+    // SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() * -1);
+    gyroAngleEntry.setDouble(m_gyro.getRotation2d().getDegrees() * -1);
+    fieldRelative = fieldBooleanEntry.getBoolean(fieldRelative);
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
     SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
     SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
+    FLspeed.setDouble(m_frontLeftEncoder.getVelocity());
+    FRspeed.setDouble(m_frontRightEncoder.getVelocity());
+    RLspeed.setDouble(m_rearLeftEncoder.getVelocity());
+    RRspeed.setDouble(m_rearRightEncoder.getVelocity());
 
     //for testng
-    KpSlider = SmartDashboard.getNumber("Kp value", KpSlider);
-    SmartDashboard.putNumber("final Kp value", KpSlider);
+    KpSlider = KpSliderEntry.getDouble(KpSlider);
     rotationPID.setP(KpSlider);
 }
 }
