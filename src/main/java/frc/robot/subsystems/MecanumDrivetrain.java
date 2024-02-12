@@ -37,7 +37,9 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
 
-  private final double STICK_DEADZONE = 0.08;
+  private final double TRANSLATION_DEADZONE = 0.08;
+  private final double ROTATION_DEADZONE = 0.08;
+
   private final double ROTATION_TOLERANCE = 3; // degrees
   // private double locationX = 0.2794;
   // private double locationY = 0.3048;
@@ -187,8 +189,8 @@ public class MecanumDrivetrain extends SubsystemBase {
     drivePercentEntry.setDouble(throttle_value * 100);
   }
 
-  public double deadzone(double input) {
-    if (Math.abs(input) < STICK_DEADZONE) {
+  public double deadzone(double input, double deadzone) {
+    if (Math.abs(input) < deadzone) {
       return 0;
     } else {
       return input;
@@ -237,7 +239,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     } else {
 
       if (m_stick.getRawButton(2)) {
-        drive_z = (deadzone(m_stick.getZ()));
+        drive_z = (deadzone(m_stick.getZ(), ROTATION_DEADZONE));
       } else {
         drive_z = 0;
       }
@@ -265,8 +267,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
       } else {
         rError = (m_gyro.getAngle() - rSetpoint);
-        drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX())) * driveSpeed;
-        drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY())) * driveSpeed;
+        drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX(), TRANSLATION_DEADZONE)) * driveSpeed;
+        drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY(), TRANSLATION_DEADZONE)) * driveSpeed;
       }
 
       // Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z
