@@ -233,18 +233,18 @@ public class MecanumDrivetrain extends SubsystemBase {
     double drive_y = 0;
     double drive_z = 0;
 
+    // **** POV drive mode
+    // If the POV stick is active, put raw POV input into the drivetrain.
+    // TODO: This will not have directional stability. Remove / Update?
     if (m_stick.getPOV() != -1) {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
-    } else {
 
-      if (m_stick.getRawButton(2)) {
-        drive_z = (deadzone(m_stick.getZ(), ROTATION_DEADZONE));
-      } else {
-        drive_z = 0;
-      }
+    // **** April Tag Tracking mode
+    // If the vision system has a detection and button 3 is held, track the april
+    // tag and position the robot directly in front of it.
+    } else if (m_vision.myPosition != null && m_stick.getRawButton(3)) {
 
-      rSetpoint = (rSetpoint + drive_z) % 360;
       tYError = m_vision.myPosition.getTranslation().getY();
       xTranslation = m_vision.myPosition.getTranslation().getX();
       yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
@@ -255,36 +255,48 @@ public class MecanumDrivetrain extends SubsystemBase {
         tXError = (xTranslation < 0) ? -1 : 1;
       }
 
-      if (m_vision.myPosition != null && m_stick.getRawButton(3)) {
-        rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
-        drive_x = translationPID.calculate(tXError, 0);
+      rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
+      drive_x = translationPID.calculate(tXError, 0);
 
-        if (Math.abs(yTranslation) <= 1) {
-          drive_y = yTranslation;
-        } else {
-          drive_y = (yTranslation < 0) ? -1 : 1;
-        }
-
+      if (Math.abs(yTranslation) <= 1) {
+        drive_y = yTranslation;
       } else {
-        rError = (m_gyro.getAngle() - rSetpoint);
-        drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX(), TRANSLATION_DEADZONE)) * driveSpeed;
-        drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY(), TRANSLATION_DEADZONE)) * driveSpeed;
+        drive_y = (yTranslation < 0) ? -1 : 1;
       }
 
-      // Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z
-      // to driveCartesian on purpose.
-      m_robotDrive.driveCartesian(
-          drive_y,
-          drive_x,
-          rotationPID.calculate(rError, 0) / 180,
-          fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0));
+    // **** Joystick Control Mode
+    // If neither POV mode nor tracking mode is active, then take stick input.
+    } else {
+      // Rotation is locked by default, unlock when button is held
+      if (m_stick.getRawButton(2)) {
+        drive_z = (deadzone(m_stick.getZ(), ROTATION_DEADZONE));
+      } else {
+        drive_z = 0;
+      }
 
-      stickXEntry.setDouble(drive_x);
-      stickYEntry.setDouble(drive_y);
-      stickZEntry.setDouble(drive_z);
+      // Update the setpoint by the drive_z input, this moves the desired heading.
+      rSetpoint = (rSetpoint + drive_z) % 360;
 
+      // Calculate the current error, we will pass this to the PID loop for corrective
+      // input
+      rError = (m_gyro.getAngle() - rSetpoint);
+
+      // Pull the translation input from the stick, apply deadzone and slew rate
+      drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX(), TRANSLATION_DEADZONE)) * driveSpeed;
+      drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY(), TRANSLATION_DEADZONE)) * driveSpeed;
     }
 
+    // Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z
+    // to driveCartesian on purpose.
+    m_robotDrive.driveCartesian(
+        drive_y,
+        drive_x,
+        rotationPID.calculate(rError, 0) / 180,
+        fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0));
+
+    stickXEntry.setDouble(drive_x);
+    stickYEntry.setDouble(drive_y);
+    stickZEntry.setDouble(drive_z);
   }
 
   @Override
