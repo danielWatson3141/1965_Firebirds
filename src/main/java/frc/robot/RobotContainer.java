@@ -92,12 +92,6 @@ public class RobotContainer {
         ta = table.getEntry("ta");
 
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.getShootCommand()));
-        // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
-        // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
-        // SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
-        //SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
-        //SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
-        // SmartDashboard.putData("Speed Up Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
     }
 
     /**
@@ -111,9 +105,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
 
-        // triggerButton.onTrue(        
-        //     m_shooter.getShootCommand()
-        // );
+        triggerButton.onTrue(        
+            m_shooter.getShootCommand()
+        );
 
         sevenButton.onTrue(
             new InstantCommand(() -> m_lifter.toggleLifter())
@@ -152,10 +146,7 @@ public class RobotContainer {
     }
 
     public void test() {
-        // ShuffleBoard widget commands for movement of arm
-        // SmartDashboard.putData("GoToTop", new InstantCommand(() -> lifter.goToTop(), lifter));
-        // SmartDashboard.putData("GoToMiddle", new InstantCommand(() -> lifter.goToMiddle(), lifter));
-        // SmartDashboard.putData("GoToBottom", new InstantCommand(() -> lifter.goToBottom(), lifter));
+
     }
 
     /**
