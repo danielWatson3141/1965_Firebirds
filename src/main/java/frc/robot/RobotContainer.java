@@ -16,10 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
-import frc.robot.subsystems.PIDMecanum;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -38,7 +36,6 @@ public class RobotContainer {
     private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
     private final Shooter m_shooter = new Shooter();
-    private final Intake m_intake = new Intake();
     private final Lifter m_lifter = new Lifter();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
@@ -97,8 +94,6 @@ public class RobotContainer {
         m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.getShootCommand()));
         // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
         // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
-        m_intake.intakeTab.add(new InstantCommand(() -> m_intake.getIntakeCommand()));
-        SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
         // SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
         //SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
         //SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
@@ -119,10 +114,6 @@ public class RobotContainer {
         // triggerButton.onTrue(        
         //     m_shooter.getShootCommand()
         // );
-
-        sideButton.onTrue(
-            m_intake.getIntakeCommand()
-        );
 
         sevenButton.onTrue(
             new InstantCommand(() -> m_lifter.toggleLifter())
