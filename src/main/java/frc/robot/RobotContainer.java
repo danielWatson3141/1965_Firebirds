@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeShooter;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.PIDMecanum;
@@ -37,8 +38,7 @@ public class RobotContainer {
 
     private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
-    private final Shooter m_shooter = new Shooter();
-    private final Intake m_intake = new Intake();
+    private final IntakeShooter m_intakeshooter = new IntakeShooter();
     private final Lifter m_lifter = new Lifter();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
@@ -94,11 +94,8 @@ public class RobotContainer {
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
 
-        m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.getShootCommand()));
         // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
         // m_shooter.shooterCommands.add(new InstantCommand(() -> m_shooter.shooterMotorSet(.8)));
-        m_intake.intakeTab.add(new InstantCommand(() -> m_intake.getIntakeCommand()));
-        SmartDashboard.putData("intake activate", new InstantCommand(() -> m_intake.getIntakeCommand()));
         // SmartDashboard.putData("lifter toggle", new InstantCommand(() -> m_lifter.toggleLifter()));
         //SmartDashboard.putData("activate shooter", new InstantCommand(() -> m_shooter.getShootCommand()));
         //SmartDashboard.putData("Slow Down Shooter", new InstantCommand(() -> m_shooter.shooterMotorSet(.2)));
@@ -119,9 +116,12 @@ public class RobotContainer {
         // triggerButton.onTrue(        
         //     m_shooter.getShootCommand()
         // );
-
-        sideButton.onTrue(
-            m_intake.getIntakeCommand()
+        triggerButton.onTrue(
+            m_intakeshooter.getShootCommand()
+        );
+        
+        topRightButton.onTrue(
+            new InstantCommand(() -> m_intakeshooter.setShooterMode())
         );
 
         sevenButton.onTrue(
@@ -132,13 +132,6 @@ public class RobotContainer {
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
 
-         elevenButton.onTrue(
-             m_shooter.testShootRunCommand()
-         );
-
-         twelveButton.onTrue(
-             m_shooter.testShootStopCommand()
-         );
     }
 
 
