@@ -150,19 +150,20 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Kp value", KpSlider);
 
     // setting up more shuffleboard stuff
-    fieldBooleanEntry = fieldRobotListLayout.add("field or robot", fieldRelative)
+    fieldBooleanEntry = fieldRobotListLayout.add("field or robot toggle", fieldRelative)
         .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-    fieldBooleanEntry = fieldRobotListLayout.add("field or robot", fieldRelative).withWidget(BuiltInWidgets.kBooleanBox)
+    fieldBooleanEntry = fieldRobotListLayout.add("field or robot box", fieldRelative).withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry();
     throttleMaxSliderEntry = slidersListLayout.add("Max Throttle %", 100).withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 100)).getEntry();
     KpSliderEntry = slidersListLayout.add("Kp value", KpSlider).withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 5)).getEntry();
-    rotateSetpointEntry = rotateSetpointListLayout.add("setpoint", rSetpoint).getEntry();
-    rotateSetpointEntry = rotateSetpointGraphLayout.add("setpoint", rSetpoint).getEntry();
-    rotateErrorEntry = rotateSetpointListLayout.add("error", rError).getEntry();
-    rotateErrorEntry = rotateSetpointGraphLayout.add("error", rError).getEntry();
-    gyroAngleEntry = rotateSetpointListLayout.add("gyro angle", gyroAngle).getEntry();
+    rotateSetpointEntry = rotateSetpointListLayout.add("setpoint list", rSetpoint).getEntry();
+    rotateSetpointEntry = rotateSetpointGraphLayout.add("setpoint graph", rSetpoint).getEntry();
+    rotateErrorEntry = rotateSetpointListLayout.add("error list", rError).getEntry();
+    rotateErrorEntry = rotateSetpointGraphLayout.add("error graph", rError).getEntry();
+    gyroAngleEntry = rotateSetpointListLayout.add("gyro angle list", 0).getEntry();
+    gyroAngleEntry = rotateSetpointGraphLayout.add("gyro angle graph", 0).getEntry();
     FLspeed = wheelSpeedListLayout.add("Front Left Wheel", 0).getEntry();
     FRspeed = wheelSpeedListLayout.add("Front Right Wheel", 0).getEntry();
     RLspeed = wheelSpeedListLayout.add("Rear Left Wheel", 0).getEntry();
@@ -170,10 +171,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     stickXEntry = axisGraphLayout.add("X axis", 0).getEntry();
     stickYEntry = axisGraphLayout.add("Y axis", 0).getEntry();
     stickZEntry = axisGraphLayout.add("Z axis", 0).getEntry();
-    translationXEntry = translationListLayout.add("X translation", xTranslation).getEntry();
-    translationXEntry = translationGraphLayout.add("X translation", xTranslation).getEntry();
-    translationYEntry = translationListLayout.add("Y translation", tYError).getEntry();
-    translationYEntry = translationGraphLayout.add("Y translation", tYError).getEntry();
+    translationXEntry = translationListLayout.add("X translation list", xTranslation).getEntry();
+    translationXEntry = translationGraphLayout.add("X translation graph", xTranslation).getEntry();
+    translationYEntry = translationListLayout.add("Y translation list", tYError).getEntry();
+    translationYEntry = translationGraphLayout.add("Y translation graph", tYError).getEntry();
   }
 
   // multipliers for values

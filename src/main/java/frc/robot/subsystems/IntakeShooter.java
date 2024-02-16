@@ -17,19 +17,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
 
-    TalonSRX rollerMotor = new WPI_TalonSRX(69);
+    TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
-    TalonSRX indexMotor = new WPI_TalonSRX(69);
+    TalonSRX indexMotor = new WPI_TalonSRX(11);
 
     double INTAKE_TIMEOUT;
     double INTAKE_EJECT_TIMEOUT;
     double INTAKE_SPEED;
 
-    DigitalInput limitSwitch1 = new DigitalInput(69);
-    DigitalInput limitSwitch2 = new DigitalInput(69);
+    DigitalInput limitSwitch1 = new DigitalInput(0);
+    DigitalInput limitSwitch2 = new DigitalInput(1);
 
-    TalonSRX shooterMotor1 = new WPI_TalonSRX(69);
-    TalonSRX shooterMotor2 = new WPI_TalonSRX(69);
+    TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
+    TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
 
     double SHOOTER_TIMER;
     double SHOOTER_SPEED;
