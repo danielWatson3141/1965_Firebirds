@@ -106,7 +106,7 @@ public class IntakeShooter extends SubsystemBase {
         Command r_command = (
            new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT).until(this::switch2State)
            .andThen(new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(0))/*log capacity*/, new InstantCommand(() -> setIntakeMotors(0)), this::switch2State))
-           .andThen(new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(-INTAKE_SPEED)).withTimeout(INTAKE_EJECT_TIMEOUT), new InstantCommand(() -> setIntakeMotors(0)), this::switch1State))
+           .andThen(new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(-INTAKE_SPEED)).withTimeout(INTAKE_EJECT_TIMEOUT)/*andThen.log intakefailed*/, new InstantCommand(() -> setIntakeMotors(0)), this::switch1State))
 
         );
 
