@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
 
-    TalonSRX rollerMotor = new WPI_TalonSRX(69);
+    TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
     TalonSRX indexMotor = new WPI_TalonSRX(69);
 
