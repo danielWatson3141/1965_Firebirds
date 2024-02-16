@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -17,12 +18,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeShooter extends SubsystemBase {
 
+    private final boolean HAVE_INDEX_MOTOR = false;
+
     TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
     TalonSRX indexMotor = new WPI_TalonSRX(11);
 
     double INTAKE_TIMEOUT;
-    double INTAKE_EJECT_TIMEOUT;
     double INTAKE_SPEED;
 
     DigitalInput limitSwitch1 = new DigitalInput(0);
@@ -44,27 +46,17 @@ public class IntakeShooter extends SubsystemBase {
         SHOOTER_SPEED = .8;
         shooterMode = true;
 
-        INTAKE_TIMEOUT = 7000;
-        INTAKE_EJECT_TIMEOUT = 3000;
+        INTAKE_TIMEOUT = 10000;
         INTAKE_SPEED = 0.6;
 
-        indexMotor.follow(rollerMotor);
     }
 
     public boolean switch1State() {
-        if (limitSwitch1 != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return !limitSwitch1.get();
     }
 
     public boolean switch2State() {
-        if (limitSwitch1 != null) {
-            return true;
-        } else {
-            return false;
-        }
+      return !limitSwitch2.get();
     }
 
     public void setShooterMode() {
@@ -79,6 +71,9 @@ public class IntakeShooter extends SubsystemBase {
 
     public void setIntakeMotors(double speed){
         rollerMotor.set(ControlMode.Current, speed);
+        if (HAVE_INDEX_MOTOR) {
+            indexMotor.set(ControlMode.Current, speed);
+        }
     }
 
     public void setShooterMotors(double speed){
@@ -105,8 +100,6 @@ public class IntakeShooter extends SubsystemBase {
     public Command getIntakeCommand() {
         Command r_command = (
            new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT).until(this::switch2State)
-           .andThen(new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(0))/*log capacity*/, new InstantCommand(() -> setIntakeMotors(0)), this::switch2State))
-           .andThen(new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(-INTAKE_SPEED)).withTimeout(INTAKE_EJECT_TIMEOUT)/*andThen.log intakefailed*/, new InstantCommand(() -> setIntakeMotors(0)), this::switch1State))
 
         );
 
@@ -117,8 +110,10 @@ public class IntakeShooter extends SubsystemBase {
 
 
     public void periodic() {
-
-
+        switch1State();
+        switch2State();
+        SmartDashboard.putBoolean("switch state 1", switch1State());
+        SmartDashboard.putBoolean("switch state 2", switch2State());
     }
 
 }

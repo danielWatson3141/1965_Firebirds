@@ -91,43 +91,43 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
 
-        try{
-            cvSink.grabFrame(source);
-            Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-            outputStream.putFrame(output);
+    //     try{
+    //         cvSink.grabFrame(source);
+    //         Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+    //         outputStream.putFrame(output);
 
-            detections = detector.detect(output);
-            myPosition = poseDetermine();
-        } catch (Exception E){
-           // Logging.log("Vision:Periodic",E.getMessage());
-        }
+    //         detections = detector.detect(output);
+    //         myPosition = poseDetermine();
+    //     } catch (Exception E){
+    //        // Logging.log("Vision:Periodic",E.getMessage());
+    //     }
 
-        //Send the position to the dashboard if the position does not equal null
-        if(myPosition != null){
-            SmartDashboard.putNumber("tagX", myPosition.getX());
-            SmartDashboard.putNumber("tagY", myPosition.getY());
-            SmartDashboard.putNumber("tagZ", myPosition.getZ());
+    //     //Send the position to the dashboard if the position does not equal null
+    //     if(myPosition != null){
+    //         SmartDashboard.putNumber("tagX", myPosition.getX());
+    //         SmartDashboard.putNumber("tagY", myPosition.getY());
+    //         SmartDashboard.putNumber("tagZ", myPosition.getZ());
 
-            double roll = myPosition.getRotation().getX();
-            double pitch = myPosition.getRotation().getY();
-            double yaw = myPosition.getRotation().getZ();
-            //gets the x y and z coordinates from poseDetermine
+    //         double roll = myPosition.getRotation().getX();
+    //         double pitch = myPosition.getRotation().getY();
+    //         double yaw = myPosition.getRotation().getZ();
+    //         //gets the x y and z coordinates from poseDetermine
     
-            SmartDashboard.putNumber("tagPitch", pitch);
-            SmartDashboard.putNumber("tagRoll", roll);
-            SmartDashboard.putNumber("tagYaw", yaw);
+    //         SmartDashboard.putNumber("tagPitch", pitch);
+    //         SmartDashboard.putNumber("tagRoll", roll);
+    //         SmartDashboard.putNumber("tagYaw", yaw);
             
-        }
-        //other stuff
-    }
+    //     }
+    //     //other stuff
+    // }
 
-    public Transform3d poseDetermine() {
-        if (detections == null || detections.length == 0) { // No April tag detected
-            return null;
-        } else { // April Tag detected
-            AprilTagDetection detection = detections[0];
-            return estimator.estimate(detection); 
-        }
+    // public Transform3d poseDetermine() {
+    //     if (detections == null || detections.length == 0) { // No April tag detected
+    //         return null;
+    //     } else { // April Tag detected
+    //         AprilTagDetection detection = detections[0];
+    //         return estimator.estimate(detection); 
+    //     }
 
 
     }
