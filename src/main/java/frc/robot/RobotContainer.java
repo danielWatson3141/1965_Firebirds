@@ -129,7 +129,7 @@ public class RobotContainer {
         );
 
         sevenButton.onTrue(
-            new InstantCommand(() -> m_lifter.toggleLifter())
+            new InstantCommand(() -> m_lifter.toggleLifter()).withTimeout(m_intakeshooter.INTAKE_TIMEOUT_SECONDS)
         );
 
         eightButton.onTrue(

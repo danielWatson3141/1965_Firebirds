@@ -22,7 +22,7 @@ public class IntakeShooter extends SubsystemBase {
     WPI_TalonSRX indexShooter = new WPI_TalonSRX(10);
     WPI_TalonSRX indexIntake = new WPI_TalonSRX(11);
 
-    double INTAKE_TIMEOUT_SECONDS;
+    public double INTAKE_TIMEOUT_SECONDS;
     double INTAKE_SPEED;
 
     DigitalInput limitSwitch1 = new DigitalInput(0);
@@ -67,11 +67,17 @@ public class IntakeShooter extends SubsystemBase {
         }
     }
 
-    public void setIntakeMotors(double speed){
+    public void runIntakeMotors(double speed){
         rollerMotor.set(speed);
-        Logging.log("IntakeShooter", "set index motor");
         indexIntake.set(speed);
+        Logging.log("IntakeShooter", "set intake");
     }
+    public void stopIntakeSequence(){
+        rollerMotor.stopMotor();
+        indexIntake.stopMotor();
+        Logging.log("IntakeShooter", "stop intake");
+    }
+
 
     public void runShooterMotors(double speed){
         shooterMotor1.set(speed);
@@ -83,7 +89,6 @@ public class IntakeShooter extends SubsystemBase {
     }
 
      public void setIndexMotor(double speed){
-        Logging.log("IntakeShooter", "set index motor");
         indexShooter.set(speed);
     
     }
@@ -106,7 +111,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public Command getIntakeCommand() {
         Command r_command = (
-           (new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).until(() -> switch2State())).withTimeout(INTAKE_TIMEOUT_SECONDS).andThen(new InstantCommand(() -> setIntakeMotors(0)))
+           new InstantCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch2State())//.andThen(new InstantCommand(() -> stopIntakeSequence())
         );
 
         r_command.addRequirements(this);
