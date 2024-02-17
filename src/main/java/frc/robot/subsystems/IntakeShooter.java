@@ -15,14 +15,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
 
 public class IntakeShooter extends SubsystemBase {
 
-    private final boolean HAVE_INDEX_MOTOR = false;
+    private final boolean HAVE_INDEX_MOTOR = true;
 
-    TalonSRX rollerMotor = new WPI_TalonSRX(9);
+    WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
-    TalonSRX indexMotor = new WPI_TalonSRX(11);
+    WPI_TalonSRX indexMotor = new WPI_TalonSRX(10);
 
     double INTAKE_TIMEOUT;
     double INTAKE_SPEED;
@@ -30,8 +31,8 @@ public class IntakeShooter extends SubsystemBase {
     DigitalInput limitSwitch1 = new DigitalInput(0);
     DigitalInput limitSwitch2 = new DigitalInput(1);
 
-    TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
-    TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
+    WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
+    WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
 
     double SHOOTER_TIMER;
     double SHOOTER_SPEED;
@@ -46,7 +47,7 @@ public class IntakeShooter extends SubsystemBase {
         SHOOTER_SPEED = .8;
         shooterMode = true;
 
-        INTAKE_TIMEOUT = 10000;
+        INTAKE_TIMEOUT = 3000;
         INTAKE_SPEED = 0.6;
 
     }
@@ -70,29 +71,37 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public void setIntakeMotors(double speed){
-        rollerMotor.set(ControlMode.Current, speed);
-        if (HAVE_INDEX_MOTOR) {
-            indexMotor.set(ControlMode.Current, speed);
-        }
+        rollerMotor.set(speed);
+        Logging.log("IntakeShooter", "set index motor");
+        indexMotor.set(speed);
     }
 
-    public void setShooterMotors(double speed){
-        shooterMotor1.set(ControlMode.Current, speed);
+    public void runShooterMotors(double speed){
+        shooterMotor1.set(speed);
+    }
+    public void stopShooterSequence(){
+        shooterMotor1.stopMotor();
+        indexMotor.stopMotor();
+
     }
 
      public void setIndexMotor(double speed){
-        if (HAVE_INDEX_MOTOR) {
-            indexMotor.set(ControlMode.Current, speed);
-        }
+        Logging.log("IntakeShooter", "set index motor");
+        indexMotor.set(speed);
+    
     }
+
+
+
 
     public Command getShootCommand() {
         Command r_command = Commands.sequence(
-            new InstantCommand(() -> setShooterMotors(SHOOTER_SPEED)),
+            new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)),
             Commands.waitSeconds(SHOOTER_TIMER),
-            new InstantCommand(() -> setIndexMotor(SHOOTER_SPEED)),
-            Commands.waitSeconds(SHOOTER_TIMER),
-            new InstantCommand(() -> setIndexMotor(0)).andThen(new InstantCommand(() -> setShooterMotors(0)))
+            // new InstantCommand(() -> setIndexMotor(SHOOTER_SPEED)),
+            // Commands.waitSeconds(SHOOTER_TIMER),
+            // new InstantCommand(() -> setIndexMotor(0)),
+            new InstantCommand(() -> stopShooterSequence())
         );
 
         r_command.addRequirements(this);
@@ -101,7 +110,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public Command getIntakeCommand() {
         Command r_command = (
-           new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT).until(this::switch2State)
+           new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).until(this::switch2State).withTimeout(INTAKE_TIMEOUT)
 
         );
 
