@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.IntakeShooter;
 import frc.robot.subsystems.Lifter;
 import frc.robot.subsystems.MecanumDrivetrain;
+import frc.robot.subsystems.TestShooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,6 +38,7 @@ public class RobotContainer {
     private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
     private final IntakeShooter m_intakeshooter = new IntakeShooter();
+    private final TestShooter m_testshooter = new TestShooter();
     private final Lifter m_lifter = new Lifter();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
@@ -139,7 +141,8 @@ public class RobotContainer {
 
 
     public void configureTestButtonBindings() {
-        tenButton.onTrue(getTestCommand());
+        elevenButton.onTrue(m_testshooter.testIntakeRunCommand());
+        twelveButton.onTrue(m_testshooter.testIntakeStopCommand());
         triggerButton.whileTrue(getTestCommand());
     }
     boolean frontCamera = true;

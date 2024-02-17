@@ -121,14 +121,14 @@ public class TestShooter extends SubsystemBase {
         return r_command;
     }
 
-    public Command testShootRunCommand() {
+    public Command testIntakeRunCommand() {
         Command r_command = new InstantCommand(() -> frontStartFunc());
         r_command.addRequirements(this);
         return r_command;
         
     }
 
-    public Command testShootStopCommand() {
+    public Command testIntakeStopCommand() {
         Command r_command = new InstantCommand(() -> frontRollerStop());
         r_command.addRequirements(this);
         return r_command;
