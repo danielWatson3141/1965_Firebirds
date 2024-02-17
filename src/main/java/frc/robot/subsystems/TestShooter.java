@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 
-public class Shooter extends SubsystemBase {
+public class TestShooter extends SubsystemBase {
 
     private WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
     private WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase {
         .withWidget(BuiltInWidgets.kNumberBar).withProperties(Map.of("min", 0, "max", 100))
         .getEntry();
 
-    public Shooter() {
+    public TestShooter() {
         Logging.log("Shooter:Shooter", "Constuctor");
 
         // dont need to set shooterMotor2 becasue it will follow what shooterMotor1 does
