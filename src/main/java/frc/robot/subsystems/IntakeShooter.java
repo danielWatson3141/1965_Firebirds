@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -12,7 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
@@ -23,7 +19,8 @@ public class IntakeShooter extends SubsystemBase {
 
     WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
-    WPI_TalonSRX indexMotor = new WPI_TalonSRX(10);
+    WPI_TalonSRX indexShooter = new WPI_TalonSRX(10);
+    WPI_TalonSRX indexIntake = new WPI_TalonSRX(11);
 
     double INTAKE_TIMEOUT_SECONDS;
     double INTAKE_SPEED;
@@ -73,7 +70,7 @@ public class IntakeShooter extends SubsystemBase {
     public void setIntakeMotors(double speed){
         rollerMotor.set(speed);
         Logging.log("IntakeShooter", "set index motor");
-        indexMotor.set(speed);
+        indexIntake.set(speed);
     }
 
     public void runShooterMotors(double speed){
@@ -81,13 +78,13 @@ public class IntakeShooter extends SubsystemBase {
     }
     public void stopShooterSequence(){
         shooterMotor1.stopMotor();
-        indexMotor.stopMotor();
+        indexShooter.stopMotor();
 
     }
 
      public void setIndexMotor(double speed){
         Logging.log("IntakeShooter", "set index motor");
-        indexMotor.set(speed);
+        indexShooter.set(speed);
     
     }
 
