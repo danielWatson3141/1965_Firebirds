@@ -81,7 +81,9 @@ public class IntakeShooter extends SubsystemBase {
     }
 
      public void setIndexMotor(double speed){
-        indexMotor.set(ControlMode.Current, speed);
+        if (HAVE_INDEX_MOTOR) {
+            indexMotor.set(ControlMode.Current, speed);
+        }
     }
 
     public Command getShootCommand() {
