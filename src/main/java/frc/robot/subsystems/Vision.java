@@ -24,7 +24,7 @@ import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 
 public class Vision extends SubsystemBase {
 
-    private final boolean VISION_WORKING = false;
+    public final boolean VISION_WORKING = false;
 
     UsbCamera camera1;
     UsbCamera camera2;

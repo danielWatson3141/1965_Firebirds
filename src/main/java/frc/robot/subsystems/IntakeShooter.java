@@ -25,7 +25,7 @@ public class IntakeShooter extends SubsystemBase {
 
     WPI_TalonSRX indexMotor = new WPI_TalonSRX(10);
 
-    double INTAKE_TIMEOUT;
+    double INTAKE_TIMEOUT_SECONDS;
     double INTAKE_SPEED;
 
     DigitalInput limitSwitch1 = new DigitalInput(0);
@@ -34,7 +34,7 @@ public class IntakeShooter extends SubsystemBase {
     WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
     WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
 
-    double SHOOTER_TIMER;
+    double SHOOTER_TIMER_SECONDS;
     double SHOOTER_SPEED;
 
     boolean shooterMode;
@@ -43,11 +43,11 @@ public class IntakeShooter extends SubsystemBase {
     public IntakeShooter() {
 
         shooterMotor2.follow(shooterMotor1);
-        SHOOTER_TIMER = 1700;
+        SHOOTER_TIMER_SECONDS = 1.7;
         SHOOTER_SPEED = .8;
         shooterMode = true;
 
-        INTAKE_TIMEOUT = 3000;
+        INTAKE_TIMEOUT_SECONDS = 3;
         INTAKE_SPEED = 0.6;
 
     }
@@ -97,10 +97,9 @@ public class IntakeShooter extends SubsystemBase {
     public Command getShootCommand() {
         Command r_command = Commands.sequence(
             new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)),
-            Commands.waitSeconds(SHOOTER_TIMER),
-            // new InstantCommand(() -> setIndexMotor(SHOOTER_SPEED)),
-            // Commands.waitSeconds(SHOOTER_TIMER),
-            // new InstantCommand(() -> setIndexMotor(0)),
+            Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
+            new InstantCommand(() -> setIndexMotor(SHOOTER_SPEED)),
+            Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
             new InstantCommand(() -> stopShooterSequence())
         );
 
@@ -110,7 +109,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public Command getIntakeCommand() {
         Command r_command = (
-           new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).until(this::switch2State).withTimeout(INTAKE_TIMEOUT)
+           new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).until(this::switch2State).withTimeout(INTAKE_TIMEOUT_SECONDS)
 
         );
 

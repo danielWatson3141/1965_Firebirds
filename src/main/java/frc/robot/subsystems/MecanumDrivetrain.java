@@ -30,8 +30,6 @@ import frc.robot.Logging;
 
 public class MecanumDrivetrain extends SubsystemBase {
 
-  private final boolean VISION_WORKING =  false;
-
   public final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
   // public double gyroAngle = m_gyro.getAngle();
@@ -248,7 +246,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     // tag and position the robot directly in front of it.
     } else if (m_vision.myPosition != null && m_stick.getRawButton(3)) {
 
-        if (VISION_WORKING){
+        if (m_vision.VISION_WORKING){
 
           tYError = m_vision.myPosition.getTranslation().getY();
           xTranslation = m_vision.myPosition.getTranslation().getX();
