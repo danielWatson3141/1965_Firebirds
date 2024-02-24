@@ -32,8 +32,11 @@ public class IntakeShooter extends SubsystemBase {
     double INTAKE_SPEED = 0.6;
 
     double SHOOTER_TIMER_SECONDS = 1;
-    double SHOOTER_SPEED = .8;
+    double SHOOTER_SPEED = 1;
     double INDEX_SHOOTER_SPEED = 1;
+
+    private final double SPEAKER_SHOOTER_SPEED = 1;
+    private final double AMP_SHOOTER_SPEED = .16;
     
 
 
@@ -68,9 +71,9 @@ public class IntakeShooter extends SubsystemBase {
         shooterMode = !shooterMode;
 
         if (shooterMode) {
-            SHOOTER_SPEED = .8;
+            SHOOTER_SPEED = SPEAKER_SHOOTER_SPEED;
         } else {
-            SHOOTER_SPEED = .22;
+            SHOOTER_SPEED = AMP_SHOOTER_SPEED;
         }
     }
 

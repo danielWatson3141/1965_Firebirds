@@ -138,6 +138,10 @@ public class RobotContainer {
              new InstantCommand(() -> m_drivetrain.switchDriveRelativity())
         );
 
+        elevenButton.whileTrue(
+            m_intakeshooter.getIntakeCommand()
+        );
+
     }
 
 

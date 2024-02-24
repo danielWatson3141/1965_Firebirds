@@ -36,9 +36,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
+  private SlewRateLimiter rotationLimiter;
 
   private final double TRANSLATION_DEADZONE = 0.08;
-  private final double ROTATION_DEADZONE = 0.08;
+  private final double ROTATION_DEADZONE = 0.11;
 
   private final double ROTATION_TOLERANCE = 3; // degrees
   // private double locationX = 0.2794;
@@ -62,7 +63,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private double rSetpoint = 0;
   private double rError = 0;
   private double KpSlider = 3;
-  private PIDController rotationPID = new PIDController(1, 0, 0);
+  private PIDController rotationPID = new PIDController(2, 0, 0);
 
   private double tXError = 0;
   private double tYError = 0;
@@ -71,8 +72,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final double SHOOT_DISTANCE = 0;
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
-  private final double ROTATION_RATE = 0.5;
+  private final double ROTATION_RATE = 4;
   private final double TRANSLATION_RATE = 4;
+
+  private boolean ROTATION_LOCK = false;
+  private boolean ROTATION_FEEDBACK = true;
 
   private final long DRIVE_AUTO_WAIT = 500;// fast speed for initial testing
   private final double DRIVE_AUTO_SPEED = 0.2;
@@ -140,6 +144,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     throttleLimiterX = new SlewRateLimiter(TRANSLATION_RATE);
     throttleLimiterY = new SlewRateLimiter(TRANSLATION_RATE);
+    rotationLimiter = new SlewRateLimiter(ROTATION_RATE);
 
     SmartDashboard.putNumber("Throttle max%", 100);
 
@@ -275,14 +280,14 @@ public class MecanumDrivetrain extends SubsystemBase {
     // If neither POV mode nor tracking mode is active, then take stick input.
     } else {
       // Rotation is locked by default, unlock when button is held
-      if (m_stick.getRawButton(2)) {
-        drive_z = (deadzone(m_stick.getZ(), ROTATION_DEADZONE));
+      if (!ROTATION_LOCK || m_stick.getRawButton(2)) {
+        drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)));
       } else {
         drive_z = 0;
       }
 
       // Update the setpoint by the drive_z input, this moves the desired heading.
-      rSetpoint = (rSetpoint + drive_z) % 360;
+      rSetpoint = (rSetpoint + drive_z);
 
       // Calculate the current error, we will pass this to the PID loop for corrective
       // input
@@ -298,7 +303,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_robotDrive.driveCartesian(
         drive_y,
         drive_x,
-        rotationPID.calculate(rError, 0) / 180,
+        ROTATION_FEEDBACK ? rotationPID.calculate(rError, 0) / 180 : drive_z,
         fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0));
 
     stickXEntry.setDouble(drive_x);
