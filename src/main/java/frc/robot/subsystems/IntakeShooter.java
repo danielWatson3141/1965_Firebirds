@@ -31,7 +31,7 @@ public class IntakeShooter extends SubsystemBase {
 
     double INTAKE_SPEED = 0.6;
 
-    double SHOOTER_TIMER_SECONDS = 1.7;
+    double SHOOTER_TIMER_SECONDS = 1;
     double SHOOTER_SPEED = .8;
     double INDEX_SHOOTER_SPEED = 1;
     
