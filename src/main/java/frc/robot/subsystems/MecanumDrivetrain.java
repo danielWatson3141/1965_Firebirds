@@ -141,7 +141,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     throttleLimiterX = new SlewRateLimiter(TRANSLATION_RATE);
     throttleLimiterY = new SlewRateLimiter(TRANSLATION_RATE);
 
-    SmartDashboard.putBoolean("Feild/Robot", true);
     SmartDashboard.putNumber("Throttle max%", 100);
 
     rotationPID.setTolerance(ROTATION_TOLERANCE);
