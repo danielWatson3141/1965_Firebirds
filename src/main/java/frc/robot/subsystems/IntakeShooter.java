@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Logging;
 
@@ -28,8 +31,8 @@ public class IntakeShooter extends SubsystemBase {
     DigitalInput limitSwitch1 = new DigitalInput(0);
     DigitalInput limitSwitch2 = new DigitalInput(1);
 
-    WPI_TalonSRX shooterMotor1 = new WPI_TalonSRX(8);
-    WPI_TalonSRX shooterMotor2 = new WPI_TalonSRX(6);
+    CANSparkMax shooterMotor1 = new CANSparkMax(8, MotorType.kBrushless);
+    CANSparkMax shooterMotor2 = new CANSparkMax(6, MotorType.kBrushless);
 
     double SHOOTER_TIMER_SECONDS;
     double SHOOTER_SPEED;
@@ -73,6 +76,13 @@ public class IntakeShooter extends SubsystemBase {
         indexIntake.set(speed);
     }
 
+    public void stopIntakeSequence(){
+        rollerMotor.stopMotor();
+        indexIntake.stopMotor();
+        Logging.log("IntakeShooter", "stopped intake");
+
+    }
+
     public void runShooterMotors(double speed){
         shooterMotor1.set(speed);
     }
@@ -106,10 +116,9 @@ public class IntakeShooter extends SubsystemBase {
 
 
     public Command getIntakeCommand() {
-        Command r_command = (
-           new InstantCommand(() -> setIntakeMotors(INTAKE_SPEED)).until(() -> switch2State()).withTimeout(INTAKE_TIMEOUT_SECONDS)
-           .andThen(new InstantCommand(() -> setIntakeMotors(0)))
+        Command r_command = (new RunCommand(() -> setIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT_SECONDS).until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence()))
         );
+
 
         r_command.addRequirements(this);
         return r_command;
