@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
@@ -22,33 +23,38 @@ public class IntakeShooter extends SubsystemBase {
 
     WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
-    WPI_TalonSRX indexShooter = new WPI_TalonSRX(10);
-    WPI_TalonSRX indexIntake = new WPI_TalonSRX(11);
+    WPI_TalonSRX indexIntake = new WPI_TalonSRX(10);
+    WPI_TalonSRX indexShooter = new WPI_TalonSRX(11);
+
+    CANSparkMax shooterMotor1 = new CANSparkMax(12, MotorType.kBrushless);
+    CANSparkMax shooterMotor2 = new CANSparkMax(13, MotorType.kBrushless);
 
     double INTAKE_TIMEOUT_SECONDS;
     double INTAKE_SPEED;
 
+    double SHOOTER_TIMER_SECONDS = 1.7;
+    double SHOOTER_SPEED = .8;
+    double INDEX_SHOOTER_SPEED = 1;
+
+
     DigitalInput limitSwitch1 = new DigitalInput(0);
     DigitalInput limitSwitch2 = new DigitalInput(1);
 
-    CANSparkMax shooterMotor1 = new CANSparkMax(8, MotorType.kBrushless);
-    CANSparkMax shooterMotor2 = new CANSparkMax(6, MotorType.kBrushless);
-
-    double SHOOTER_TIMER_SECONDS;
-    double SHOOTER_SPEED;
-
     boolean shooterMode;
-
 
     public IntakeShooter() {
 
         shooterMotor2.follow(shooterMotor1);
-        SHOOTER_TIMER_SECONDS = 1.7;
-        SHOOTER_SPEED = .8;
         shooterMode = true;
+
+        shooterMotor1.setIdleMode(IdleMode.kCoast);
+        shooterMotor2.setIdleMode(IdleMode.kCoast);
+        indexShooter.setInverted(true);
 
         INTAKE_TIMEOUT_SECONDS = 3;
         INTAKE_SPEED = 0.6;
+        indexIntake.setInverted(true);
+
 
     }
 
@@ -57,7 +63,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public boolean switch2State() {
-      return !limitSwitch2.get();
+        return !limitSwitch2.get();
     }
 
     public void setShooterMode() {
@@ -70,61 +76,82 @@ public class IntakeShooter extends SubsystemBase {
         }
     }
 
-    public void setIntakeMotors(double speed){
+    public void runIntakeMotors(double speed) {
         rollerMotor.set(speed);
         Logging.log("IntakeShooter", "set index motor");
         indexIntake.set(speed);
     }
 
-    public void stopIntakeSequence(){
+    public void stopIntakeSequence() {
         rollerMotor.stopMotor();
         indexIntake.stopMotor();
         Logging.log("IntakeShooter", "stopped intake");
 
     }
 
-    public void runShooterMotors(double speed){
+    public void runShooterMotors(double speed) {
         shooterMotor1.set(speed);
     }
-    public void stopShooterSequence(){
+
+    public void stopShooterSequence() {
         shooterMotor1.stopMotor();
         indexShooter.stopMotor();
 
     }
 
-     public void setIndexMotor(double speed){
+    public void setIndexShooter(double speed) {
         Logging.log("IntakeShooter", "set index motor");
         indexShooter.set(speed);
-    
+
     }
-
-
-
 
     public Command getShootCommand() {
         Command r_command = Commands.sequence(
-            new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)),
-            Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
-            new InstantCommand(() -> setIndexMotor(SHOOTER_SPEED)),
-            Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
-            new InstantCommand(() -> stopShooterSequence())
-        );
+                new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)),
+                Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
+                new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)),
+                Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
+                new InstantCommand(() -> stopShooterSequence()));
 
         r_command.addRequirements(this);
         return r_command;
     }
-
 
     public Command getIntakeCommand() {
-        Command r_command = (new RunCommand(() -> setIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT_SECONDS).until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence()))
-        );
-
+        Command r_command = (new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT_SECONDS)
+                .until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence())));
 
         r_command.addRequirements(this);
         return r_command;
     }
 
+    public Command testIntakeRunCommand() {
+        Command r_command = (new InstantCommand(() -> runIntakeMotors(INTAKE_SPEED)));
 
+        r_command.addRequirements(this);
+        return r_command;
+    }
+
+    public Command testIntakeStopCommand() {
+        Command r_command = (new InstantCommand(() -> stopIntakeSequence()));
+
+        r_command.addRequirements(this);
+        return r_command;
+    }
+
+    public Command testShootRunCommand() {
+        Command r_command = Commands.sequence(new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)), new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)));
+
+        r_command.addRequirements(this);
+        return r_command;
+    }
+
+    public Command testShootStopCommand() {
+        Command r_command = (new InstantCommand(() -> stopShooterSequence()));
+
+        r_command.addRequirements(this);
+        return r_command;
+    }
 
     public void periodic() {
         switch1State();
@@ -132,7 +159,6 @@ public class IntakeShooter extends SubsystemBase {
         SmartDashboard.putBoolean("switch state 1", switch1State());
         SmartDashboard.putBoolean("switch state 2", switch2State());
     }
-
 }
 
-//new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(0)),  )
+// new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(0)), )

@@ -45,6 +45,9 @@ public class Vision extends SubsystemBase {
 
     public Vision() {
 
+        if(!VISION_WORKING)
+            return;
+
         camera1 = CameraServer.startAutomaticCapture(0);
         camera1.setResolution(300, 300);
         camera2 = CameraServer.startAutomaticCapture(1);

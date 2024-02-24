@@ -7,10 +7,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Logging;
 
 public class Lifter extends SubsystemBase{
 
-    private DoubleSolenoid lifterArm;
+    private DoubleSolenoid lifterArm1;
+    private DoubleSolenoid lifterArm2;
+
 
     public final ShuffleboardTab lifterTab = Shuffleboard.getTab(getName());
     private GenericEntry armStateEntry = lifterTab.add("Is Arm Up", false)
@@ -18,13 +21,21 @@ public class Lifter extends SubsystemBase{
     .getEntry();
 
     public Lifter() {
-        lifterArm = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+        lifterArm1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 2);
+        lifterArm2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 3);
+
+        lifterArm1.set(Value.kForward);
+        lifterArm2.set(Value.kForward);
     }
 
     public void toggleLifter(){
-        lifterArm.toggle();
+        lifterArm1.toggle();
+        lifterArm2.toggle();
 
-        armStateEntry.setBoolean(lifterArm.get()==Value.kForward);
+        armStateEntry.setBoolean(lifterArm1.get()==Value.kForward);
+        armStateEntry.setBoolean(lifterArm2.get()==Value.kForward);
+
+        Logging.log("Lifter", "I'm not dead");
 
     }
 
