@@ -116,9 +116,11 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = (new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence())));
+        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State());
 
         r_command.addRequirements(this);
+
+        r_command = r_command.finallyDo(() -> stopIntakeSequence());
         return r_command;
     }
 

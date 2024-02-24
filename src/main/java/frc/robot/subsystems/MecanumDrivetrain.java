@@ -72,7 +72,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
   private final double ROTATION_RATE = 0.5;
-  private final double TRANSLATION_RATE = 1;
+  private final double TRANSLATION_RATE = 4;
 
   private final long DRIVE_AUTO_WAIT = 500;// fast speed for initial testing
   private final double DRIVE_AUTO_SPEED = 0.2;
