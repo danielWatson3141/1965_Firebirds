@@ -208,7 +208,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     Logging.log(getSubsystem(), "reset gyroscope");
   }
 
-  public void driveMode() {
+  public void switchDriveRelativity() {
     fieldRelative = !fieldRelative;
   }
 

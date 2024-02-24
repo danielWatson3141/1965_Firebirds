@@ -135,7 +135,7 @@ public class RobotContainer {
         );
 
         tenButton.onTrue(
-             new InstantCommand(() -> m_drivetrain.driveMode())
+             new InstantCommand(() -> m_drivetrain.switchDriveRelativity())
         );
 
     }
