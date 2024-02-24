@@ -122,7 +122,7 @@ public class RobotContainer {
             new InstantCommand(() -> m_intakeshooter.setShooterMode())
         );
 
-        bottomRightButton.onTrue(
+        bottomRightButton.whileTrue(
             m_intakeshooter.getIntakeCommand()
         );
 
@@ -132,6 +132,10 @@ public class RobotContainer {
 
         eightButton.onTrue(
             new InstantCommand(() -> m_drivetrain.gyroReset())
+        );
+
+        tenButton.onTrue(
+             new InstantCommand(() -> m_drivetrain.driveMode())
         );
 
     }

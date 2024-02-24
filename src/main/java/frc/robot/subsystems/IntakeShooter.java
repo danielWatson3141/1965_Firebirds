@@ -29,12 +29,12 @@ public class IntakeShooter extends SubsystemBase {
     CANSparkMax shooterMotor1 = new CANSparkMax(12, MotorType.kBrushless);
     CANSparkMax shooterMotor2 = new CANSparkMax(13, MotorType.kBrushless);
 
-    double INTAKE_TIMEOUT_SECONDS;
-    double INTAKE_SPEED;
+    double INTAKE_SPEED = 0.6;
 
     double SHOOTER_TIMER_SECONDS = 1.7;
     double SHOOTER_SPEED = .8;
     double INDEX_SHOOTER_SPEED = 1;
+    
 
 
     DigitalInput limitSwitch1 = new DigitalInput(0);
@@ -51,8 +51,6 @@ public class IntakeShooter extends SubsystemBase {
         shooterMotor2.setIdleMode(IdleMode.kCoast);
         indexShooter.setInverted(true);
 
-        INTAKE_TIMEOUT_SECONDS = 3;
-        INTAKE_SPEED = 0.6;
         indexIntake.setInverted(true);
 
 
@@ -118,8 +116,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = (new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).withTimeout(INTAKE_TIMEOUT_SECONDS)
-                .until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence())));
+        Command r_command = (new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State()).andThen(new InstantCommand(() -> stopIntakeSequence())));
 
         r_command.addRequirements(this);
         return r_command;

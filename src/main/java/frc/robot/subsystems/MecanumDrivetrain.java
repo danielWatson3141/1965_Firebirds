@@ -77,7 +77,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final long DRIVE_AUTO_WAIT = 500;// fast speed for initial testing
   private final double DRIVE_AUTO_SPEED = 0.2;
 
-  public boolean fieldRelative = true;
+  public boolean fieldRelative = false;
 
   MecanumDrive m_robotDrive = new MecanumDrive(m_frontLeft::set, m_rearLeft::set, m_frontRight::set, m_rearRight::set);
 
@@ -209,6 +209,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     Logging.log(getSubsystem(), "reset gyroscope");
   }
 
+  public void driveMode() {
+    fieldRelative = !fieldRelative;
+  }
+
   public void driveAuto(double autoSpeed) {
     m_frontLeft.set(autoSpeed);
     m_rearLeft.set(autoSpeed);
@@ -316,7 +320,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     // SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() *
     // -1);
     gyroAngleEntry.setDouble(m_gyro.getRotation2d().getDegrees() * -1);
-    fieldRelative = fieldBooleanEntry.getBoolean(fieldRelative);
+  
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
