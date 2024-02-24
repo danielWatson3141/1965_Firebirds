@@ -118,12 +118,12 @@ public class RobotContainer {
             m_intakeshooter.getShootCommand()
         );
 
-        topRightButton.onTrue(
-            new InstantCommand(() -> m_intakeshooter.setShooterMode())
+        bottomLeftButton.whileTrue(
+            m_intakeshooter.getIntakeCommand()
         );
 
-        bottomRightButton.whileTrue(
-            m_intakeshooter.getIntakeCommand()
+        topLeftButton.onTrue(
+            new InstantCommand(() -> m_intakeshooter.setShooterMode())
         );
 
         sevenButton.onTrue(
