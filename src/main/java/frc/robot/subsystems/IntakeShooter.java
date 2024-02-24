@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,20 +33,18 @@ public class IntakeShooter extends SubsystemBase {
     double INTAKE_SPEED = 0.6;
 
     double SHOOTER_TIMER_SECONDS = 1;
-    double SHOOTER_SPEED = 1;
     double INDEX_SHOOTER_SPEED = 1;
-
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .16;
     
-
+    private final Joystick m_stick;
 
     DigitalInput limitSwitch1 = new DigitalInput(0);
     DigitalInput limitSwitch2 = new DigitalInput(1);
 
     boolean shooterMode;
 
-    public IntakeShooter() {
+    public IntakeShooter(Joystick input_stick) {
 
         shooterMotor2.follow(shooterMotor1);
         shooterMode = true;
@@ -56,6 +55,7 @@ public class IntakeShooter extends SubsystemBase {
 
         indexIntake.setInverted(true);
 
+        m_stick = input_stick;
 
     }
 
@@ -65,16 +65,6 @@ public class IntakeShooter extends SubsystemBase {
 
     public boolean switch2State() {
         return !limitSwitch2.get();
-    }
-
-    public void setShooterMode() {
-        shooterMode = !shooterMode;
-
-        if (shooterMode) {
-            SHOOTER_SPEED = SPEAKER_SHOOTER_SPEED;
-        } else {
-            SHOOTER_SPEED = AMP_SHOOTER_SPEED;
-        }
     }
 
     public void runIntakeMotors(double speed) {
@@ -108,7 +98,7 @@ public class IntakeShooter extends SubsystemBase {
 
     public Command getShootCommand() {
         Command r_command = Commands.sequence(
-                new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)),
+                new InstantCommand(() -> runShooterMotors(m_stick.getRawButton(2) ? AMP_SHOOTER_SPEED : SPEAKER_SHOOTER_SPEED)),
                 Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
                 new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)),
                 Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
@@ -142,7 +132,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command testShootRunCommand() {
-        Command r_command = Commands.sequence(new InstantCommand(() -> runShooterMotors(SHOOTER_SPEED)), new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)));
+        Command r_command = Commands.sequence(new InstantCommand(() -> runShooterMotors(m_stick.getRawButton(2) ? AMP_SHOOTER_SPEED : SPEAKER_SHOOTER_SPEED)), new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)));
 
         r_command.addRequirements(this);
         return r_command;

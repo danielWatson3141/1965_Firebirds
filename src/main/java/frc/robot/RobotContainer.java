@@ -35,7 +35,7 @@ public class RobotContainer {
 
     private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
-    private final IntakeShooter m_intakeshooter = new IntakeShooter();
+    private final IntakeShooter m_intakeshooter = new IntakeShooter(m_stick);
     private final Lifter m_lifter = new Lifter();
    
     private JoystickButton triggerButton = new JoystickButton(m_stick, 1);
@@ -120,10 +120,6 @@ public class RobotContainer {
 
         bottomLeftButton.whileTrue(
             m_intakeshooter.getIntakeCommand()
-        );
-
-        topLeftButton.onTrue(
-            new InstantCommand(() -> m_intakeshooter.setShooterMode())
         );
 
         sevenButton.onTrue(
