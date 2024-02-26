@@ -110,10 +110,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         Logging.log("robot container", "buttons configured");
 
-        // triggerButton.onTrue(        
-        //     m_shooter.getShootCommand()
-        // );
-
         triggerButton.whileTrue(
             m_intakeshooter.getShootCommand()
         );
@@ -128,10 +124,6 @@ public class RobotContainer {
 
         eightButton.onTrue(
             new InstantCommand(() -> m_drivetrain.gyroReset())
-        );
-
-        tenButton.onTrue(
-             new InstantCommand(() -> m_drivetrain.switchDriveRelativity())
         );
 
         elevenButton.whileTrue(
