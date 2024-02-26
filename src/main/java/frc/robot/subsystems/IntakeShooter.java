@@ -105,6 +105,8 @@ public class IntakeShooter extends SubsystemBase {
                 new InstantCommand(() -> stopShooterSequence()));
 
         r_command.addRequirements(this);
+
+        r_command = r_command.finallyDo(() -> stopShooterSequence());
         return r_command;
     }
 

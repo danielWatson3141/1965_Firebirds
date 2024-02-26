@@ -114,7 +114,7 @@ public class RobotContainer {
         //     m_shooter.getShootCommand()
         // );
 
-        triggerButton.onTrue(
+        triggerButton.whileTrue(
             m_intakeshooter.getShootCommand()
         );
 
