@@ -4,7 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
@@ -29,6 +30,11 @@ public class IntakeShooter extends SubsystemBase {
 
     CANSparkMax shooterMotor1 = new CANSparkMax(12, MotorType.kBrushless);
     CANSparkMax shooterMotor2 = new CANSparkMax(13, MotorType.kBrushless);
+
+    private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(3, 1);
+
+    RelativeEncoder shooterEncoder1 = shooterMotor1.getEncoder();
+    RelativeEncoder shooterEncoder2 = shooterMotor2.getEncoder();
 
     double INTAKE_SPEED = 0.6;
 
