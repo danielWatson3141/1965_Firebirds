@@ -22,6 +22,7 @@ import frc.robot.Logging;
 public class IntakeShooter extends SubsystemBase {
 
     private final boolean HAVE_INDEX_MOTOR = true;
+    private boolean intake_bypass;
 
     WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
@@ -60,13 +61,15 @@ public class IntakeShooter extends SubsystemBase {
         indexShooter.setInverted(true);
 
         indexIntake.setInverted(true);
+        intake_bypass = false;
+        SmartDashboard.putBoolean("intake bypass", false);
 
         m_stick = input_stick;
 
     }
 
     public boolean switch1State() {
-        return !limitSwitch1.get();
+        return intake_bypass ? false : !limitSwitch1.get();
     }
 
     public boolean switch2State() {
@@ -162,6 +165,7 @@ public class IntakeShooter extends SubsystemBase {
         switch2State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
         SmartDashboard.putBoolean("switch state 2", switch2State());
+        intake_bypass = SmartDashboard.getBoolean("intake bypass", false);
     }
 }
 
