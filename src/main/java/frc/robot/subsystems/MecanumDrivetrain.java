@@ -139,10 +139,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public MecanumDrivetrain(Joystick input_stick) {
 
-    initialFLEncoder = m_frontLeftEncoder.getPosition();
-    initialFREncoder = m_frontRightEncoder.getPosition();
-    initialRLEncoder = m_rearLeftEncoder.getPosition();
-    initialRREncoder = m_rearRightEncoder.getPosition();
+    resetEncoder();
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
@@ -228,14 +225,16 @@ public class MecanumDrivetrain extends SubsystemBase {
     double rearLeftEncoderValue = (m_rearLeftEncoder.getPosition() - initialRLEncoder) / ENCODER_CONVERSION_FACTOR;
     double rearRightEncoderValue = (m_rearRightEncoder.getPosition() - initialRREncoder) / ENCODER_CONVERSION_FACTOR;
 
-    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue)
-        / 4;
+    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue) / 4;
 
     return driveEncoderMean;
   }
 
   public void resetEncoder() {
-    driveEncoderMean = 0;
+    initialFLEncoder = m_frontLeftEncoder.getPosition();
+    initialFREncoder = m_frontRightEncoder.getPosition();
+    initialRLEncoder = m_rearLeftEncoder.getPosition();
+    initialRREncoder = m_rearRightEncoder.getPosition();
   }
 
   public Rotation2d gyroAngle() {
