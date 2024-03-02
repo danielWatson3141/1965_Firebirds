@@ -108,7 +108,8 @@ public class IntakeShooter extends SubsystemBase {
         Command r_command = Commands.sequence(
                 new InstantCommand(() -> runShooterMotors(m_stick.getRawButton(2) ? AMP_SHOOTER_SPEED : SPEAKER_SHOOTER_SPEED)),
                 Commands.waitSeconds(SHOOTER_TIMER_SECONDS),
-                new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED))
+                new InstantCommand(() -> setIndexShooter(INDEX_SHOOTER_SPEED)),
+                Commands.waitSeconds(Double.POSITIVE_INFINITY)
                 );
 
         r_command.addRequirements(this);
