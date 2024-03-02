@@ -216,20 +216,20 @@ public class MecanumDrivetrain extends SubsystemBase {
       if (input < 0) {
         value = -value;
       }
-
       return value;
     }
   }
 
-private final double ENCODER_CONVERSION_FACTOR = 25;
+  private final double ENCODER_CONVERSION_FACTOR = 25;
 
-  public double getDistanceTravelled(){
+  public double getDistanceTravelled() {
     double frontLeftEncoderValue = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
     double frontRightEncoderValue = (m_frontRightEncoder.getPosition() - initialFREncoder) / ENCODER_CONVERSION_FACTOR;
     double rearLeftEncoderValue = (m_rearLeftEncoder.getPosition() - initialRLEncoder) / ENCODER_CONVERSION_FACTOR;
     double rearRightEncoderValue = (m_rearRightEncoder.getPosition() - initialRREncoder) / ENCODER_CONVERSION_FACTOR;
 
-    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue) / 4;
+    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue)
+        / 4;
 
     return driveEncoderMean;
   }
@@ -254,10 +254,10 @@ private final double ENCODER_CONVERSION_FACTOR = 25;
   }
 
   public void driveAuto(double autoSpeed) {
-      m_frontLeft.set(autoSpeed);
-      m_rearLeft.set(autoSpeed);
-      m_frontRight.set(autoSpeed);
-      m_rearRight.set(autoSpeed);
+    m_frontLeft.set(autoSpeed);
+    m_rearLeft.set(autoSpeed);
+    m_frontRight.set(autoSpeed);
+    m_rearRight.set(autoSpeed);
   }
 
   public Command driveAutoCommand() {
@@ -357,7 +357,7 @@ private final double ENCODER_CONVERSION_FACTOR = 25;
     SmartDashboard.putNumber("rotation error", rError);
 
     SmartDashboard.putNumber("encoder value", getDistanceTravelled());
-    
+
     rotateSetpointEntry.setDouble(rSetpoint);
     rotateErrorEntry.setDouble(rError);
 
