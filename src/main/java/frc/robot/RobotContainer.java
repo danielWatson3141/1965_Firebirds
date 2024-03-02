@@ -119,6 +119,10 @@ public class RobotContainer {
             new InstantCommand(() -> m_drivetrain.gyroReset())
         );
 
+        nineButton.onTrue(
+            new InstantCommand(() -> m_drivetrain.lifterModeToggle())
+        );
+
         elevenButton.onTrue(
             m_intakeshooter.getIntakeCommand()
         );
