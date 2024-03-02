@@ -35,8 +35,6 @@ public class Lifter extends SubsystemBase{
         armStateEntry.setBoolean(lifterArm1.get()==Value.kForward);
         armStateEntry.setBoolean(lifterArm2.get()==Value.kForward);
 
-        Logging.log("Lifter", "I'm not dead");
-
     }
 
     
