@@ -252,6 +252,17 @@ public class MecanumDrivetrain extends SubsystemBase {
     fieldRelative = !fieldRelative;
   }
 
+  public void lifterModeToggle(){
+    if (ROTATION_FEEDBACK){
+      ROTATION_FEEDBACK = false;
+    }
+    else{
+      gyroReset();
+      ROTATION_FEEDBACK = true;
+    }
+
+  }
+
   public void driveAuto(double autoSpeed) {
     m_frontLeft.set(autoSpeed);
     m_rearLeft.set(autoSpeed);

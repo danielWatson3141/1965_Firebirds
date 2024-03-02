@@ -116,7 +116,7 @@ public class RobotContainer {
         );
 
         eightButton.onTrue(
-            new InstantCommand(() -> m_drivetrain.gyroReset())
+            new InstantCommand(() -> m_drivetrain.lifterModeToggle())
         );
 
         elevenButton.onTrue(
