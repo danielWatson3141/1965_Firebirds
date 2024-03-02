@@ -94,7 +94,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public double setPoint;
 
+  private final PhotonVision m_photonvision = new PhotonVision();
   private final Vision m_vision = new Vision();
+
 
   // Shuffleboard setting up, oh boy
   public final ShuffleboardTab drivetrainTab = Shuffleboard.getTab(getName());
@@ -302,24 +304,28 @@ public class MecanumDrivetrain extends SubsystemBase {
 
       if (m_vision.VISION_WORKING) {
 
-        tYError = m_vision.myPosition.getTranslation().getY();
-        xTranslation = m_vision.myPosition.getTranslation().getX();
-        yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
-
-        if (Math.abs(xTranslation) <= 1) {
-          tXError = xTranslation;
-        } else {
-          tXError = (xTranslation < 0) ? -1 : 1;
+        if (m_photonvision.hasTargets){
+          
         }
 
-        rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
-        drive_x = translationPID.calculate(tXError, 0);
+        // tYError = m_vision.myPosition.getTranslation().getY();
+        // xTranslation = m_vision.myPosition.getTranslation().getX();
+        // yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
 
-        if (Math.abs(yTranslation) <= 1) {
-          drive_y = yTranslation;
-        } else {
-          drive_y = (yTranslation < 0) ? -1 : 1;
-        }
+        // if (Math.abs(xTranslation) <= 1) {
+        //   tXError = xTranslation;
+        // } else {
+        //   tXError = (xTranslation < 0) ? -1 : 1;
+        // }
+
+        // rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
+        // drive_x = translationPID.calculate(tXError, 0);
+
+        // if (Math.abs(yTranslation) <= 1) {
+        //   drive_y = yTranslation;
+        // } else {
+        //   drive_y = (yTranslation < 0) ? -1 : 1;
+        // }
       }
 
       // **** Joystick Control Mode
