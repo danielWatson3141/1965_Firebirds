@@ -60,6 +60,10 @@ public class MecanumDrivetrain extends SubsystemBase {
   RelativeEncoder m_frontRightEncoder = m_frontRight.getEncoder();
   RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
 
+  double initialFLEncoder;
+
+  double frontLeftEncoderValue;
+
   private double rSetpoint = 0;
   private double rError = 0;
   private double KpSlider = 3;
@@ -132,7 +136,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public MecanumDrivetrain(Joystick input_stick) {
 
-    m_frontLeftEncoder.setPositionConversionFactor(1/42);
+    //m_frontLeftEncoder.setPositionConversionFactor(1/625);
+    //m_frontLeftEncoder.setPositionConversionFactor(1);
+
+    initialFLEncoder = m_frontLeftEncoder.getPosition();
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
@@ -210,6 +217,12 @@ public class MecanumDrivetrain extends SubsystemBase {
       return value;
     }
   }
+
+private final double ENCODER_CONVERSION_FACTOR = 25;
+
+public void getEncoderValue(){
+  frontLeftEncoderValue = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
+}
 
   public Rotation2d gyroAngle() {
     gyroAngle = m_gyro.getRotation2d().times(-1);
@@ -329,7 +342,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
 
-    SmartDashboard.putNumber("encoder value", m_frontLeftEncoder.getPosition());
+    SmartDashboard.putNumber("encoder value", frontLeftEncoderValue);
     
     rotateSetpointEntry.setDouble(rSetpoint);
     rotateErrorEntry.setDouble(rError);
@@ -352,5 +365,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     // for testng
     KpSlider = KpSliderEntry.getDouble(KpSlider);
     rotationPID.setP(KpSlider);
+    getEncoderValue();
   }
 }

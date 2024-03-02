@@ -44,7 +44,7 @@ public class IntakeShooter extends SubsystemBase {
     private final double SHOOTER_TIMER_SECONDS = 1;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
-    private final double AMP_SHOOTER_SPEED = .16;
+    private final double AMP_SHOOTER_SPEED = .10;
     
     private final Joystick m_stick;
 
