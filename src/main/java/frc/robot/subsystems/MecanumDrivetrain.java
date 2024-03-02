@@ -156,7 +156,8 @@ public class MecanumDrivetrain extends SubsystemBase {
     // setting up more shuffleboard stuff
     fieldBooleanEntry = fieldRobotListLayout.add("field or robot toggle", fieldRelative)
         .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-    fieldBooleanEntry = fieldRobotListLayout.add("field or robot box", fieldRelative).withWidget(BuiltInWidgets.kBooleanBox)
+    fieldBooleanEntry = fieldRobotListLayout.add("field or robot box", fieldRelative)
+        .withWidget(BuiltInWidgets.kBooleanBox)
         .getEntry();
     throttleMaxSliderEntry = slidersListLayout.add("Max Throttle %", 100).withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 100)).getEntry();
@@ -195,10 +196,16 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public double deadzone(double input, double deadzone) {
-    if (Math.abs(input) < deadzone) {
+    double absInput = Math.abs(input);
+    if (absInput <= deadzone) {
       return 0;
     } else {
-      return input;
+      double value = (absInput - deadzone) / (1 - deadzone);
+      if (input < 0) {
+        value = -value;
+      }
+
+      return value;
     }
   }
 
@@ -249,35 +256,35 @@ public class MecanumDrivetrain extends SubsystemBase {
       POVvalue = Rotation2d.fromDegrees(m_stick.getPOV());
       m_robotDrive.drivePolar(driveSpeed, POVvalue, 0);
 
-    // **** April Tag Tracking mode
-    // If the vision system has a detection and button 3 is held, track the april
-    // tag and position the robot directly in front of it.
+      // **** April Tag Tracking mode
+      // If the vision system has a detection and button 3 is held, track the april
+      // tag and position the robot directly in front of it.
     } else if (m_vision.myPosition != null && m_stick.getRawButton(3)) {
 
-        if (m_vision.VISION_WORKING){
+      if (m_vision.VISION_WORKING) {
 
-          tYError = m_vision.myPosition.getTranslation().getY();
-          xTranslation = m_vision.myPosition.getTranslation().getX();
-          yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
+        tYError = m_vision.myPosition.getTranslation().getY();
+        xTranslation = m_vision.myPosition.getTranslation().getX();
+        yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
 
-          if (Math.abs(xTranslation) <= 1) {
-            tXError = xTranslation;
-          } else {
-            tXError = (xTranslation < 0) ? -1 : 1;
-          }
-
-          rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
-          drive_x = translationPID.calculate(tXError, 0);
-
-          if (Math.abs(yTranslation) <= 1) {
-            drive_y = yTranslation;
-          } else {
-            drive_y = (yTranslation < 0) ? -1 : 1;
-          }
+        if (Math.abs(xTranslation) <= 1) {
+          tXError = xTranslation;
+        } else {
+          tXError = (xTranslation < 0) ? -1 : 1;
         }
-        
-    // **** Joystick Control Mode
-    // If neither POV mode nor tracking mode is active, then take stick input.
+
+        rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
+        drive_x = translationPID.calculate(tXError, 0);
+
+        if (Math.abs(yTranslation) <= 1) {
+          drive_y = yTranslation;
+        } else {
+          drive_y = (yTranslation < 0) ? -1 : 1;
+        }
+      }
+
+      // **** Joystick Control Mode
+      // If neither POV mode nor tracking mode is active, then take stick input.
     } else {
       // Rotation is locked by default, unlock when button is held
       if (!ROTATION_LOCK || m_stick.getRawButton(2)) {
@@ -285,6 +292,8 @@ public class MecanumDrivetrain extends SubsystemBase {
       } else {
         drive_z = 0;
       }
+
+      drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)));
 
       // Update the setpoint by the drive_z input, this moves the desired heading.
       rSetpoint = (rSetpoint + drive_z);
@@ -296,6 +305,7 @@ public class MecanumDrivetrain extends SubsystemBase {
       // Pull the translation input from the stick, apply deadzone and slew rate
       drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX(), TRANSLATION_DEADZONE)) * driveSpeed;
       drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY(), TRANSLATION_DEADZONE)) * driveSpeed;
+
     }
 
     // Mecanum seems to consider 'X' the forward direction, so we're passing y, x, z
@@ -324,7 +334,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     // SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() *
     // -1);
     gyroAngleEntry.setDouble(m_gyro.getRotation2d().getDegrees() * -1);
-  
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());

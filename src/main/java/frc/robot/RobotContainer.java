@@ -140,6 +140,7 @@ public class RobotContainer {
         twelveButton.onTrue(m_intakeshooter.testIntakeStopCommand());
         triggerButton.whileTrue(getTestCommand());
     }
+
     boolean frontCamera = true;
 
     public void switchCamera() {
@@ -163,11 +164,25 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+    public void stopAutonomousCommand(){
+        m_intakeshooter.stopIntakeSequence();
+        m_intakeshooter.stopShooterSequence();
+        m_drivetrain.driveAuto(0);
 
-    long DRIVE_TIME = 5;
+    }
 
     public Command getAutonomousCommand() {
-        return m_drivetrain.driveAutoCommand();
+        Command r_command = Commands.sequence(
+            m_intakeshooter.getShootCommand(),
+            Commands.waitSeconds(2),
+            new InstantCommand(() -> m_intakeshooter.stopShooterSequence()),
+            new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)),
+            Commands.race(new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State()), Commands.waitSeconds(2))
+        );
+         
+        r_command = r_command.finallyDo(() -> stopAutonomousCommand());
+        return r_command;
+
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
     }
 
