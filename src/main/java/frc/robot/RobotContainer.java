@@ -78,9 +78,6 @@ public class RobotContainer {
 
         POVspeed = m_drivetrain.driveSpeed;
 
-        m_drivetrain.setDefaultCommand(
-                new RunCommand(() -> m_drivetrain.drive(),
-                        m_drivetrain));
         //camera1 = CameraServer.startAutomaticCapture(0);
         //camera1.setResolution(300, 300);
         //camera2 = CameraServer.startAutomaticCapture(1);
@@ -169,12 +166,18 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         Command r_command = Commands.sequence(
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).withTimeout(0.2),
+            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).withTimeout(0.2),
             m_intakeshooter.getShootCommand().withTimeout(3),
             new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)),
-            Commands.race(new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State()), Commands.waitSeconds(2))
+            Commands.race(new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State()), Commands.waitSeconds(3))
         );
          
         r_command = r_command.finallyDo(() -> stopAutonomousCommand());
+
+        r_command.addRequirements(m_drivetrain);
+        r_command.addRequirements(m_intakeshooter);
+
         return r_command;
 
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
@@ -184,6 +187,10 @@ public class RobotContainer {
      
 
         return Commands.none();
+    }
+
+    public Command getTeleopCommand(){
+        return new RunCommand(() -> m_drivetrain.drive() , m_drivetrain);
     }
 
 }
