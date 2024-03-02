@@ -39,9 +39,10 @@ public class IntakeShooter extends SubsystemBase {
     RelativeEncoder shooterEncoder2 = shooterMotor2.getEncoder();
 
     public double INTAKE_SPEED = 0.6;
+    private final double INTAKE_TIMEOUT = 5;
 
-    double SHOOTER_TIMER_SECONDS = 1;
-    double INDEX_SHOOTER_SPEED = 1;
+    private final double SHOOTER_TIMER_SECONDS = 1;
+    private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .16;
     
@@ -117,7 +118,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> intake_bypass ? true : switch1State());
+        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> intake_bypass ? true : switch1State()).withTimeout(INTAKE_TIMEOUT);
 
         r_command.addRequirements(this);
 
