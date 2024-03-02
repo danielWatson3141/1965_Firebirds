@@ -61,8 +61,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   RelativeEncoder m_rearRightEncoder = m_rearRight.getEncoder();
 
   double initialFLEncoder;
+  double initialFREncoder;
+  double initialRLEncoder;
+  double initialRREncoder;
 
-  double frontLeftEncoderValue;
+  double driveEncoderMean;
 
   private double rSetpoint = 0;
   private double rError = 0;
@@ -136,10 +139,10 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public MecanumDrivetrain(Joystick input_stick) {
 
-    //m_frontLeftEncoder.setPositionConversionFactor(1/625);
-    //m_frontLeftEncoder.setPositionConversionFactor(1);
-
     initialFLEncoder = m_frontLeftEncoder.getPosition();
+    initialFREncoder = m_frontRightEncoder.getPosition();
+    initialRLEncoder = m_rearLeftEncoder.getPosition();
+    initialRREncoder = m_rearRightEncoder.getPosition();
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
@@ -220,9 +223,20 @@ public class MecanumDrivetrain extends SubsystemBase {
 
 private final double ENCODER_CONVERSION_FACTOR = 25;
 
-public void getEncoderValue(){
-  frontLeftEncoderValue = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
-}
+  public double getDistanceTravelled(){
+    double frontLeftEncoderValue = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
+    double frontRightEncoderValue = (m_frontRightEncoder.getPosition() - initialFREncoder) / ENCODER_CONVERSION_FACTOR;
+    double rearLeftEncoderValue = (m_rearLeftEncoder.getPosition() - initialRLEncoder) / ENCODER_CONVERSION_FACTOR;
+    double rearRightEncoderValue = (m_rearRightEncoder.getPosition() - initialRREncoder) / ENCODER_CONVERSION_FACTOR;
+
+    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue) / 4;
+
+    return driveEncoderMean;
+  }
+
+  public void resetEncoder() {
+    driveEncoderMean = 0;
+  }
 
   public Rotation2d gyroAngle() {
     gyroAngle = m_gyro.getRotation2d().times(-1);
@@ -240,10 +254,10 @@ public void getEncoderValue(){
   }
 
   public void driveAuto(double autoSpeed) {
-    m_frontLeft.set(autoSpeed);
-    m_rearLeft.set(autoSpeed);
-    m_frontRight.set(autoSpeed);
-    m_rearRight.set(autoSpeed);
+      m_frontLeft.set(autoSpeed);
+      m_rearLeft.set(autoSpeed);
+      m_frontRight.set(autoSpeed);
+      m_rearRight.set(autoSpeed);
   }
 
   public Command driveAutoCommand() {
@@ -317,7 +331,7 @@ public void getEncoderValue(){
       // input
       rError = (m_gyro.getAngle() - rSetpoint);
 
-      // Pull the translation input from the stick, apply deadzone and slew rate
+      // Pull the translation input from the stick, apply deadzone and slew rateP
       drive_x = throttleLimiterX.calculate(deadzone(m_stick.getX(), TRANSLATION_DEADZONE)) * driveSpeed;
       drive_y = throttleLimiterY.calculate(deadzone(-m_stick.getY(), TRANSLATION_DEADZONE)) * driveSpeed;
 
@@ -342,7 +356,7 @@ public void getEncoderValue(){
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
 
-    SmartDashboard.putNumber("encoder value", frontLeftEncoderValue);
+    SmartDashboard.putNumber("encoder value", getDistanceTravelled());
     
     rotateSetpointEntry.setDouble(rSetpoint);
     rotateErrorEntry.setDouble(rError);
@@ -365,6 +379,5 @@ public void getEncoderValue(){
     // for testng
     KpSlider = KpSliderEntry.getDouble(KpSlider);
     rotationPID.setP(KpSlider);
-    getEncoderValue();
   }
 }

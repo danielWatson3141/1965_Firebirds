@@ -164,7 +164,30 @@ public class RobotContainer {
 
     }
 
-    public Command getAutonomousCommand() {
+    private final double autoDistance = 1.5;
+
+    public Command getDistanceAutonomousCommand() {
+        Command r_command = Commands.sequence(
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).withTimeout(0.2),
+            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).withTimeout(0.2),
+            m_intakeshooter.getShootCommand().withTimeout(3),
+            new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)),
+            new InstantCommand(() -> m_drivetrain.resetEncoder()),
+            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State() || m_drivetrain.getDistanceTravelled() >= autoDistance), 
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).until(() -> m_drivetrain.getDistanceTravelled() <= 0),
+            m_intakeshooter.getShootCommand().withTimeout(3)
+            );
+         
+        r_command = r_command.finallyDo(() -> stopAutonomousCommand());
+
+        r_command.addRequirements(m_drivetrain);
+        r_command.addRequirements(m_intakeshooter);
+
+        return r_command;
+    }
+    
+
+    public Command getTimedAutonomousCommand() {
         Command r_command = Commands.sequence(
             new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).withTimeout(0.2),
             new RunCommand(() -> m_drivetrain.driveAuto(0.2)).withTimeout(0.2),
