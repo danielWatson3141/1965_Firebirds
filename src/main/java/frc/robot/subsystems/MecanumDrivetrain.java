@@ -132,6 +132,8 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public MecanumDrivetrain(Joystick input_stick) {
 
+    m_frontLeftEncoder.setPositionConversionFactor(1/42);
+
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
     m_frontRight.setIdleMode(IdleMode.kBrake);
@@ -326,6 +328,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
+
+    SmartDashboard.putNumber("encoder value", m_frontLeftEncoder.getPosition());
+    
     rotateSetpointEntry.setDouble(rSetpoint);
     rotateErrorEntry.setDouble(rError);
 
