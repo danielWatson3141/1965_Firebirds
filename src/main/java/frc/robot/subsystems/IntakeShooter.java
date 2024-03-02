@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Logging;
 
 public class IntakeShooter extends SubsystemBase {
@@ -69,7 +70,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public boolean switch1State() {
-        return intake_bypass ? false : !limitSwitch1.get();
+        return !limitSwitch1.get();
     }
 
     public boolean switch2State() {
@@ -78,15 +79,12 @@ public class IntakeShooter extends SubsystemBase {
 
     public void runIntakeMotors(double speed) {
         rollerMotor.set(speed);
-        Logging.log("IntakeShooter", "set index motor");
         indexIntake.set(speed);
     }
 
     public void stopIntakeSequence() {
         rollerMotor.stopMotor();
         indexIntake.stopMotor();
-        Logging.log("IntakeShooter", "stopped intake");
-
     }
 
     public void runShooterMotors(double speed) {
@@ -119,7 +117,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State());
+        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> intake_bypass ? true : switch1State());
 
         r_command.addRequirements(this);
 
