@@ -164,7 +164,7 @@ public class RobotContainer {
 
     }
 
-    private final double autoDistance = 1.5;
+    private final double autoDistance = 2.5;
 
     public Command getDistanceAutonomousCommand() {
         Command r_command = Commands.sequence(
