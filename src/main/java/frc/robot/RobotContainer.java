@@ -169,9 +169,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         Command r_command = Commands.sequence(
-            m_intakeshooter.getShootCommand(),
-            Commands.waitSeconds(2),
-            new InstantCommand(() -> m_intakeshooter.stopShooterSequence()),
+            m_intakeshooter.getShootCommand().withTimeout(3),
             new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)),
             Commands.race(new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State()), Commands.waitSeconds(2))
         );
