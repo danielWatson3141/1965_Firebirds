@@ -168,8 +168,8 @@ public class RobotContainer {
 
     public Command getDistanceAutonomousCommand() {
         Command r_command = Commands.sequence(
-            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).withTimeout(0.2),
-            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).withTimeout(0.2), //spaz out for a second to flip down the hinge thingy
+            new RunCommand(() -> m_drivetrain.driveAuto(0.3)).withTimeout(0.4),
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.3)).withTimeout(0.3), //spaz out for a second to flip down the hinge thingy
             m_intakeshooter.getShootCommand().withTimeout(3), //shoot the first note and then stop
             new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)), //start intake motors
             new InstantCommand(() -> m_drivetrain.resetEncoder()), //reset distance just in case it's off

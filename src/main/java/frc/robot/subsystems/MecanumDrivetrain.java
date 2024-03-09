@@ -39,7 +39,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter rotationLimiter;
 
   private final double TRANSLATION_DEADZONE = 0.08;
-  private final double ROTATION_DEADZONE = 0.11;
+  private final double ROTATION_DEADZONE = 0.15;
 
   private final double ROTATION_TOLERANCE = 3; // degrees
   // private double locationX = 0.2794;
@@ -80,10 +80,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
   private final double ROTATION_RATE = 4;
+  private final double ROTATION_CAP = .6;
   private final double TRANSLATION_RATE = 4;
 
   private boolean ROTATION_LOCK = false;
-  private boolean ROTATION_FEEDBACK = true;
+  private boolean rotationFeedback = true;
 
   private final long DRIVE_AUTO_WAIT = 500;// fast speed for initial testing
   private final double DRIVE_AUTO_SPEED = 0.2;
@@ -254,12 +255,12 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public void lifterModeToggle(){
-    if (ROTATION_FEEDBACK){
-      ROTATION_FEEDBACK = false;
+    if (rotationFeedback){
+      rotationFeedback = false;
     }
     else{
       gyroReset();
-      ROTATION_FEEDBACK = true;
+      rotationFeedback = true;
     }
 
   }
@@ -328,12 +329,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     } else {
       // Rotation is locked by default, unlock when button is held
       if (!ROTATION_LOCK || m_stick.getRawButton(2)) {
-        drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)));
+        drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)) * ROTATION_CAP);
       } else {
         drive_z = 0;
       }
-
-      drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)));
 
       // Update the setpoint by the drive_z input, this moves the desired heading.
       rSetpoint = (rSetpoint + drive_z);
@@ -353,7 +352,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_robotDrive.driveCartesian(
         drive_y,
         drive_x,
-        ROTATION_FEEDBACK ? rotationPID.calculate(rError, 0) / 180 : drive_z,
+        rotationFeedback ? rotationPID.calculate(rError, 0) / 180 : drive_z,
         fieldRelative ? gyroAngle : Rotation2d.fromDegrees(0));
 
     // stickXEntry.setDouble(drive_x);
@@ -367,7 +366,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
     SmartDashboard.putNumber("gyro angle graph", m_gyro.getAngle());
-    SmartDashboard.putBoolean("lifter mode", ROTATION_FEEDBACK);
+    SmartDashboard.putBoolean("lifter mode", rotationFeedback);
     SmartDashboard.putNumber("encoder value", getDistanceTravelled());
 
     // rotateSetpointEntry.setDouble(rSetpoint);
