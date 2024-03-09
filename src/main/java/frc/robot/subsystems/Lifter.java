@@ -15,10 +15,10 @@ public class Lifter extends SubsystemBase{
     private DoubleSolenoid lifterArm2;
 
 
-    public final ShuffleboardTab lifterTab = Shuffleboard.getTab(getName());
-    private GenericEntry armStateEntry = lifterTab.add("Is Arm Up", false)
-    .withSize(1, 1).withPosition(0, 1)
-    .getEntry();
+    // public final ShuffleboardTab lifterTab = Shuffleboard.getTab(getName());
+    // private GenericEntry armStateEntry = lifterTab.add("Is Arm Up", false)
+    // .withSize(1, 1).withPosition(0, 1)
+    // .getEntry();
 
     public Lifter() {
         lifterArm1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 2);
@@ -32,8 +32,8 @@ public class Lifter extends SubsystemBase{
         lifterArm1.toggle();
         lifterArm2.toggle();
 
-        armStateEntry.setBoolean(lifterArm1.get()==Value.kForward);
-        armStateEntry.setBoolean(lifterArm2.get()==Value.kForward);
+        // armStateEntry.setBoolean(lifterArm1.get()==Value.kForward);
+        // armStateEntry.setBoolean(lifterArm2.get()==Value.kForward);
 
     }
 

@@ -23,8 +23,7 @@ import frc.robot.Logging;
 public class IntakeShooter extends SubsystemBase {
 
     private final boolean HAVE_INDEX_MOTOR = true;
-    private boolean intake_bypass;
-
+    
     WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
     WPI_TalonSRX indexIntake = new WPI_TalonSRX(10);
@@ -63,8 +62,7 @@ public class IntakeShooter extends SubsystemBase {
         indexShooter.setInverted(true);
 
         indexIntake.setInverted(true);
-        intake_bypass = false;
-        SmartDashboard.putBoolean("intake bypass", false);
+       
 
         m_stick = input_stick;
 
@@ -119,7 +117,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> intake_bypass ? true : switch1State()).withTimeout(INTAKE_TIMEOUT);
+        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State()).withTimeout(INTAKE_TIMEOUT);
 
         r_command.addRequirements(this);
 
@@ -164,7 +162,6 @@ public class IntakeShooter extends SubsystemBase {
         switch2State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
         SmartDashboard.putBoolean("switch state 2", switch2State());
-        intake_bypass = SmartDashboard.getBoolean("intake bypass", false);
     }
 }
 
