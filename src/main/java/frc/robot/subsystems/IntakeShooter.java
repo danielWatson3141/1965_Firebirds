@@ -40,7 +40,7 @@ public class IntakeShooter extends SubsystemBase {
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
-    private final double SHOOTER_TIMER_SECONDS = 1;
+    private final double SHOOTER_TIMER_SECONDS = 0.5;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .10;
@@ -59,6 +59,10 @@ public class IntakeShooter extends SubsystemBase {
 
         shooterMotor1.setIdleMode(IdleMode.kCoast);
         shooterMotor2.setIdleMode(IdleMode.kCoast);
+
+        shooterMotor1.setSmartCurrentLimit(20);
+        shooterMotor2.setSmartCurrentLimit(20);
+
         indexShooter.setInverted(true);
 
         indexIntake.setInverted(true);
@@ -157,11 +161,21 @@ public class IntakeShooter extends SubsystemBase {
         return r_command;
     }
 
+
     public void periodic() {
+
+        double shooterMotor1Amps = shooterMotor1.getOutputCurrent();
+        double shooterMotor2Amps = shooterMotor2.getOutputCurrent();
+
         switch1State();
         switch2State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
         SmartDashboard.putBoolean("switch state 2", switch2State());
+        SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
+        SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+
+        
     }
 }
 

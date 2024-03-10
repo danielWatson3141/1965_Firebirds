@@ -80,7 +80,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
   private final double ROTATION_RATE = 4;
-  private final double ROTATION_CAP = .6;
+  private final double ROTATION_CAP = .65;
   private final double TRANSLATION_RATE = 4;
 
   private boolean ROTATION_LOCK = false;
