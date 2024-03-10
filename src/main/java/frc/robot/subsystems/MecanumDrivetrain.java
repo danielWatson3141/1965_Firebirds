@@ -39,7 +39,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter rotationLimiter;
 
   private final double TRANSLATION_DEADZONE = 0.08;
-  private final double ROTATION_DEADZONE = 0.15;
+  private final double ROTATION_DEADZONE = 0.2;
 
   private final double ROTATION_TOLERANCE = 3; // degrees
   // private double locationX = 0.2794;
@@ -80,7 +80,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
   private final double ROTATION_RATE = 4;
-  private final double ROTATION_CAP = .65;
+  private final double ROTATION_CAP = .6;
   private final double TRANSLATION_RATE = 4;
 
   private boolean ROTATION_LOCK = false;

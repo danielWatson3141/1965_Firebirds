@@ -40,7 +40,7 @@ public class IntakeShooter extends SubsystemBase {
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
-    private final double SHOOTER_TIMER_SECONDS = 0.5;
+    private final double SHOOTER_TIMER_SECONDS = 0.65;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .10;
