@@ -40,7 +40,7 @@ public class IntakeShooter extends SubsystemBase {
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
-    private final double SHOOTER_TIMER_SECONDS = 0.65;
+    private final double SHOOTER_TIMER_SECONDS = .25;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .10;
@@ -168,12 +168,13 @@ public class IntakeShooter extends SubsystemBase {
         double shooterMotor2Amps = shooterMotor2.getOutputCurrent();
 
         switch1State();
-        switch2State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
-        SmartDashboard.putBoolean("switch state 2", switch2State());
         SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
         SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
-        SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+         SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
+        SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
+       
 
         
     }
