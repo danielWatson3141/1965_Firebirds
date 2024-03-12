@@ -105,6 +105,8 @@ public class Robot extends TimedRobot {
 
     Command teleopCommand = m_robotContainer.getTeleopCommand();
 
+    m_robotContainer.m_drivetrain.gyroReset();
+
     if(teleopCommand != null){
       teleopCommand.schedule();
     }

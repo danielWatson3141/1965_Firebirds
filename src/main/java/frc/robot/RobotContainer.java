@@ -33,7 +33,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private Joystick m_stick = new Joystick(0);
 
-    private final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
+    public final MecanumDrivetrain m_drivetrain = new MecanumDrivetrain(m_stick);
     //private final PIDMecanum m_drivetrain = new PIDMecanum(m_stick);
     private final IntakeShooter m_intakeshooter = new IntakeShooter(m_stick);
     private final Lifter m_lifter = new Lifter();

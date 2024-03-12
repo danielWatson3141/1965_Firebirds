@@ -23,8 +23,7 @@ import frc.robot.Logging;
 public class IntakeShooter extends SubsystemBase {
 
     private final boolean HAVE_INDEX_MOTOR = true;
-    private boolean intake_bypass;
-
+    
     WPI_TalonSRX rollerMotor = new WPI_TalonSRX(9);
 
     WPI_TalonSRX indexIntake = new WPI_TalonSRX(10);
@@ -41,7 +40,7 @@ public class IntakeShooter extends SubsystemBase {
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
-    private final double SHOOTER_TIMER_SECONDS = 1;
+    private final double SHOOTER_TIMER_SECONDS = .25;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .10;
@@ -60,11 +59,14 @@ public class IntakeShooter extends SubsystemBase {
 
         shooterMotor1.setIdleMode(IdleMode.kCoast);
         shooterMotor2.setIdleMode(IdleMode.kCoast);
+
+        shooterMotor1.setSmartCurrentLimit(20);
+        shooterMotor2.setSmartCurrentLimit(20);
+
         indexShooter.setInverted(true);
 
         indexIntake.setInverted(true);
-        intake_bypass = false;
-        SmartDashboard.putBoolean("intake bypass", false);
+       
 
         m_stick = input_stick;
 
@@ -119,7 +121,7 @@ public class IntakeShooter extends SubsystemBase {
     }
 
     public Command getIntakeCommand() {
-        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> intake_bypass ? true : switch1State()).withTimeout(INTAKE_TIMEOUT);
+        Command r_command = new RunCommand(() -> runIntakeMotors(INTAKE_SPEED)).until(() -> switch1State()).withTimeout(INTAKE_TIMEOUT);
 
         r_command.addRequirements(this);
 
@@ -159,12 +161,22 @@ public class IntakeShooter extends SubsystemBase {
         return r_command;
     }
 
+
     public void periodic() {
+
+        double shooterMotor1Amps = shooterMotor1.getOutputCurrent();
+        double shooterMotor2Amps = shooterMotor2.getOutputCurrent();
+
         switch1State();
-        switch2State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
-        SmartDashboard.putBoolean("switch state 2", switch2State());
-        intake_bypass = SmartDashboard.getBoolean("intake bypass", false);
+        SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
+        SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
+         SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
+        SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
+       
+
+        
     }
 }
 
