@@ -131,7 +131,7 @@ public class RobotContainer {
         tenButton.onTrue(m_intakeshooter.testShootStopCommand());
         elevenButton.onTrue(m_intakeshooter.testIntakeRunCommand());
         twelveButton.onTrue(m_intakeshooter.testIntakeStopCommand());
-        triggerButton.whileTrue(getTestCommand());
+        triggerButton.whileTrue(getDriveTestCommand());
     }
 
     boolean frontCamera = true;
@@ -164,12 +164,12 @@ public class RobotContainer {
 
     }
 
-    private final double autoDistance = 1.5;
+    private final double autoDistance = 2.5;
 
     public Command getDistanceAutonomousCommand() {
         Command r_command = Commands.sequence(
-            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).withTimeout(0.2),
-            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).withTimeout(0.2), //spaz out for a second to flip down the hinge thingy
+            new RunCommand(() -> m_drivetrain.driveAuto(0.5)).withTimeout(0.4),
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.5)).withTimeout(0.4), //spaz out for a second to flip down the hinge thingy
             m_intakeshooter.getShootCommand().withTimeout(3), //shoot the first note and then stop
             new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)), //start intake motors
             new InstantCommand(() -> m_drivetrain.resetEncoder()), //reset distance just in case it's off
@@ -206,8 +206,8 @@ public class RobotContainer {
         //return new RollAuto(drivetrain).withTimeout(DRIVE_TIME);
     }
 
-    public Command getTestCommand () {
-     
+    public Command getDriveTestCommand () {
+        
 
         return Commands.none();
     }

@@ -272,16 +272,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_rearRight.set(autoSpeed);
   }
 
-  public Command driveAutoCommand() {
-    Command r_command = Commands.sequence(
-        new InstantCommand(() -> driveAuto(DRIVE_AUTO_SPEED)),
-        Commands.waitSeconds(DRIVE_AUTO_WAIT),
-        new InstantCommand(() -> driveAuto(0)));
-
-    r_command.addRequirements(this);
-    return r_command;
-  }
-
   public void drive() {
 
     gyroAngle();
