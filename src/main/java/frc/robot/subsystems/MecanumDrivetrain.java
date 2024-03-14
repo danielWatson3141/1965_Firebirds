@@ -266,13 +266,14 @@ public class MecanumDrivetrain extends SubsystemBase {
 
   public void testDrive(double speed){
     if (testDriveState <= 1) {
-      testDriveAngle = Rotation2d.fromDegrees(currentTestDriveAngle);
       testDriveState = testDriveState + 1;
     }
     else {
-      testDriveAngle = Rotation2d.fromDegrees(currentTestDriveAngle + 45);
+      currentTestDriveAngle = currentTestDriveAngle + 45;
       testDriveState = 0;
     }
+
+    testDriveAngle = Rotation2d.fromDegrees(currentTestDriveAngle);
 
     m_robotDrive.drivePolar(speed, testDriveAngle, 0);
   }
