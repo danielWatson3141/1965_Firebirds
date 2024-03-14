@@ -207,9 +207,18 @@ public class RobotContainer {
     }
 
     public Command getDriveTestCommand () {
-        
+        Command r_command = Commands.sequence(
+            new InstantCommand(() -> m_drivetrain.testDrive(0.2)),
+            Commands.waitSeconds(0.2),
+            new InstantCommand(() -> m_drivetrain.testDrive(-0.2)),
+            Commands.waitSeconds(0.2)
+        );
 
-        return Commands.none();
+        r_command = r_command.repeatedly();
+        r_command = r_command.finallyDo(() -> m_drivetrain.stopTestDrive());
+        
+        r_command.addRequirements(m_drivetrain);
+        return r_command;
     }
 
     public Command getTeleopCommand(){

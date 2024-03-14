@@ -50,6 +50,10 @@ public class MecanumDrivetrain extends SubsystemBase {
   Rotation2d gyroAngle;
   Rotation2d POVvalue;
 
+  Rotation2d testDriveAngle;
+  double currentTestDriveAngle;
+  int testDriveState;
+
   CANSparkMax m_frontLeft = new CANSparkMax(1, MotorType.kBrushless);
   CANSparkMax m_rearLeft = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax m_frontRight = new CANSparkMax(3, MotorType.kBrushless);
@@ -144,6 +148,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     m_gyro.calibrate();
     resetEncoder();
+
+    currentTestDriveAngle = 0;
+    testDriveState = 0;
 
     m_frontLeft.setIdleMode(IdleMode.kBrake);
     m_rearLeft.setIdleMode(IdleMode.kBrake);
@@ -250,6 +257,25 @@ public class MecanumDrivetrain extends SubsystemBase {
     m_gyro.reset();
     rSetpoint = 0;
     Logging.log(getSubsystem(), "reset gyroscope");
+  }
+
+  public void stopTestDrive(){
+    currentTestDriveAngle = 0;
+    testDriveState = 0;
+    driveAuto(0);
+  }
+
+  public void testDrive(double speed){
+    if (testDriveState <= 1) {
+      testDriveAngle = Rotation2d.fromDegrees(currentTestDriveAngle);
+      testDriveState = testDriveState + 1;
+    }
+    else {
+      testDriveAngle = Rotation2d.fromDegrees(currentTestDriveAngle + 45);
+      testDriveState = 0;
+    }
+
+    m_robotDrive.drivePolar(speed, testDriveAngle, 0);
   }
 
   public void switchDriveRelativity() {
