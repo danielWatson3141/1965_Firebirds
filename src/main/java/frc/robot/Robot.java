@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
   private Command m_testCommand;
   public static boolean iron_man = true;
 
-  private RobotContainer m_robotContainer;
+  private RobotContainer m_robotcontainer;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    m_robotcontainer = new RobotContainer();
   }
 
   /**
@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
 
-    m_autonomousCommand = m_robotContainer.getDistanceAutonomousCommand();
+    m_autonomousCommand = m_robotcontainer.getDistanceAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -103,9 +103,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    Command teleopCommand = m_robotContainer.getTeleopCommand();
+    Command teleopCommand = m_robotcontainer.getTeleopCommand();
 
-    m_robotContainer.m_drivetrain.gyroReset();
+    m_robotcontainer.m_drivetrain.gyroReset();
 
     if(teleopCommand != null){
       teleopCommand.schedule();
@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     // Cancels all running commands at the start of test mode.
-    m_robotContainer.configureTestButtonBindings();
+    m_robotcontainer.configureTestButtonBindings();
 
     }
   
@@ -131,6 +131,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_robotContainer.test();
+    m_robotcontainer.test();
+    m_robotcontainer.testLogging();
   }
 }

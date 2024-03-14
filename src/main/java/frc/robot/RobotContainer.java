@@ -134,6 +134,12 @@ public class RobotContainer {
         triggerButton.whileTrue(getDriveTestCommand());
     }
 
+    public void testLogging(){
+        m_intakeshooter.intakeShooterLogging();
+        m_drivetrain.drivetrainTestLogging();
+
+    }
+
     boolean frontCamera = true;
 
     public void switchCamera() {

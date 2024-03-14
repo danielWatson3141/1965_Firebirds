@@ -37,6 +37,10 @@ public class IntakeShooter extends SubsystemBase {
     RelativeEncoder shooterEncoder1 = shooterMotor1.getEncoder();
     RelativeEncoder shooterEncoder2 = shooterMotor2.getEncoder();
 
+    double shooterMotor1Amps;
+    double shooterMotor2Amps;
+
+
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
@@ -161,21 +165,24 @@ public class IntakeShooter extends SubsystemBase {
         return r_command;
     }
 
+    public void intakeShooterLogging(){
+        
+        shooterMotor1Amps = shooterMotor1.getOutputCurrent();
+        shooterMotor2Amps = shooterMotor2.getOutputCurrent();
+
+        SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
+        SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
+        SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
+    }
+
 
     public void periodic() {
 
-        double shooterMotor1Amps = shooterMotor1.getOutputCurrent();
-        double shooterMotor2Amps = shooterMotor2.getOutputCurrent();
-
+        //part of drive mode
         switch1State();
         SmartDashboard.putBoolean("switch state 1", switch1State());
-        SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
-        SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
-         SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
-        SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
-        SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
-       
-
         
     }
 }

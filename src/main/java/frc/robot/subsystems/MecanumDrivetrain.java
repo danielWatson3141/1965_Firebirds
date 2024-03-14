@@ -167,12 +167,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     rotationLimiter = new SlewRateLimiter(ROTATION_RATE);
 
     SmartDashboard.putNumber("Throttle max%", 100);
+    SmartDashboard.putNumber("Kp value", KpSlider);
 
     rotationPID.setTolerance(ROTATION_TOLERANCE);
 
     // for testing
-    SmartDashboard.putNumber("Kp value", KpSlider);
-
     // setting up more shuffleboard stuff
     // fieldBooleanEntry = fieldRobotListLayout.add("field or robot toggle", fieldRelative)
     //     .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
@@ -382,14 +381,27 @@ public class MecanumDrivetrain extends SubsystemBase {
     // stickZEntry.setDouble(drive_z);
   }
 
-  @Override
-  public void periodic() {
+  public void drivetrainTestLogging(){
 
     SmartDashboard.putNumber("rotation setpoint", rSetpoint);
     SmartDashboard.putNumber("rotation error", rError);
+
     SmartDashboard.putNumber("gyro angle graph", m_gyro.getAngle());
-    SmartDashboard.putBoolean("lifter mode", rotationFeedback);
+
     SmartDashboard.putNumber("encoder value", getDistanceTravelled());
+
+    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
+    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
+  }
+
+  @Override
+  public void periodic() {
+
+    //part of drive mode
+    SmartDashboard.putBoolean("lifter mode", rotationFeedback);
+    
 
     // rotateSetpointEntry.setDouble(rSetpoint);
     // rotateErrorEntry.setDouble(rError);
@@ -400,10 +412,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     // -1);
     // gyroAngleEntry.setDouble(m_gyro.getRotation2d().getDegrees() * -1);
 
-    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
-    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
-    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
-    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
     // FLspeed.setDouble(m_frontLeftEncoder.getVelocity());
     // FRspeed.setDouble(m_frontRightEncoder.getVelocity());
     // RLspeed.setDouble(m_rearLeftEncoder.getVelocity());
