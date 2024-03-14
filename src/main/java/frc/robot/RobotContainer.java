@@ -135,7 +135,7 @@ public class RobotContainer {
     }
 
     public void testLogging(){
-        m_intakeshooter.intakeShooterLogging();
+        m_intakeshooter.intakeShooterTestLogging();
         m_drivetrain.drivetrainTestLogging();
 
     }

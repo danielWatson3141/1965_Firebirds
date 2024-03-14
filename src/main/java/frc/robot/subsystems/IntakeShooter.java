@@ -165,8 +165,8 @@ public class IntakeShooter extends SubsystemBase {
         return r_command;
     }
 
-    public void intakeShooterLogging(){
-        
+    public void intakeShooterTestLogging(){
+
         shooterMotor1Amps = shooterMotor1.getOutputCurrent();
         shooterMotor2Amps = shooterMotor2.getOutputCurrent();
 
@@ -187,4 +187,3 @@ public class IntakeShooter extends SubsystemBase {
     }
 }
 
-// new ConditionalCommand(new InstantCommand(() -> setIntakeMotors(0)), )
