@@ -207,16 +207,20 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public double deadzone(double input, double deadzone) {
+
+    double value = 0;
+
     double absInput = Math.abs(input);
     if (absInput <= deadzone) {
-      return 0;
+      value = 0;
     } else {
-      double value = (absInput - deadzone) / (1 - deadzone);
+      value = (absInput - deadzone) / (1 - deadzone);
       if (input < 0) {
         value = -value;
       }
-      return value;
     }
+
+    return value;
   }
 
   private final double ENCODER_CONVERSION_FACTOR = 25;
@@ -373,11 +377,25 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
     SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
     SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
+
+
   }
 
   @Override
   public void periodic() {
 
+    double deadzonedStickZ = deadzone(m_stick.getZ(), ROTATION_DEADZONE);
+    double deadzonedStickX = deadzone(m_stick.getX(), TRANSLATION_DEADZONE);
+    double deadzonedStickY = deadzone(m_stick.getY(), TRANSLATION_DEADZONE);
+
+    SmartDashboard.putNumber("deadzoned stickZ", deadzonedStickZ);
+    SmartDashboard.putNumber("deadzoned stickX", deadzonedStickX);
+    SmartDashboard.putNumber("deadzoned stickY", deadzonedStickY);
+
+    SmartDashboard.putNumber("raw stickZ", m_stick.getZ());
+    SmartDashboard.putNumber("raw stickX", m_stick.getX());
+    SmartDashboard.putNumber("raw stickY", m_stick.getY());
+    
     SmartDashboard.putBoolean("lifter mode", rotationFeedback);
 
 
