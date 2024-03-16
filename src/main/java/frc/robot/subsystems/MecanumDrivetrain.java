@@ -80,11 +80,11 @@ public class MecanumDrivetrain extends SubsystemBase {
   private PIDController translationPID = new PIDController(0.6, 0, 0);
 
   private final double ROTATION_RATE = 4;
-  private final double ROTATION_CAP = .6;
+  private final double ROTATION_CAP = 1;
   private final double TRANSLATION_RATE = 4;
 
   private boolean ROTATION_LOCK = false;
-  private boolean rotationFeedback = true;
+  private boolean rotationFeedback = false;
 
   private final long DRIVE_AUTO_WAIT = 500;// fast speed for initial testing
   private final double DRIVE_AUTO_SPEED = 0.2;
@@ -329,7 +329,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     } else {
       // Rotation is locked by default, unlock when button is held
       if (!ROTATION_LOCK || m_stick.getRawButton(2)) {
-        drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)) * ROTATION_CAP);
+        drive_z = rotationLimiter.calculate((deadzone(m_stick.getZ(), ROTATION_DEADZONE)) * driveSpeed);
       } else {
         drive_z = 0;
       }
