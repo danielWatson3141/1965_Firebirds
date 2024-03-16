@@ -279,25 +279,7 @@ public class MecanumDrivetrain extends SubsystemBase {
         if (m_photonvision.hasTargets){
           
         }
-
-        // tYError = m_vision.myPosition.getTranslation().getY();
-        // xTranslation = m_vision.myPosition.getTranslation().getX();
-        // yTranslation = translationPID.calculate(tYError, SHOOT_DISTANCE);
-
-        // if (Math.abs(xTranslation) <= 1) {
-        //   tXError = xTranslation;
-        // } else {
-        //   tXError = (xTranslation < 0) ? -1 : 1;
-        // }
-
-        // rError = Units.radiansToDegrees((m_vision.myPosition.getRotation().getZ()));
-        // drive_x = translationPID.calculate(tXError, 0);
-
-        // if (Math.abs(yTranslation) <= 1) {
-        //   drive_y = yTranslation;
-        // } else {
-        //   drive_y = (yTranslation < 0) ? -1 : 1;
-        // }
+        
       }
 
       // **** Joystick Control Mode
@@ -356,24 +338,9 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     //part of drive mode
     SmartDashboard.putBoolean("lifter mode", rotationFeedback);
-    
-
-    // rotateSetpointEntry.setDouble(rSetpoint);
-    // rotateErrorEntry.setDouble(rError);
 
     setSpeed();
 
-    // SmartDashboard.putNumber("gyroAngle", m_gyro.getRotation2d().getDegrees() *
-    // -1);
-    // gyroAngleEntry.setDouble(m_gyro.getRotation2d().getDegrees() * -1);
-
-    // FLspeed.setDouble(m_frontLeftEncoder.getVelocity());
-    // FRspeed.setDouble(m_frontRightEncoder.getVelocity());
-    // RLspeed.setDouble(m_rearLeftEncoder.getVelocity());
-    // RRspeed.setDouble(m_rearRightEncoder.getVelocity());
-
-    // for testng
-    // KpSlider = KpSliderEntry.getDouble(KpSlider);
     rotationPID.setP(KpSlider);
   }
 }
