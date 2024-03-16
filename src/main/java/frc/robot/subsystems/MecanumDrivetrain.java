@@ -9,12 +9,15 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.kinematics.struct.MecanumDriveWheelPositionsStruct;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -106,15 +109,19 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final PhotonVision m_photonvision = new PhotonVision();
   private final Vision m_vision = new Vision();
 
+  //TODO: configure wheel positions
   private final Translation2d m_frontLeftLocation = new Translation2d(0, 0);
   private final Translation2d m_frontRightLocation = new Translation2d(0, -0);
   private final Translation2d m_backLeftLocation = new Translation2d(-0, 0);
   private final Translation2d m_backRightLocation = new Translation2d(-0, -0);
 
-  MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backRightLocation, m_backLeftLocation);
+  private final MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backRightLocation, m_backLeftLocation);
 
+  //set to default starting position 0,0
   private final MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(m_kinematics, m_gyro.getRotation2d(), getCurrentDistances());
 
+  //TODO: ajust feedforward gains
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
 
   public MecanumDrivetrain(Joystick input_stick) {
 
@@ -201,6 +208,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     initialRREncoder = m_rearRightEncoder.getPosition();
   }
 
+  public void autoSetSpeeds(MecanumDriveWheelSpeeds speed){
+    
+  }
+
   public Rotation2d gyroAngle() {
     gyroAngle = m_gyro.getRotation2d().times(-1);
     return gyroAngle;
@@ -279,7 +290,7 @@ public class MecanumDrivetrain extends SubsystemBase {
         if (m_photonvision.hasTargets){
           
         }
-        
+
       }
 
       // **** Joystick Control Mode
