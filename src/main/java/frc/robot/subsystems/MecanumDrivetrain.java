@@ -171,17 +171,17 @@ public class MecanumDrivetrain extends SubsystemBase {
     }
   }
 
+  private final double ENCODER_CONVERSION_FACTOR = 25;
+
   public MecanumDriveWheelPositions getCurrentDistances(){
     return new MecanumDriveWheelPositions(
-      m_frontLeftEncoder.getPosition(),
-      m_frontRightEncoder.getPosition(),
-      m_rearLeftEncoder.getPosition(),
-      m_rearRightEncoder.getPosition()
+      (m_frontLeftEncoder.getPosition() / ENCODER_CONVERSION_FACTOR),
+      (m_frontRightEncoder.getPosition() / ENCODER_CONVERSION_FACTOR),
+      (m_rearLeftEncoder.getPosition() / ENCODER_CONVERSION_FACTOR),
+      (m_rearRightEncoder.getPosition() / ENCODER_CONVERSION_FACTOR)
     );
 
   }
-
-  private final double ENCODER_CONVERSION_FACTOR = 25;
 
   public double getTotalDistanceTravelled() {
     double frontLeftEncoderDistance = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;

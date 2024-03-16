@@ -179,8 +179,8 @@ public class RobotContainer {
             m_intakeshooter.getShootCommand().withTimeout(3), //shoot the first note and then stop
             new InstantCommand(() -> m_intakeshooter.runIntakeMotors(m_intakeshooter.INTAKE_SPEED)), //start intake motors
             new InstantCommand(() -> m_drivetrain.resetEncoder()), //reset distance just in case it's off
-            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State() || m_drivetrain.getDistanceTravelled() >= autoDistance), //run until you pick up a note or exceed a certain distance
-            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).until(() -> m_drivetrain.getDistanceTravelled() <= 0), //run back the same distance (until you hit the speaker)
+            new RunCommand(() -> m_drivetrain.driveAuto(0.2)).until(() -> m_intakeshooter.switch1State() || m_drivetrain.getTotalDistanceTravelled() >= autoDistance), //run until you pick up a note or exceed a certain distance
+            new RunCommand(() -> m_drivetrain.driveAuto(-0.2)).until(() -> m_drivetrain.getTotalDistanceTravelled() <= 0), //run back the same distance (until you hit the speaker)
             m_intakeshooter.getShootCommand().withTimeout(3) //shoot the second note
             );
          
