@@ -11,6 +11,10 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -69,7 +73,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   double initialRLEncoder;
   double initialRREncoder;
 
-  double driveEncoderMean;
+  double encoderDistanceMean;
 
   private double rSetpoint = 0;
   private double rError = 0;
@@ -102,47 +106,15 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final PhotonVision m_photonvision = new PhotonVision();
   private final Vision m_vision = new Vision();
 
+  private final Translation2d m_frontLeftLocation = new Translation2d(0, 0);
+  private final Translation2d m_frontRightLocation = new Translation2d(0, -0);
+  private final Translation2d m_backLeftLocation = new Translation2d(-0, 0);
+  private final Translation2d m_backRightLocation = new Translation2d(-0, -0);
 
-  // Shuffleboard setting up, oh boy
-  // public final ShuffleboardTab drivetrainTab = Shuffleboard.getTab(getName());
-  // public final GenericEntry drivePercentEntry = drivetrainTab.add("drive %", 0)
-  //     .withSize(2, 2).withPosition(2, 3).withWidget(BuiltInWidgets.kDial).getEntry();
-  // public final ShuffleboardLayout fieldRobotListLayout = drivetrainTab.getLayout("Field Robot", BuiltInLayouts.kList)
-  //     .withSize(2, 2).withPosition(0, 3).withProperties(Map.of("Label position", "HIDDEN"));
-  // public GenericEntry fieldBooleanEntry;
-  // public final ShuffleboardLayout slidersListLayout = drivetrainTab.getLayout("Sliders", BuiltInLayouts.kList)
-  //     .withSize(3, 3).withPosition(0, 0);
-  // public GenericEntry throttleMaxSliderEntry;
-  // public GenericEntry KpSliderEntry;
-  // public final ShuffleboardLayout rotateSetpointListLayout = drivetrainTab
-  //     .getLayout("Rotate Setpoint Values", BuiltInLayouts.kList)
-  //     .withSize(1, 2).withPosition(3, 0);
-  // public final ShuffleboardLayout rotateSetpointGraphLayout = drivetrainTab
-  //     .getLayout("Rotate Setpoint graph", BuiltInLayouts.kGrid)
-  //     .withSize(2, 2).withPosition(4, 0);
-  // public GenericEntry rotateSetpointEntry;
-  // public GenericEntry rotateErrorEntry;
-  // public GenericEntry gyroAngleEntry;
-  // public final ShuffleboardLayout wheelSpeedListLayout = drivetrainTab
-  //     .getLayout("Wheel Speeds List", BuiltInLayouts.kList)
-  //     .withSize(2, 5).withPosition(8, 0);
-  // public GenericEntry FLspeed;
-  // public GenericEntry FRspeed;
-  // public GenericEntry RLspeed;
-  // public GenericEntry RRspeed;
-  // public final ShuffleboardLayout axisGraphLayout = drivetrainTab.getLayout("axis graph", BuiltInLayouts.kGrid)
-  //     .withSize(2, 2).withPosition(6, 0);
-  // public GenericEntry stickXEntry;
-  // public GenericEntry stickYEntry;
-  // public GenericEntry stickZEntry;
-  // public final ShuffleboardLayout translationListLayout = drivetrainTab
-  //     .getLayout("Translation values List", BuiltInLayouts.kList)
-  //     .withSize(2, 2).withPosition(6, 3);
-  // public final ShuffleboardLayout translationGraphLayout = drivetrainTab
-  //     .getLayout("Translation values graph", BuiltInLayouts.kGrid)
-  //     .withSize(2, 2).withPosition(4, 3);
-  // public GenericEntry translationXEntry;
-  // public GenericEntry translationYEntry;
+  MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backRightLocation, m_backLeftLocation);
+
+  private final MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(m_kinematics, m_gyro.getRotation2d(), getCurrentDistances());
+
 
   public MecanumDrivetrain(Joystick input_stick) {
 
@@ -171,34 +143,6 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     rotationPID.setTolerance(ROTATION_TOLERANCE);
 
-    // for testing
-    // setting up more shuffleboard stuff
-    // fieldBooleanEntry = fieldRobotListLayout.add("field or robot toggle", fieldRelative)
-    //     .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
-    // fieldBooleanEntry = fieldRobotListLayout.add("field or robot box", fieldRelative)
-    //     .withWidget(BuiltInWidgets.kBooleanBox)
-    //     .getEntry();
-    // throttleMaxSliderEntry = slidersListLayout.add("Max Throttle %", 100).withWidget(BuiltInWidgets.kNumberSlider)
-    //     .withProperties(Map.of("min", 0, "max", 100)).getEntry();
-    // KpSliderEntry = slidersListLayout.add("Kp value", KpSlider).withWidget(BuiltInWidgets.kNumberSlider)
-    //     .withProperties(Map.of("min", 0, "max", 5)).getEntry();
-    // rotateSetpointEntry = rotateSetpointListLayout.add("setpoint list", rSetpoint).getEntry();
-    // rotateSetpointEntry = rotateSetpointGraphLayout.add("setpoint graph", rSetpoint).getEntry();
-    // rotateErrorEntry = rotateSetpointListLayout.add("error list", rError).getEntry();
-    // rotateErrorEntry = rotateSetpointGraphLayout.add("error graph", rError).getEntry();
-    // gyroAngleEntry = rotateSetpointListLayout.add("gyro angle list", 0).getEntry();
-    // gyroAngleEntry = rotateSetpointGraphLayout.add("gyro angle graph", 0).getEntry();
-    // FLspeed = wheelSpeedListLayout.add("Front Left Wheel", 0).getEntry();
-    // FRspeed = wheelSpeedListLayout.add("Front Right Wheel", 0).getEntry();
-    // RLspeed = wheelSpeedListLayout.add("Rear Left Wheel", 0).getEntry();
-    // RRspeed = wheelSpeedListLayout.add("Rear Right Wheel", 0).getEntry();
-    // stickXEntry = axisGraphLayout.add("X axis", 0).getEntry();
-    // stickYEntry = axisGraphLayout.add("Y axis", 0).getEntry();
-    // stickZEntry = axisGraphLayout.add("Z axis", 0).getEntry();
-    // translationXEntry = translationListLayout.add("X translation list", xTranslation).getEntry();
-    // translationXEntry = translationGraphLayout.add("X translation graph", xTranslation).getEntry();
-    // translationYEntry = translationListLayout.add("Y translation list", tYError).getEntry();
-    // translationYEntry = translationGraphLayout.add("Y translation graph", tYError).getEntry();
   }
 
   // multipliers for values
@@ -227,17 +171,27 @@ public class MecanumDrivetrain extends SubsystemBase {
     }
   }
 
+  public MecanumDriveWheelPositions getCurrentDistances(){
+    return new MecanumDriveWheelPositions(
+      m_frontLeftEncoder.getPosition(),
+      m_frontRightEncoder.getPosition(),
+      m_rearLeftEncoder.getPosition(),
+      m_rearRightEncoder.getPosition()
+    );
+
+  }
+
   private final double ENCODER_CONVERSION_FACTOR = 25;
 
-  public double getDistanceTravelled() {
-    double frontLeftEncoderValue = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
-    double frontRightEncoderValue = (m_frontRightEncoder.getPosition() - initialFREncoder) / ENCODER_CONVERSION_FACTOR;
-    double rearLeftEncoderValue = (m_rearLeftEncoder.getPosition() - initialRLEncoder) / ENCODER_CONVERSION_FACTOR;
-    double rearRightEncoderValue = (m_rearRightEncoder.getPosition() - initialRREncoder) / ENCODER_CONVERSION_FACTOR;
+  public double getTotalDistanceTravelled() {
+    double frontLeftEncoderDistance = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
+    double frontRightEncoderDistance = (m_frontRightEncoder.getPosition() - initialFREncoder) / ENCODER_CONVERSION_FACTOR;
+    double rearLeftEncoderDistance = (m_rearLeftEncoder.getPosition() - initialRLEncoder) / ENCODER_CONVERSION_FACTOR;
+    double rearRightEncoderDistance = (m_rearRightEncoder.getPosition() - initialRREncoder) / ENCODER_CONVERSION_FACTOR;
 
-    driveEncoderMean = (frontLeftEncoderValue + frontRightEncoderValue + rearLeftEncoderValue + rearRightEncoderValue) / 4;
+    encoderDistanceMean = (frontLeftEncoderDistance + frontRightEncoderDistance + rearLeftEncoderDistance + rearRightEncoderDistance) / 4;
 
-    return driveEncoderMean;
+    return encoderDistanceMean;
   }
 
   public void resetEncoder() {
@@ -389,7 +343,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("gyro angle graph", m_gyro.getAngle());
 
-    SmartDashboard.putNumber("encoder value", getDistanceTravelled());
+    SmartDashboard.putNumber("encoder value", getTotalDistanceTravelled());
 
     SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
     SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
