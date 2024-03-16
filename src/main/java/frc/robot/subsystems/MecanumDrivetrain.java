@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -115,10 +116,12 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0, 0);
   private final Translation2d m_backRightLocation = new Translation2d(-0, -0);
 
-  private final MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backRightLocation, m_backLeftLocation);
+  public final MecanumDriveKinematics m_kinematics = new MecanumDriveKinematics(m_frontRightLocation, m_frontLeftLocation, m_backRightLocation, m_backLeftLocation);
+
+  MecanumDriveWheelSpeeds wheelSpeeds;
 
   //set to default starting position 0,0
-  private final MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(m_kinematics, m_gyro.getRotation2d(), getCurrentDistances());
+  public final MecanumDriveOdometry m_odometry = new MecanumDriveOdometry(m_kinematics, m_gyro.getRotation2d(), getCurrentDistances());
 
   //TODO: ajust feedforward gains
   private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
@@ -178,8 +181,10 @@ public class MecanumDrivetrain extends SubsystemBase {
     }
   }
 
+  //25 rotations = 1 meter
   private final double ENCODER_CONVERSION_FACTOR = 25;
 
+  //in meters
   public MecanumDriveWheelPositions getCurrentDistances(){
     return new MecanumDriveWheelPositions(
       (m_frontLeftEncoder.getPosition() / ENCODER_CONVERSION_FACTOR),
@@ -189,6 +194,23 @@ public class MecanumDrivetrain extends SubsystemBase {
     );
 
   }
+
+  //in meters/sec
+  public MecanumDriveWheelSpeeds getCurrentWheelSpeeds(){
+
+    wheelSpeeds = new MecanumDriveWheelSpeeds(
+      (m_frontLeftEncoder.getVelocity() / ENCODER_CONVERSION_FACTOR) / 60,
+      (m_frontRightEncoder.getVelocity() / ENCODER_CONVERSION_FACTOR) / 60,
+      (m_rearLeftEncoder.getVelocity() / ENCODER_CONVERSION_FACTOR) / 60,
+      (m_rearRightEncoder.getVelocity() / ENCODER_CONVERSION_FACTOR) / 60
+    );
+    return wheelSpeeds;
+  }
+
+  public ChassisSpeeds getCurrentChassisSpeed(){
+    return m_kinematics.toChassisSpeeds(wheelSpeeds);
+  }
+
 
   public double getTotalDistanceTravelled() {
     double frontLeftEncoderDistance = (m_frontLeftEncoder.getPosition() - initialFLEncoder) / ENCODER_CONVERSION_FACTOR;
@@ -209,6 +231,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public void autoSetSpeeds(MecanumDriveWheelSpeeds speed){
+
+
     
   }
 
