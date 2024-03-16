@@ -115,9 +115,10 @@ public class RobotContainer {
             new InstantCommand(() -> m_lifter.toggleLifter())
         );
 
-        eightButton.onTrue(
-            new InstantCommand(() -> m_drivetrain.lifterModeToggle())
-        );
+        //deleted to prevent accidentally hitting and enabling feedback
+        // eightButton.onTrue(
+        //     new InstantCommand(() -> m_drivetrain.lifterModeToggle())
+        // );
 
         elevenButton.onTrue(
             m_intakeshooter.getIntakeCommand()
@@ -125,6 +126,11 @@ public class RobotContainer {
 
     }
 
+    public void testLogging(){
+        m_intakeshooter.intakeShooterTestLogging();
+        m_drivetrain.drivetrainTestLogging();
+
+    }
 
     public void configureTestButtonBindings() {
         nineButton.onTrue(m_intakeshooter.testShootRunCommand());

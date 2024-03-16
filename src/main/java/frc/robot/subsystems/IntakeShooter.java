@@ -52,6 +52,9 @@ public class IntakeShooter extends SubsystemBase {
 
     boolean shooterMode;
 
+    double shooterMotor1Amps;
+    double shooterMotor2Amps;
+
     public IntakeShooter(Joystick input_stick) {
 
         shooterMotor2.follow(shooterMotor1);
@@ -161,20 +164,20 @@ public class IntakeShooter extends SubsystemBase {
         return r_command;
     }
 
+    public void intakeShooterTestLogging(){
 
-    public void periodic() {
+        shooterMotor1Amps = shooterMotor1.getOutputCurrent();
+        shooterMotor2Amps = shooterMotor2.getOutputCurrent();
 
-        double shooterMotor1Amps = shooterMotor1.getOutputCurrent();
-        double shooterMotor2Amps = shooterMotor2.getOutputCurrent();
-
-        switch1State();
-        SmartDashboard.putBoolean("switch state 1", switch1State());
         SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
         SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
-         SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
+        SmartDashboard.putNumber("shooter total amps", shooterMotor1Amps + shooterMotor2Amps);
         SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
         SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
-       
+    }
+
+
+    public void periodic() {
 
         
     }

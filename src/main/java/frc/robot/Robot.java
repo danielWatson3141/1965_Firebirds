@@ -132,5 +132,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     m_robotContainer.test();
+    m_robotContainer.testLogging();
   }
 }
