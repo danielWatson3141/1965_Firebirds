@@ -209,18 +209,22 @@ public class MecanumDrivetrain extends SubsystemBase {
   public double deadzone(double input, double deadzone) {
 
     double value = 0;
+    double outputValue = 0;
 
     double absInput = Math.abs(input);
     if (absInput <= deadzone) {
       value = 0;
     } else {
-      value = (absInput - deadzone) / (1 - deadzone);
-      if (input < 0) {
-        value = -value;
+      value = Math.pow((Math.abs((absInput - deadzone) / (1 - deadzone))), 2);
+      if (input > 0) {
+        outputValue = value;
+      }
+      else {
+        outputValue = -value;
       }
     }
 
-    return value;
+    return outputValue;
   }
 
   private final double ENCODER_CONVERSION_FACTOR = 25;
