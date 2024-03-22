@@ -64,7 +64,7 @@ public class IntakeShooter extends SubsystemBase {
         shooterMotor2.setIdleMode(IdleMode.kCoast);
 
         shooterMotor1.setSmartCurrentLimit(20);
-        shooterMotor2.setSmartCurrentLimit(20);
+        shooterMotor2.setSmartCurrentLimit(25);
 
         indexShooter.setInverted(true);
 
@@ -178,6 +178,8 @@ public class IntakeShooter extends SubsystemBase {
 
 
     public void periodic() {
+
+        switch1State();
 
         
     }
