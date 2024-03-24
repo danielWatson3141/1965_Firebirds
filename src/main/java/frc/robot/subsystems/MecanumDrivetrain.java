@@ -37,6 +37,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private SlewRateLimiter throttleLimiterX;
   private SlewRateLimiter throttleLimiterY;
   private SlewRateLimiter rotationLimiter;
+  private SlewRateLimiter autoLimiter;
 
   private final double TRANSLATION_DEADZONE = 0.08;
   private final double ROTATION_DEADZONE = 0.2;
@@ -82,6 +83,7 @@ public class MecanumDrivetrain extends SubsystemBase {
   private final double ROTATION_RATE = 4;
   private final double ROTATION_CAP = 1;
   private final double TRANSLATION_RATE = 4;
+  private final double DRIVE_AUTO_RATE = 4;
 
   private boolean ROTATION_LOCK = false;
   private boolean rotationFeedback = false;
@@ -156,6 +158,8 @@ public class MecanumDrivetrain extends SubsystemBase {
     throttleLimiterX = new SlewRateLimiter(TRANSLATION_RATE);
     throttleLimiterY = new SlewRateLimiter(TRANSLATION_RATE);
     rotationLimiter = new SlewRateLimiter(ROTATION_RATE);
+
+    autoLimiter = new SlewRateLimiter(DRIVE_AUTO_RATE);
 
     SmartDashboard.putNumber("Throttle max%", 100);
 
@@ -274,10 +278,15 @@ public class MecanumDrivetrain extends SubsystemBase {
   }
 
   public void driveAuto(double autoSpeed) {
-    m_frontLeft.set(autoSpeed);
-    m_rearLeft.set(autoSpeed);
-    m_frontRight.set(autoSpeed);
-    m_rearRight.set(autoSpeed);
+
+    double limitedSpeed = autoLimiter.calculate(autoSpeed);
+
+    m_frontLeft.set(limitedSpeed);
+    m_rearLeft.set(limitedSpeed);
+    m_frontRight.set(limitedSpeed);
+    m_rearRight.set(limitedSpeed);
+
+    Logging.log("Drivetrain", "driveAuto");
   }
 
   public Command driveAutoCommand() {
@@ -366,6 +375,7 @@ public class MecanumDrivetrain extends SubsystemBase {
     // stickXEntry.setDouble(drive_x);
     // stickYEntry.setDouble(drive_y);
     // stickZEntry.setDouble(drive_z);
+
   }
 
   public void drivetrainTestLogging(){
@@ -376,11 +386,6 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("gyro angle graph", m_gyro.getAngle());
 
     SmartDashboard.putNumber("encoder value", getDistanceTravelled());
-
-    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
-    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
-    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
-    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
 
 
   }
@@ -401,6 +406,11 @@ public class MecanumDrivetrain extends SubsystemBase {
     SmartDashboard.putNumber("raw stickY", m_stick.getY());
     
     SmartDashboard.putBoolean("lifter mode", rotationFeedback);
+
+    SmartDashboard.putNumber("FL_SPEED", m_frontLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("RL_SPEED", m_rearLeftEncoder.getVelocity());
+    SmartDashboard.putNumber("FR_SPEED", m_frontRightEncoder.getVelocity());
+    SmartDashboard.putNumber("RR_SPEED", m_rearRightEncoder.getVelocity());
 
 
     // rotateSetpointEntry.setDouble(rSetpoint);

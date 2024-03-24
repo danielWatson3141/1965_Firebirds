@@ -40,7 +40,7 @@ public class IntakeShooter extends SubsystemBase {
     public double INTAKE_SPEED = 0.6;
     private final double INTAKE_TIMEOUT = 5;
 
-    private final double SHOOTER_TIMER_SECONDS = .25;
+    private final double SHOOTER_TIMER_SECONDS = 1;
     private final double INDEX_SHOOTER_SPEED = 1;
     private final double SPEAKER_SHOOTER_SPEED = 1;
     private final double AMP_SHOOTER_SPEED = .10;
@@ -63,8 +63,8 @@ public class IntakeShooter extends SubsystemBase {
         shooterMotor1.setIdleMode(IdleMode.kCoast);
         shooterMotor2.setIdleMode(IdleMode.kCoast);
 
-        shooterMotor1.setSmartCurrentLimit(20);
-        shooterMotor2.setSmartCurrentLimit(25);
+        // shooterMotor1.setSmartCurrentLimit(20);
+        // shooterMotor2.setSmartCurrentLimit(25);
 
         indexShooter.setInverted(true);
 
@@ -179,7 +179,23 @@ public class IntakeShooter extends SubsystemBase {
 
     public void periodic() {
 
+        double shooterMotor1Voltage = shooterMotor1.getBusVoltage();
+        double shooterMotor2Voltage = shooterMotor2.getBusVoltage();
+
+        SmartDashboard.putNumber("shooter 1 volts", shooterMotor1Voltage);
+        SmartDashboard.putNumber("shooter 2 volts", shooterMotor2Voltage);
+
+        SmartDashboard.putNumber("shooter 1 amps", shooterMotor1Amps);
+        SmartDashboard.putNumber("shooter 2 amps", shooterMotor2Amps);
+
+        SmartDashboard.putNumber("shooter1 velocity", shooterEncoder1.getVelocity());
+        SmartDashboard.putNumber("shooter2 velocity", shooterEncoder2.getVelocity());
+
+
+
+
         switch1State();
+        SmartDashboard.putBoolean("note loaded", switch1State());
 
         
     }
